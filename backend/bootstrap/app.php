@@ -16,6 +16,19 @@ return Application::configure(basePath: dirname(__DIR__))
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Trust the reverse proxy so X-Forwarded-Proto/Host produces correct
+        // https:// URLs from url()->to() etc. TRUSTED_PROXIES="*" trusts any
+        // hop — fine when only the proxy can reach this container's port.
+        if ($proxies = env('TRUSTED_PROXIES')) {
+            $middleware->trustProxies(
+                at: $proxies === '*' ? '*' : array_map('trim', explode(',', $proxies)),
+                headers: \Illuminate\Http\Request::HEADER_X_FORWARDED_FOR
+                       | \Illuminate\Http\Request::HEADER_X_FORWARDED_HOST
+                       | \Illuminate\Http\Request::HEADER_X_FORWARDED_PORT
+                       | \Illuminate\Http\Request::HEADER_X_FORWARDED_PROTO,
+            );
+        }
+
         // CRITICAL: Custom CORS middleware to handle OPTIONS preflight FIRST
         // This prevents redirect issues with preflight requests
         $middleware->prepend(CorsMiddleware::class);
