@@ -1,0 +1,800 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Universal Responsive Foundation ────────────────────────────────
+ * Goal: render correctly on every screen shape — phone, tablet, laptop,
+ * desktop, ultrawide, square (e.g. iPad split-view), AND round screens
+ * (Wear OS / smartwatch browsers). No per-page rewrite required: this
+ * layer overrides the most common Tailwind viewport classes so existing
+ * markup adapts automatically.
+ * ──────────────────────────────────────────────────────────────────── */
+
+/* Custom properties exposed to every component so they can compose with
+   safe-area insets without re-typing the env() ladder. */
+:root {
+  /* Dynamic viewport (collapses with mobile browser chrome). Falls back
+     to 1vh when dvh is unsupported. */
+  --vh: 1vh;
+  --dvh: 1dvh;
+
+  /* Safe-area insets resolved into plain pixels for use inside calc(). */
+  --sat: env(safe-area-inset-top, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+
+  /* Fluid spacing scale — clamps between mobile and desktop so paddings
+     scale with the viewport instead of jumping at breakpoints. */
+  --space-xs: clamp(4px, 1vw, 8px);
+  --space-sm: clamp(8px, 1.5vw, 12px);
+  --space-md: clamp(12px, 2.5vw, 20px);
+  --space-lg: clamp(16px, 3.5vw, 28px);
+  --space-xl: clamp(24px, 5vw, 44px);
+
+  /* Fluid typography — readable on a 320 px phone, comfortable on a
+     1920 px laptop, doesn't blow up on ultrawide. */
+  --fs-xs:   clamp(10px, 0.85vw + 8px, 12px);
+  --fs-sm:   clamp(12px, 0.95vw + 9px, 14px);
+  --fs-base: clamp(14px, 1.10vw + 10px, 16px);
+  --fs-lg:   clamp(16px, 1.30vw + 11px, 19px);
+  --fs-xl:   clamp(18px, 1.60vw + 12px, 22px);
+  --fs-2xl:  clamp(22px, 2.20vw + 14px, 28px);
+  --fs-3xl:  clamp(26px, 3.00vw + 16px, 36px);
+
+  /* Round-screen inscribed rectangle ratio. A round screen (aspect-ratio
+     ~ 1 / 1) needs content to live inside its inscribed square; this
+     constant is the inscribed-square side / diameter (= 1/√2 ≈ 0.707).
+     The .round-safe utility uses it; defaults to 1 on non-round screens. */
+  --round-inset: 1;
+}
+
+/* @supports gate – browsers that understand dvh get true dynamic vh,
+   which fixes the "100vh is taller than the visible viewport on
+   mobile Safari" bug everywhere in the app. */
+@supports (height: 100dvh) {
+  :root { --vh: 1dvh; }
+}
+
+/* Round-screen — applied whenever <html data-shape="round"> is set
+   (by useScreenShape — heuristically for 1:1 viewports, or manually
+   via ?shape=round / Settings toggle). The inscribed-square side of a
+   circle of diameter d is d/√2 ≈ 0.707 — we use 0.74 (slightly tighter)
+   so a bezel/curvature can never crop UI even with a non-perfect
+   circle. The corresponding inset on each side is (1 - 0.74) / 2
+   ≈ 13 % of the diameter, expressed in `vmin` so it adapts to whichever
+   axis is shorter. */
+html[data-shape="round"] {
+  --round-inset: 0.74;
+  --round-pad: 13vmin;
+  overflow: hidden; /* a round screen has no off-canvas to scroll into */
+}
+
+/* Fallback CSS-only detection — kicks in even if JS hasn't seeded
+   data-shape yet (e.g. very first frame on a hard reload). */
+@media (min-aspect-ratio: 19 / 20) and (max-aspect-ratio: 20 / 19) {
+  html:not([data-shape="rect"]) {
+    --round-inset: 0.74;
+    --round-pad: 13vmin;
+  }
+}
+
+/* ─── Tailwind viewport-height overrides ───────────────────────────
+ * Existing code uses `h-screen` / `min-h-screen` (= 100vh / min-height
+ * 100vh). On mobile Safari that overflows under the URL bar. Override
+ * to dynamic viewport units so the same markup renders correctly on
+ * phones, tablets, foldables AND desktops — without touching pages. */
+@supports (height: 100dvh) {
+  .h-screen     { height: 100dvh; }
+  .min-h-screen { min-height: 100dvh; }
+  .max-h-screen { max-height: 100dvh; }
+}
+
+/* ─── Mobile / PWA global utilities ─────────────────────────────────
+ * Applied app-wide so every page benefits without needing per-file work.
+ * Key behaviours:
+ *   • Disable iOS Safari's tap-highlight grey + double-tap zoom.
+ *   • Prevent rubber-band scroll bleed-through on edge-to-edge pages.
+ *   • Honour the safe-area on the body so the launch-image colour reaches
+ *     under the notch (better with `viewport-fit: cover` in index.html).
+ * ──────────────────────────────────────────────────────────────────── */
+html, body, #root {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  /* iOS Safari has a bug where momentum scrolling can leave a 1 px gap;
+   * `overscroll-behavior: contain` stops the bounce. */
+  overscroll-behavior-y: contain;
+}
+
+/* #root fills the dynamic viewport so flex/grid children with h-full
+   resolve to the actual visible area, not the static 100vh sometimes
+   reported behind the URL bar on iOS. */
+#root {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+body {
+  /* Allow native pinch but disable two-finger pan tricks that interfere
+   * with our 3D pointer events. */
+  touch-action: manipulation;
+}
+
+/* Visible only when the user is navigating with a keyboard. Prevents the
+ * focus ring from appearing on every mobile tap. */
+*:focus:not(:focus-visible) { outline: none; }
+
+/* Hover effects scoped to fine pointers (mouse/trackpad) only. Mobile
+ * touch never matches `hover: hover`, so `hover-fine:bg-…` etc. won't
+ * stick on a tapped button — fixes "phantom hover" everywhere on phones. */
+@media (hover: none) {
+  .hover-fine\:opacity-100,
+  .hover-fine\:scale-110,
+  .hover-fine\:shadow-xl { /* no-op on touch */ }
+}
+
+/* Safe-area helpers used by MobileLayout / MobileHeader. */
+.safe-top    { padding-top:    env(safe-area-inset-top); }
+.safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+.safe-left   { padding-left:   env(safe-area-inset-left); }
+.safe-right  { padding-right:  env(safe-area-inset-right); }
+.safe-x      { padding-left:   env(safe-area-inset-left); padding-right: env(safe-area-inset-right); }
+.safe-y      { padding-top:    env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
+.safe-all    {
+  padding-top: env(safe-area-inset-top);
+  padding-right: env(safe-area-inset-right);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+}
+
+/* Dynamic viewport sizing helpers. Same as `h-screen`/`min-h-screen` but
+   explicit — useful when you want the dvh fallback chain without writing
+   it by hand. */
+.h-dvh     { height: 100vh; height: 100dvh; }
+.min-h-dvh { min-height: 100vh; min-height: 100dvh; }
+.max-h-dvh { max-height: 100vh; max-height: 100dvh; }
+
+/* Fluid-padding wrapper for top-level page content. Scales with viewport
+   AND respects safe-area on devices with notches/home-bars. */
+.page-pad {
+  padding-left:  calc(env(safe-area-inset-left)  + var(--space-md));
+  padding-right: calc(env(safe-area-inset-right) + var(--space-md));
+  padding-top:   calc(env(safe-area-inset-top)   + var(--space-sm));
+  padding-bottom:calc(env(safe-area-inset-bottom)+ var(--space-sm));
+}
+
+/* Centered, max-width-capped content column. Default cap is comfortable
+   reading width on big screens, full-bleed on phones. */
+.content-col {
+  width: 100%;
+  max-width: min(100%, 1100px);
+  margin-inline: auto;
+}
+
+/* Round-screen safe content area.
+   On a watch (round viewport detected above) this clamps content to the
+   inscribed square so nothing escapes the visible circle. On any other
+   screen it's a no-op (--round-inset = 1). */
+.round-safe {
+  width:  calc(100% * var(--round-inset));
+  height: calc(100% * var(--round-inset));
+  margin: auto;
+}
+
+/* Square-ratio container — for the iso scene, dashboards in PiP windows,
+   and side-by-side foldable mode where the viewport aspect ratio is
+   close to 1:1. */
+.aspect-stable {
+  aspect-ratio: 1 / 1;
+}
+
+/* Container queries: opt a parent into being a query container, then
+   children can use cq-* utilities below. Useful for cards that should
+   re-flow based on the card width, not the viewport width — e.g. when
+   a dashboard reflows from 4 columns → 2 → 1. */
+.cq, .cq-inline { container-type: inline-size; }
+.cq-size        { container-type: size; }
+@container (min-width: 360px) { .cq-sm\:flex-row { flex-direction: row; } .cq-sm\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+@container (min-width: 560px) { .cq-md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0,1fr)); } .cq-md\:text-base { font-size: 1rem; } }
+@container (min-width: 760px) { .cq-lg\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0,1fr)); } }
+
+/* Touch-target floor: any tappable thing should be ≥ 44 × 44 (Apple HIG)
+   so the same code feels right on a phone, tablet, AND a smartwatch. */
+.touch-target {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+/* Orientation-aware utilities — hide/show by orientation without writing
+   media queries inline in JSX. */
+@media (orientation: portrait)  { .landscape-only { display: none !important; } }
+@media (orientation: landscape) { .portrait-only  { display: none !important; } }
+
+/* ─── Round-display chrome containment ──────────────────────────────
+ * On a round display, every UI element needs to live inside the
+ * inscribed square (≈ 74 % of the diameter). The naive approach —
+ * padding on body — doesn't constrain `position: fixed` elements,
+ * which always resolve relative to the visual viewport.
+ *
+ * Solution: the .round-frame wrapper (mounted in App.tsx) uses
+ * `transform: translate(0)` to CREATE A CONTAINING BLOCK for fixed
+ * descendants. Combined with `padding: var(--round-pad)`, every
+ * `fixed top-0 left-0 right-0` chrome bar (nav header, bottom dock,
+ * corner FABs, modal overlays) now snaps to the inscribed-square edges
+ * instead of the bezel.
+ * ──────────────────────────────────────────────────────────────────── */
+.round-frame {
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  position: relative;
+}
+html[data-shape="round"] .round-frame {
+  /* transform creates a fixed-positioning containing block — this is
+     the actual magic that makes `fixed` respect the inscribed inset. */
+  transform: translate(0);
+  /* Inscribed-square inset. vmin so it adapts to the shorter axis. */
+  padding: var(--round-pad);
+  box-sizing: border-box;
+  /* Crop content that bleeds past the inscribed square — keeps the
+     visual edge clean inside the circle. */
+  overflow: hidden;
+}
+
+/* When inside a round frame, full-bleed 3D Canvases / backgrounds
+   should reach the actual visual edge (looks better than a flat
+   inscribed square). Opt-in via .full-bleed-bg. */
+html[data-shape="round"] .round-frame .full-bleed-bg {
+  position: absolute;
+  inset: calc(var(--round-pad) * -1);
+  width: auto;
+  height: auto;
+}
+
+/* On round, fluid type drops a notch — same content has less horizontal
+   space, so 18 % tighter prevents headlines from breaking into walls of
+   wraps. */
+html[data-shape="round"] {
+  --fs-base: clamp(13px, 1.10vw + 9px, 15px);
+  --fs-lg:   clamp(15px, 1.30vw + 10px, 18px);
+  --fs-xl:   clamp(17px, 1.60vw + 11px, 21px);
+  --fs-2xl:  clamp(20px, 2.20vw + 13px, 26px);
+  --fs-3xl:  clamp(24px, 3.00vw + 15px, 32px);
+}
+
+/* ─── Low-spec performance layer ────────────────────────────────────
+ * useDeviceTier() writes `data-perf="low|mid|high"` to <html> on first
+ * paint. These selectors strip the most expensive paint/composite work
+ * for low-tier devices WITHOUT requiring per-component changes:
+ *   • backdrop-filter (blur) — by far the heaviest GPU op on mobile
+ *   • large/multi-shadow box-shadows
+ *   • will-change / filter / mix-blend-mode
+ *   • animation + transition (replaced with instant snap)
+ * The :where() wrapper keeps specificity at 0 so author styles still
+ * win when they want to opt back in. */
+:where(html[data-perf="low"]) *,
+:where(html[data-perf="low"]) *::before,
+:where(html[data-perf="low"]) *::after {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Tailwind's backdrop-blur-* classes set the variable; clearing it on
+   low-tier kills the GPU cost across all 181 callsites at once. */
+:where(html[data-perf="low"]) .backdrop-blur,
+:where(html[data-perf="low"]) [class*="backdrop-blur"] {
+  --tw-backdrop-blur: none;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Big radial / multi-stop shadows are expensive composites on weak GPUs.
+   Replace with a flat 1-px outline so cards remain delineated. */
+:where(html[data-perf="low"]) [class*="shadow-2xl"],
+:where(html[data-perf="low"]) [class*="shadow-xl"],
+:where(html[data-perf="low"]) [class*="shadow-lg"] {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.20) !important;
+}
+
+/* will-change forces a layer per element — death-by-a-thousand-cuts on
+   low-end Adreno/Mali GPUs (each layer eats VRAM). */
+:where(html[data-perf="low"]) * { will-change: auto !important; }
+
+/* When reduced-motion is on (either OS-level or our tier downgrade),
+   short-circuit every animation + transition to instant. framer-motion
+   already respects this MQ; this catches CSS-driven motion too. */
+:where(html[data-reduce-motion="true"]) *,
+:where(html[data-reduce-motion="true"]) *::before,
+:where(html[data-reduce-motion="true"]) *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* OS-level prefers-reduced-motion — same treatment, but only when the
+   OS says so. Belt-and-braces with the hook's runtime detection. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* On low-tier devices, suppress GPU-intensive `filter` chains (e.g.
+   drop-shadow + blur + saturate stacked together on cards). Components
+   that NEED a filter can opt back in via the `.perf-keep` escape hatch. */
+:where(html[data-perf="low"]) [class*="filter-"]:not(.perf-keep),
+:where(html[data-perf="low"]) [style*="filter:"]:not(.perf-keep) {
+  filter: none !important;
+}
+
+/* Opt-in `.perf-heavy` class for elements that should be hidden
+   entirely on low-tier devices (e.g. decorative gradient orbs,
+   ambient particle systems that aren't driven by R3F). Components
+   that want a low-tier fallback can render a sibling without this
+   class. */
+:where(html[data-perf="low"]) .perf-heavy { display: none !important; }
+
+/* ─── VIBRANT Design Tokens ─── */
+:root {
+  /* Vibrant Primary Colors */
+  --color-primary: #6366f1;
+  --color-primary-hover: #4f46e5;
+  --color-primary-light: #e0e7ff;
+  
+  /* Vibrant Accent Colors */
+  --color-accent: #8b5cf6;
+  --color-accent-hover: #7c3aed;
+  --color-accent-light: rgba(139, 92, 246, 0.18);
+  --color-accent-muted: rgba(139, 92, 246, 0.28);
+
+  /* Surface colors - Soft Grey Mode (kid-friendly: calm grey base,
+     cards lift off the background so the UI reads as friendly cards
+     rather than a harsh sheet of white) */
+  --color-bg-primary: #e9eaf1;
+  --color-bg-secondary: #e1e3ec;
+  --color-bg-tertiary: #d5d8e4;
+  --color-bg-elevated: #f6f7fb;
+
+  --color-surface: #f6f7fb;
+  --color-surface-hover: #eef0f7;
+  --color-surface-active: #e4e7f1;
+  --color-surface-overlay: rgba(246, 247, 251, 0.95);
+
+  /* Borders */
+  --color-border: rgba(40, 44, 66, 0.10);
+  --color-border-light: rgba(40, 44, 66, 0.05);
+  --color-border-focus: #8b5cf6;
+
+  /* Text — kept dark for strong contrast on grey (kid readability) */
+  --color-text-primary: #1f2433;
+  --color-text-secondary: #4b5168;
+  --color-text-tertiary: #8b90a6;
+  --color-text-inverse: #ffffff;
+
+  /* Vibrant Status Colors */
+  --color-success: #10b981;
+  --color-success-light: #d1fae5;
+  --color-warning: #f59e0b;
+  --color-warning-light: #fef3c7;
+  --color-error: #ef4444;
+  --color-error-light: #fee2e2;
+  --color-info: #3b82f6;
+  --color-info-light: #dbeafe;
+
+  /* Vibrant Gradients */
+  --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+  --gradient-success: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+  --gradient-warning: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+  --gradient-error: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 3px 0 rgba(40, 44, 66, 0.06);
+  --shadow-card: 0 4px 10px -2px rgba(40, 44, 66, 0.10), 0 2px 4px -2px rgba(40, 44, 66, 0.06);
+  --shadow-md: 0 10px 20px -4px rgba(40, 44, 66, 0.12), 0 4px 8px -4px rgba(40, 44, 66, 0.06);
+  --shadow-lg: 0 20px 30px -6px rgba(40, 44, 66, 0.14), 0 10px 12px -6px rgba(40, 44, 66, 0.05);
+  --shadow-glow: 0 0 40px rgba(139, 92, 246, 0.3);
+  --shadow-glow-sm: 0 0 20px rgba(139, 92, 246, 0.2);
+
+  /* Radius */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
+}
+
+/* ─── Dark Mode - VIBRANT ─── */
+.dark, :root.dark {
+  --color-primary: #818cf8;
+  --color-primary-hover: #6366f1;
+  --color-primary-light: rgba(129, 140, 248, 0.15);
+  
+  --color-accent: #a78bfa;
+  --color-accent-hover: #8b5cf6;
+  --color-accent-light: rgba(167, 139, 250, 0.15);
+  --color-accent-muted: rgba(167, 139, 250, 0.25);
+  
+  --color-bg-primary: #0f0f1a;
+  --color-bg-secondary: #16162a;
+  --color-bg-tertiary: #1e1e3a;
+  --color-bg-elevated: #1a1a2e;
+
+  --color-surface: rgba(30, 30, 58, 0.8);
+  --color-surface-hover: rgba(40, 40, 70, 0.9);
+  --color-surface-active: rgba(50, 50, 80, 0.95);
+  --color-surface-overlay: rgba(15, 15, 26, 0.95);
+
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-light: rgba(255, 255, 255, 0.04);
+  --color-border-focus: #a78bfa;
+
+  --color-text-primary: #f9fafb;
+  --color-text-secondary: #d1d5db;
+  --color-text-tertiary: #9ca3af;
+  --color-text-inverse: #111827;
+
+  --color-success: #34d399;
+  --color-success-light: rgba(52, 211, 153, 0.15);
+  --color-warning: #fbbf24;
+  --color-warning-light: rgba(251, 191, 36, 0.15);
+  --color-error: #f87171;
+  --color-error-light: rgba(248, 113, 113, 0.15);
+  --color-info: #60a5fa;
+  --color-info-light: rgba(96, 165, 250, 0.15);
+
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.35), 0 4px 6px -2px rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+  --shadow-glow: 0 0 40px rgba(167, 139, 250, 0.4);
+  --shadow-glow-sm: 0 0 20px rgba(167, 139, 250, 0.25);
+}
+
+/* ─── Base ─── */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ─── Glassmorphism Component Classes ─── */
+@layer components {
+  /* Page container */
+  .page-container {
+    min-height: 100vh;
+    background: var(--color-bg-primary);
+    color: var(--color-text-primary);
+  }
+
+  /* Card - Glassmorphism */
+  .card {
+    background: rgba(15, 15, 30, 0.5);
+    backdrop-filter: blur(30px) saturate(150%);
+    -webkit-backdrop-filter: blur(30px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: var(--radius-xl);
+    padding: 1.5rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  }
+
+  .card-hover {
+    transition: all 0.3s ease;
+  }
+  .card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  /* Glass Card - Glassmorphism */
+  .glass-card {
+    background: rgba(15, 15, 30, 0.55);
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-xl);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+
+  .glass-card-hover {
+    transition: all 0.3s ease;
+  }
+  .glass-card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+
+  /* Glass Surface - lighter variant */
+  .glass-surface {
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-lg);
+  }
+
+  /* Glass Nav */
+  .glass-nav {
+    background: rgba(15, 15, 30, 0.6);
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Glass Input */
+  .glass-input {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-lg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: white;
+    transition: all 0.2s ease;
+  }
+  .glass-input:focus {
+    border-color: rgba(139, 92, 246, 0.4);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+    background: rgba(255, 255, 255, 0.08);
+    outline: none;
+  }
+  .glass-input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+  }
+
+  /* Glass Border Wrapper - gradient border effect */
+  .glass-border {
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05));
+    border-radius: var(--radius-xl);
+  }
+
+  /* Gradient Card */
+  .gradient-card {
+    background: var(--gradient-primary);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg), var(--shadow-glow);
+  }
+
+  /* Vibrant Buttons */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: var(--gradient-primary);
+    color: white;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-lg);
+    border: none;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow-md), 0 0 20px rgba(139, 92, 246, 0.3);
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg), 0 0 30px rgba(139, 92, 246, 0.4);
+  }
+  .btn-primary:active {
+    transform: translateY(0);
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: var(--color-surface);
+    color: var(--color-text-primary);
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+  }
+  .btn-secondary:hover {
+    background: var(--color-surface-hover);
+    border-color: var(--color-accent-muted);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: transparent;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+  }
+  .btn-ghost:hover {
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+  }
+
+  /* Vibrant Input */
+  .input-vibrant {
+    width: 100%;
+    background: var(--color-surface);
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 0.875rem 1rem;
+    color: var(--color-text-primary);
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+    outline: none;
+  }
+  .input-vibrant:focus {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 4px var(--color-accent-muted);
+  }
+  .input-vibrant::placeholder {
+    color: var(--color-text-tertiary);
+  }
+
+  /* Vibrant Chips/Badges */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.375rem 0.875rem;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+  .chip-accent {
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    border: 1px solid var(--color-accent-muted);
+  }
+  .chip-success {
+    background: var(--color-success-light);
+    color: var(--color-success);
+  }
+  .chip-warning {
+    background: var(--color-warning-light);
+    color: var(--color-warning);
+  }
+  .chip-error {
+    background: var(--color-error-light);
+    color: var(--color-error);
+  }
+  .chip-gradient {
+    background: var(--gradient-primary);
+    color: white;
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* Stat Card - Glassmorphism */
+  .stat-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-xl);
+    padding: 1.25rem;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+  .stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  .stat-value {
+    font-size: 1.75rem;
+    font-weight: 800;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .stat-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* Section title */
+  .section-title {
+    font-weight: 800;
+    font-size: 1.5rem;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Animated gradient background */
+  .animated-gradient {
+    background: linear-gradient(-45deg, #6366f1, #8b5cf6, #a855f7, #ec4899);
+    background-size: 400% 400%;
+    animation: gradient-shift 15s ease infinite;
+  }
+  
+  @keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* Glow effects */
+  .glow {
+    box-shadow: var(--shadow-glow);
+  }
+  .glow-sm {
+    box-shadow: var(--shadow-glow-sm);
+  }
+}
+
+/* ─── Animations ─── */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.float-animation {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(139, 92, 246, 0.5); }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-secondary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-accent-muted);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent);
+}
+
+/* Selection */
+::selection {
+  background: var(--color-accent-muted);
+  color: var(--color-text-primary);
+}

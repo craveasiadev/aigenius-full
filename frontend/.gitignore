@@ -1,0 +1,34 @@
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+
+# Windows reserved names
+nul
+NUL
+
+# Unpacked Kenney asset zips. The .glb files we actually ship live in
+# public/assets/iso/ (committed). The raw packs sit at the repo root as
+# a source of truth in case we need to re-extract a model or grab another
+# format, but they're ~60 MB of FBX/OBJ/preview-PNG duplicates we don't
+# ship, so they're ignored.
+iso_assets/

@@ -1,0 +1,101 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+@layer base {
+
+    /* Base form styles */
+    input:where(:not([type])),
+    [type='text'],
+    [type='email'],
+    [type='url'],
+    [type='password'],
+    [type='number'],
+    [type='date'],
+    [type='datetime-local'],
+    [type='month'],
+    [type='search'],
+    [type='tel'],
+    [type='time'],
+    [type='week'],
+    [multiple],
+    textarea,
+    select {
+        @apply w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-900 text-sm shadow-sm transition-all duration-200 outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 placeholder:text-slate-400 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-800 dark:bg-slate-950 dark:text-white dark:placeholder:text-slate-600 dark:focus:border-indigo-500 dark:focus:ring-indigo-500/10;
+    }
+
+    /* Custom select chevron */
+    select {
+        @apply appearance-none bg-no-repeat pr-10;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2364748b' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+        background-position: right 1rem center;
+        background-size: 1.25em 1.25em;
+    }
+
+    .dark select {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2394a3b8' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    }
+
+    /* Date picker customization */
+    [type='date']::-webkit-calendar-picker-indicator {
+        @apply cursor-pointer opacity-60 hover:opacity-100 transition-opacity p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800;
+    }
+
+    .dark [type='date']::-webkit-calendar-picker-indicator {
+        filter: invert(1);
+    }
+
+    /* Autofill fix */
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    textarea:-webkit-autofill,
+    textarea:-webkit-autofill:hover,
+    textarea:-webkit-autofill:focus,
+    select:-webkit-autofill,
+    select:-webkit-autofill:hover,
+    select:-webkit-autofill:focus {
+        -webkit-box-shadow: 0 0 0px 1000px white inset;
+        transition: background-color 5000s ease-in-out 0s;
+    }
+
+    .dark input:-webkit-autofill,
+    .dark input:-webkit-autofill:hover,
+    .dark input:-webkit-autofill:focus,
+    .dark textarea:-webkit-autofill,
+    .dark textarea:-webkit-autofill:hover,
+    .dark textarea:-webkit-autofill:focus,
+    .dark select:-webkit-autofill,
+    .dark select:-webkit-autofill:hover,
+    .dark select:-webkit-autofill:focus {
+        -webkit-box-shadow: 0 0 0px 1000px #020617 inset;
+        -webkit-text-fill-color: white;
+        transition: background-color 5000s ease-in-out 0s;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        @apply bg-slate-200 dark:bg-slate-700 rounded-full border-2 border-transparent bg-clip-content;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        @apply bg-slate-300 dark:bg-slate-600;
+    }
+}

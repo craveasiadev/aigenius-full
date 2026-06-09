@@ -1,0 +1,31 @@
+# Never ship dev tooling output into images
+**/node_modules
+**/vendor
+**/.git
+**/.idea
+**/.vscode
+**/dist
+**/test-results
+**/android
+**/ios
+**/*.log
+**/.DS_Store
+**/Thumbs.db
+
+# Backend dev artifacts
+backend/storage/logs/*
+backend/storage/framework/cache/data/*
+backend/storage/framework/sessions/*
+backend/storage/framework/views/*
+backend/storage/framework/testing/*
+backend/bootstrap/cache/*.php
+
+# Host env files (compose reads its own)
+.env
+.env.local
+.env.docker
+
+# Repo meta docs that don't belong in the image
+**/*.md
+!backend/README.md
+!frontend/README.md

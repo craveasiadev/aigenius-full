@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#8A2BE2" />
+    <meta name="description" content="Empower your child to build real businesses with AI. Learn entrepreneurship, innovation, and leadership through hands-on experiences that prepare them for tomorrow's opportunities." />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Kid-friendly cartoon-style fonts.
+         Fredoka  → rounded, modern, very readable; used everywhere as the
+                    default body/UI font.
+         Baloo 2  → chunky, friendly, slightly hand-drawn; reserved for
+                    big display headlines (font-display in Tailwind). -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Baloo+2:wght@600;700;800&display=swap"
+    />
+
+    <title>AI Genius AIpreneur</title>
+    <style>
+      .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+      }
+      .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      .pb-safe {
+        padding-bottom: env(safe-area-inset-bottom);
+      }
+
+      /*
+       * Boot loader: shown the instant index.html is parsed, BEFORE React or
+       * any framework JS has run. All animation is pure CSS (GPU-composited
+       * transforms/opacity) so it stays smooth even while the main thread is
+       * parsing megabytes of JS / instantiating Rapier WASM. Removed by
+       * main.tsx once React has mounted.
+       *
+       * Visual language matches AppLoader (the in-app loader React renders
+       * after this one fades out): violet plastic-key tile + bouncing dots
+       * + soft slate dotted background, safe-area aware so mobile devices
+       * never get a black band at the bottom under the home-bar.
+       */
+      #boot-loader {
+        position: fixed;
+        inset: 0;
+        z-index: 999999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        background:
+          radial-gradient(circle at 18px 18px, rgba(100, 116, 139, 0.18) 1px, transparent 1px) 0 0 / 24px 24px,
+          #f8fafc;
+        font-family: 'Fredoka', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        color: #0f172a;
+        transition: opacity 0.45s ease-out;
+        will-change: opacity;
+      }
+      @media (prefers-color-scheme: dark) {
+        #boot-loader {
+          background:
+            radial-gradient(circle at 18px 18px, rgba(100, 116, 139, 0.10) 1px, transparent 1px) 0 0 / 24px 24px,
+            #020617;
+          color: #f8fafc;
+        }
+      }
+      #boot-loader.fade-out {
+        opacity: 0;
+        pointer-events: none;
+      }
+      /* The card mirrors the AppLoader's frosted-glass tile. */
+      #boot-loader .card {
+        background: rgba(255, 255, 255, 0.7);
+        border: 1px solid rgba(226, 232, 240, 0.7);
+        border-radius: 28px;
+        padding: 32px 28px 26px;
+        width: 84vw;
+        max-width: 320px;
+        box-shadow: 0 12px 36px rgba(15, 23, 42, 0.08);
+        text-align: center;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+      }
+      @media (prefers-color-scheme: dark) {
+        #boot-loader .card {
+          background: rgba(15, 23, 42, 0.6);
+          border-color: rgba(255, 255, 255, 0.08);
+          box-shadow: 0 12px 36px rgba(0, 0, 0, 0.3);
+        }
+      }
+      /* Violet plastic-key logo tile — gently floats up and down. */
+      #boot-loader .logo {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 64px;
+        height: 64px;
+        background: #7c3aed;
+        border-radius: 22px;
+        border-bottom: 5px solid #5b21b6;
+        margin-bottom: 16px;
+        animation: boot-float 2.4s ease-in-out infinite;
+      }
+      #boot-loader .logo svg {
+        width: 32px;
+        height: 32px;
+        color: #ffffff;
+      }
+      /* Pulsing halo behind the logo. */
+      #boot-loader .logo::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 22px;
+        background: #a78bfa;
+        animation: boot-pulse 1.6s ease-out infinite;
+        z-index: -1;
+      }
+      #boot-loader .spinner {
+        display: none;
+      }
+      #boot-loader .label {
+        margin-top: 0;
+        font-size: 18px;
+        font-weight: 800;
+        letter-spacing: 0.01em;
+      }
+      /* Three bouncing dots, same as AppLoader. */
+      #boot-loader .dots {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        margin-top: 8px;
+        margin-bottom: 8px;
+      }
+      #boot-loader .dots span {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #8b5cf6;
+        animation: boot-dot 0.9s ease-in-out infinite;
+      }
+      #boot-loader .dots span:nth-child(2) { animation-delay: 0.15s; }
+      #boot-loader .dots span:nth-child(3) { animation-delay: 0.3s; }
+      #boot-loader .bar {
+        position: relative;
+        margin-top: 16px;
+        width: 100%;
+        height: 8px;
+        border-radius: 9999px;
+        background: rgba(148, 163, 184, 0.25);
+        overflow: hidden;
+      }
+      @media (prefers-color-scheme: dark) {
+        #boot-loader .bar { background: rgba(255, 255, 255, 0.08); }
+      }
+      #boot-loader .bar-fill {
+        height: 100%;
+        width: 0%;
+        background: #8b5cf6;
+        border-radius: inherit;
+        transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+        will-change: width;
+      }
+      #boot-loader .bar-shimmer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.45) 50%, transparent 100%);
+        background-size: 50% 100%;
+        background-repeat: no-repeat;
+        animation: boot-shimmer 1.6s ease-in-out infinite;
+        pointer-events: none;
+        will-change: background-position;
+      }
+      #boot-loader .pct {
+        margin-top: 8px;
+        font-variant-numeric: tabular-nums;
+        font-size: 11px;
+        font-weight: 700;
+        color: #64748b;
+        letter-spacing: 0.04em;
+      }
+      @media (prefers-color-scheme: dark) {
+        #boot-loader .pct { color: #94a3b8; }
+      }
+      #boot-loader .hint {
+        margin-top: 12px;
+        font-size: 13px;
+        color: #475569;
+        line-height: 1.45;
+      }
+      @media (prefers-color-scheme: dark) {
+        #boot-loader .hint { color: #cbd5e1; }
+      }
+      @keyframes boot-shimmer {
+        0%   { background-position: -100% 0; }
+        100% { background-position:  200% 0; }
+      }
+      @keyframes boot-float {
+        0%, 100% { transform: translateY(0); }
+        50%      { transform: translateY(-6px); }
+      }
+      @keyframes boot-pulse {
+        0%   { opacity: 0.35; transform: scale(1); }
+        100% { opacity: 0;    transform: scale(1.4); }
+      }
+      @keyframes boot-dot {
+        0%, 100% { transform: translateY(0); }
+        50%      { transform: translateY(-6px); }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #boot-loader .logo,
+        #boot-loader .logo::before,
+        #boot-loader .dots span,
+        #boot-loader .bar-shimmer {
+          animation-duration: 4s;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="boot-loader" aria-label="Loading">
+      <div class="card">
+        <span class="logo" aria-hidden>
+          <!-- Inline Sparkles icon (Lucide); avoids loading any JS to draw it. -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1" />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+        </span>
+        <div class="label" id="boot-label">Loading…</div>
+        <div class="dots" aria-hidden>
+          <span></span><span></span><span></span>
+        </div>
+        <div class="bar">
+          <div class="bar-fill" id="boot-bar-fill"></div>
+          <div class="bar-shimmer"></div>
+        </div>
+        <div class="pct" id="boot-pct">0%</div>
+        <div class="hint" id="boot-hint">Just a moment</div>
+      </div>
+    </div>
+    <div id="root"></div>
+    <script>
+      /*
+       * Boot loader API — called from React code at key milestones.
+       *
+       * Crucially, this overlay uses ONLY CSS animations (GPU-composited).
+       * Even when the main thread is stuck compiling Rapier WASM (2 MB) or
+       * parsing a chunk, the spinner + shimmer bar keep moving smoothly.
+       * A React-based loader would freeze during those blocks because its
+       * state updates can't fire.
+       *
+       * The loader stays up until __shopBootDone() is called from the
+       * scene when the player is actually visible + interactive.
+       */
+      (function () {
+        var $ = function (id) { return document.getElementById(id); };
+        var safetyTimer;
+        var doneOnce = false;
+        // Track highest progress so milestones can never decrease the bar.
+        var currentPct = 0;
+        function armSafety() {
+          if (safetyTimer) clearTimeout(safetyTimer);
+          safetyTimer = setTimeout(function () { window.__shopBootDone(); }, 25000);
+        }
+        function applyPct(pct) {
+          var fill = $('boot-bar-fill');
+          var num = $('boot-pct');
+          if (fill) fill.style.width = pct + '%';
+          if (num) num.textContent = pct + '%';
+        }
+        function ensureNode() {
+          var node = $('boot-loader');
+          if (node) return node;
+          // The loader was removed (e.g. dismissed on / before SPA-navigating
+          // to /demo). Rebuild it inline. CSS rules in <style> still apply.
+          // Mirrors the card layout the page renders on first paint so the
+          // visual is consistent across boot + SPA navigations.
+          var sparkSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">'
+            + '<path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"></path>'
+            + '<circle cx="12" cy="12" r="3"></circle>'
+            + '</svg>';
+          var html = '<div class="card">'
+            + '<span class="logo" aria-hidden>' + sparkSvg + '</span>'
+            + '<div class="label" id="boot-label">Loading…</div>'
+            + '<div class="dots" aria-hidden><span></span><span></span><span></span></div>'
+            + '<div class="bar"><div class="bar-fill" id="boot-bar-fill"></div><div class="bar-shimmer"></div></div>'
+            + '<div class="pct" id="boot-pct">0%</div>'
+            + '<div class="hint" id="boot-hint">Just a moment</div>'
+            + '</div>';
+          node = document.createElement('div');
+          node.id = 'boot-loader';
+          node.setAttribute('aria-label', 'Loading');
+          node.innerHTML = html;
+          document.body.appendChild(node);
+          doneOnce = false;
+          currentPct = 0;
+          applyPct(0);
+          armSafety();
+          return node;
+        }
+        // Show or re-create the loader (used by SPA route changes into /demo).
+        window.__shopBootShow = function (label, hint) {
+          var node = ensureNode();
+          node.classList.remove('fade-out');
+          if (typeof label === 'string') {
+            var n = $('boot-label');
+            if (n) n.textContent = label;
+          }
+          if (typeof hint === 'string') {
+            var h = $('boot-hint');
+            if (h) h.textContent = hint;
+          }
+        };
+        // Update the big heading.
+        window.__shopBootLabel = function (text) {
+          var n = $('boot-label');
+          if (n && typeof text === 'string') n.textContent = text;
+        };
+        // Update the sub-line.
+        window.__shopBootHint = function (text) {
+          var h = $('boot-hint');
+          if (h && typeof text === 'string') h.textContent = text;
+        };
+        // Set progress in [0, 100]. Monotonic — calls below the current value
+        // are ignored so the bar never rolls back.
+        window.__shopBootProgress = function (pct) {
+          if (typeof pct !== 'number' || isNaN(pct)) return;
+          pct = Math.max(0, Math.min(100, Math.round(pct)));
+          if (pct < currentPct) return;
+          currentPct = pct;
+          applyPct(pct);
+        };
+        window.__shopBootDone = function () {
+          if (doneOnce) return; doneOnce = true;
+          if (safetyTimer) { clearTimeout(safetyTimer); safetyTimer = null; }
+          // Snap to 100% before the fade so the bar visibly completes.
+          applyPct(100);
+          var node = $('boot-loader');
+          if (!node) return;
+          // Tiny delay so the snap-to-100% paint lands before the opacity fade.
+          setTimeout(function () {
+            node.classList.add('fade-out');
+            setTimeout(function () {
+              if (node && node.parentNode) node.parentNode.removeChild(node);
+            }, 500);
+          }, 80);
+        };
+        // Initial baseline so the bar isn't a flat zero on first paint.
+        applyPct(4);
+        currentPct = 4;
+        armSafety();
+      })();
+    </script>
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/3/turn.min.js"></script>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch(() => {});
+        });
+      }
+    </script>
+  </body>
+</html>

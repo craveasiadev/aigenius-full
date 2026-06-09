@@ -1,0 +1,217 @@
+# =====================================================================
+# Aigenius — one-shot full-stack deployment
+# ---------------------------------------------------------------------
+#   build:  docker compose build
+#   run:    docker compose up -d
+#   bootstrap (migrate + seed + cache) runs automatically on first boot
+# =====================================================================
+
+x-app-env: &app-env
+  # APP_KEY intentionally NOT overridden here — the app container manages
+  # it via .env + persistent storage volume so rebuilds don't break it.
+  APP_NAME: ${APP_NAME:-Aigenius}
+  APP_ENV: ${APP_ENV:-production}
+  APP_DEBUG: ${APP_DEBUG:-false}
+  APP_URL: ${APP_URL:-http://localhost}
+  APP_TIMEZONE: ${APP_TIMEZONE:-Asia/Kuala_Lumpur}
+
+  LOG_CHANNEL: stack
+  LOG_STACK: single
+  LOG_LEVEL: ${LOG_LEVEL:-warning}
+
+  DB_CONNECTION: mysql
+  DB_HOST: mysql
+  DB_PORT: 3306
+  DB_DATABASE: ${DB_DATABASE:-aigenius}
+  DB_USERNAME: ${DB_USERNAME:-aigenius}
+  DB_PASSWORD: ${DB_PASSWORD:-secret}
+
+  CACHE_STORE: redis
+  QUEUE_CONNECTION: redis
+  SESSION_DRIVER: redis
+  SESSION_LIFETIME: ${SESSION_LIFETIME:-120}
+  REDIS_HOST: redis
+  REDIS_PORT: 6379
+  REDIS_CLIENT: phpredis
+
+  BROADCAST_CONNECTION: log
+  FILESYSTEM_DISK: local
+  MAIL_MAILER: ${MAIL_MAILER:-log}
+
+  # — Pass-through secrets (read from host .env) —
+  OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+  MAILERSEND_API_KEY: ${MAILERSEND_API_KEY:-}
+  MAIL_FROM_ADDRESS: ${MAIL_FROM_ADDRESS:-noreply@localhost}
+  MAIL_FROM_NAME: ${MAIL_FROM_NAME:-Aigenius}
+  SUPABASE_URL: ${SUPABASE_URL:-}
+  SUPABASE_SERVICE_KEY: ${SUPABASE_SERVICE_KEY:-}
+  FIUU_MERCHANT_ID: ${FIUU_MERCHANT_ID:-}
+  FIUU_VERIFY_KEY: ${FIUU_VERIFY_KEY:-}
+  FIUU_SECRET_KEY: ${FIUU_SECRET_KEY:-}
+  FIUU_PAYMENT_URL: ${FIUU_PAYMENT_URL:-}
+  TOYYIBPAY_SECRET: ${TOYYIBPAY_SECRET:-}
+  TOYYIBPAY_CATEGORY: ${TOYYIBPAY_CATEGORY:-}
+  TOYYIBPAY_URL: ${TOYYIBPAY_URL:-}
+  ISMS_USERNAME: ${ISMS_USERNAME:-}
+  ISMS_PASSWORD: ${ISMS_PASSWORD:-}
+  ISMS_SENDER_ID: ${ISMS_SENDER_ID:-}
+  SANCTUM_STATEFUL_DOMAINS: ${SANCTUM_STATEFUL_DOMAINS:-localhost}
+  FRONTEND_URL: ${APP_URL:-http://localhost}
+
+services:
+  # ===================================================================
+  # MySQL 8 — persistent, tuned
+  # ===================================================================
+  mysql:
+    image: mysql:8.0
+    container_name: aigenius-mysql
+    restart: unless-stopped
+    command: >-
+      --default-authentication-plugin=mysql_native_password
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+      --innodb-buffer-pool-size=512M
+      --innodb-flush-log-at-trx-commit=2
+      --max-connections=200
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-rootsecret}
+      MYSQL_DATABASE:      ${DB_DATABASE:-aigenius}
+      MYSQL_USER:          ${DB_USERNAME:-aigenius}
+      MYSQL_PASSWORD:      ${DB_PASSWORD:-secret}
+      TZ: ${APP_TIMEZONE:-Asia/Kuala_Lumpur}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks: [aigenius]
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot",
+             "-p${DB_ROOT_PASSWORD:-rootsecret}"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+      start_period: 30s
+
+  # ===================================================================
+  # Redis — cache / queue / sessions
+  # ===================================================================
+  redis:
+    image: redis:7-alpine
+    container_name: aigenius-redis
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes",
+              "--maxmemory", "256mb",
+              "--maxmemory-policy", "allkeys-lru"]
+    volumes:
+      - redis_data:/data
+    networks: [aigenius]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+
+  # ===================================================================
+  # Laravel application (PHP-FPM)
+  #   - Bootstraps DB on first run (migrate + seed)
+  #   - Recompiles caches every boot
+  # ===================================================================
+  app:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    image: aigenius/app:latest
+    container_name: aigenius-app
+    restart: unless-stopped
+    depends_on:
+      mysql: { condition: service_healthy }
+      redis: { condition: service_healthy }
+    environment:
+      <<: *app-env
+    volumes:
+      - app_storage:/var/www/backend/storage
+    networks: [aigenius]
+    healthcheck:
+      test: ["CMD-SHELL", "php-fpm -t || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 90s
+
+  # ===================================================================
+  # Queue worker — reuses app image, skips bootstrap
+  # ===================================================================
+  queue:
+    image: aigenius/app:latest
+    container_name: aigenius-queue
+    restart: unless-stopped
+    depends_on:
+      app:   { condition: service_healthy }
+      redis: { condition: service_healthy }
+    environment:
+      <<: *app-env
+      SKIP_BOOTSTRAP: "1"
+    volumes:
+      - app_storage:/var/www/backend/storage
+    networks: [aigenius]
+    command: ["php", "artisan", "queue:work", "redis",
+              "--sleep=3", "--tries=3", "--max-time=3600", "--backoff=5"]
+
+  # ===================================================================
+  # Scheduler — runs Laravel task scheduler in-process
+  # ===================================================================
+  scheduler:
+    image: aigenius/app:latest
+    container_name: aigenius-scheduler
+    restart: unless-stopped
+    depends_on:
+      app: { condition: service_healthy }
+    environment:
+      <<: *app-env
+      SKIP_BOOTSTRAP: "1"
+    volumes:
+      - app_storage:/var/www/backend/storage
+    networks: [aigenius]
+    command: ["php", "artisan", "schedule:work"]
+
+  # ===================================================================
+  # Nginx — serves React SPA + reverse-proxies Laravel
+  # ===================================================================
+  web:
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+      args:
+        VITE_API_URL:                      ${VITE_API_URL:-/api}
+        VITE_ASSETS_URL:                   ${VITE_ASSETS_URL:-}
+        VITE_BASE:                         ${VITE_BASE:-/}
+        VITE_FIREBASE_API_KEY:             ${VITE_FIREBASE_API_KEY:-}
+        VITE_FIREBASE_AUTH_DOMAIN:         ${VITE_FIREBASE_AUTH_DOMAIN:-}
+        VITE_FIREBASE_PROJECT_ID:          ${VITE_FIREBASE_PROJECT_ID:-}
+        VITE_FIREBASE_STORAGE_BUCKET:      ${VITE_FIREBASE_STORAGE_BUCKET:-}
+        VITE_FIREBASE_MESSAGING_SENDER_ID: ${VITE_FIREBASE_MESSAGING_SENDER_ID:-}
+        VITE_FIREBASE_APP_ID:              ${VITE_FIREBASE_APP_ID:-}
+        VITE_FIREBASE_VAPID_KEY:           ${VITE_FIREBASE_VAPID_KEY:-}
+    image: aigenius/web:latest
+    container_name: aigenius-web
+    restart: unless-stopped
+    depends_on:
+      app: { condition: service_healthy }
+    ports:
+      - "${HTTP_PORT:-80}:80"
+    volumes:
+      # Live Laravel storage so /storage/... and uploaded files resolve
+      - app_storage:/var/www/backend/storage:ro
+    networks: [aigenius]
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mysql_data:
+  redis_data:
+  app_storage:
+
+networks:
+  aigenius:
+    driver: bridge
