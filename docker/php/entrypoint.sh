@@ -34,6 +34,26 @@ if [ "${SKIP_BOOTSTRAP:-0}" = "1" ]; then
 fi
 
 # ---------------------------------------------------------------------
+# 0. Ensure .env exists
+#   On a fresh `git clone` (e.g. on a new VPS) the backend/.env file is
+#   absent because it's gitignored. Laravel's artisan commands choke
+#   without it — `key:generate` does file_get_contents('.env') and dies.
+#   We seed it from .env.example so the rest of the bootstrap can run.
+#   Docker env vars still override every value at runtime.
+# ---------------------------------------------------------------------
+if [ ! -f .env ]; then
+    if [ -f .env.example ]; then
+        log "No .env present — seeding from .env.example."
+        cp .env.example .env
+    else
+        log "Creating empty .env (no .env.example to seed from)."
+        : > .env
+    fi
+    chown www-data:www-data .env 2>/dev/null || true
+    chmod 644 .env 2>/dev/null || true
+fi
+
+# ---------------------------------------------------------------------
 # 1. Wait for MySQL
 # ---------------------------------------------------------------------
 if [ -n "${DB_HOST:-}" ]; then
