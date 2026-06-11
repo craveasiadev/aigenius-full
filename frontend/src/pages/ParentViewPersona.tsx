@@ -83,7 +83,7 @@ export const ParentViewPersona = () => {
           </div>
         </header>
 
-        <div className="max-w-4xl mx-auto px-3 sm:px-4 py-8 sm:py-12 relative" style={{ zIndex: 1 }}>
+        <div className="max-w-4xl mx-auto px-3 sm:px-4 py-8 sm:py-12 pb-24 sm:pb-28 relative" style={{ zIndex: 1, paddingBottom: 'calc(env(safe-area-inset-bottom) + 96px)' }}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -146,14 +146,16 @@ export const ParentViewPersona = () => {
         borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
       }}>
         <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-8 h-14 sm:h-16 md:h-20 flex justify-between items-center">
-          <h1 className="text-sm sm:text-lg font-bold truncate pr-2" style={{ color: '#fff' }}>
+          <h1 className="text-sm sm:text-lg font-bold truncate pr-2 min-w-0 flex-1" style={{ color: '#fff' }}>
             {displayName}'s Persona
           </h1>
-          <ThemeToggle />
+          <div className="flex-shrink-0">
+            <ThemeToggle />
+          </div>
         </div>
       </header>
 
-      <div className="max-w-[1400px] mx-auto p-3 sm:p-4 md:p-6 relative" style={{ zIndex: 1 }}>
+      <div className="max-w-[1400px] mx-auto p-3 sm:p-4 md:p-6 pb-24 sm:pb-28 relative" style={{ zIndex: 1, paddingBottom: 'calc(env(safe-area-inset-bottom) + 96px)' }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -316,12 +318,12 @@ export const ParentViewPersona = () => {
 
                 return (
                   <div key={trait}>
-                    <div className="flex items-center justify-between mb-1.5 sm:mb-2">
-                      <div className="flex items-center gap-1.5 sm:gap-2">
-                        <span className="text-base sm:text-xl">{category.icon}</span>
-                        <span className="font-semibold text-xs sm:text-sm" style={{ color: '#fff' }}>{category.name}</span>
+                    <div className="flex items-center justify-between gap-2 mb-1.5 sm:mb-2">
+                      <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+                        <span className="text-base sm:text-xl flex-shrink-0">{category.icon}</span>
+                        <span className="font-semibold text-xs sm:text-sm truncate" style={{ color: '#fff' }}>{category.name}</span>
                       </div>
-                      <span className="text-cyan-400 font-bold text-xs sm:text-sm">{score}</span>
+                      <span className="text-cyan-400 font-bold text-xs sm:text-sm flex-shrink-0">{score}</span>
                     </div>
                     <div className="w-full h-2 sm:h-3 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
                       <motion.div

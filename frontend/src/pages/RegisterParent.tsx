@@ -108,7 +108,7 @@ export const RegisterParent = () => {
 
   return (
     <div
-      className={`${PAGE} overflow-y-auto px-4 touch-manipulation`}
+      className={`${PAGE} overflow-y-auto overflow-x-hidden px-4 touch-manipulation`}
       style={{
         paddingTop: 'max(env(safe-area-inset-top), 1.5rem)',
         paddingBottom: 'max(env(safe-area-inset-bottom), 1.5rem)',

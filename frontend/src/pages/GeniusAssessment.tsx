@@ -322,13 +322,13 @@ export const GeniusAssessment = () => {
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="flex items-center gap-3"
+            className="flex items-center gap-3 min-w-0"
           >
-            <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(236, 72, 153, 0.6))' }}>
+            <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(236, 72, 153, 0.6))' }}>
               <Brain className="w-5 h-5 md:w-6 md:h-6 text-white" />
             </div>
-            <div>
-              <h1 className="text-base md:text-lg font-bold" style={{ color: 'white' }}>
+            <div className="min-w-0">
+              <h1 className="text-base md:text-lg font-bold truncate" style={{ color: 'white' }}>
                 Assessment for {profile.genius_name}
               </h1>
               <p className="text-xs" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
@@ -350,7 +350,7 @@ export const GeniusAssessment = () => {
         />
       </div>
 
-      <main className="max-w-4xl mx-auto px-4 md:px-8 py-12" style={{ position: 'relative', zIndex: 1 }}>
+      <main className="max-w-4xl mx-auto px-4 md:px-8 py-8 md:py-12 pb-24 sm:pb-28" style={{ position: 'relative', zIndex: 1, paddingBottom: 'calc(env(safe-area-inset-bottom) + 96px)' }}>
         <AnimatePresence mode="wait">
           <motion.div
             key={currentQuestionIndex}
@@ -358,14 +358,14 @@ export const GeniusAssessment = () => {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -50 }}
             transition={{ duration: 0.3 }}
-            className="rounded-2xl p-8 md:p-12"
+            className="rounded-2xl p-5 sm:p-8 md:p-12"
             style={{ background: 'rgba(15, 15, 30, 0.5)', backdropFilter: 'blur(30px)', WebkitBackdropFilter: 'blur(30px)', border: '1px solid rgba(255, 255, 255, 0.06)' }}
           >
             <div className="mb-8">
               <div className="text-sm font-semibold mb-4" style={{ color: 'rgba(167, 139, 250, 0.8)' }}>
                 Question {currentQuestionIndex + 1} of {questions.length}
               </div>
-              <h2 className="text-2xl md:text-3xl font-bold mb-2" style={{ color: 'white' }}>
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2" style={{ color: 'white' }}>
                 {currentQuestion.question}
               </h2>
               <p className="text-sm" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
@@ -380,13 +380,13 @@ export const GeniusAssessment = () => {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => handleAnswer(option)}
-                  className="w-full p-6 rounded-2xl text-left transition-all text-white"
+                  className="w-full p-4 sm:p-6 rounded-2xl text-left transition-all text-white"
                   style={selectedAnswer === option
                     ? { background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(236, 72, 153, 0.6))', boxShadow: '0 0 30px rgba(139, 92, 246, 0.3)', border: '1px solid rgba(139, 92, 246, 0.4)' }
                     : { background: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(255, 255, 255, 0.08)' }
                   }
                 >
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-3 sm:gap-4 min-w-0">
                     <div
                       className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
                       style={selectedAnswer === option
@@ -400,17 +400,17 @@ export const GeniusAssessment = () => {
                         <span className="font-bold text-white">{String.fromCharCode(65 + index)}</span>
                       )}
                     </div>
-                    <span className="text-lg font-semibold flex-1">{option}</span>
+                    <span className="text-base sm:text-lg font-semibold flex-1 min-w-0">{option}</span>
                   </div>
                 </motion.button>
               ))}
             </div>
 
-            <div className="flex items-center justify-between">
+            <div className="flex flex-wrap items-center justify-between gap-3">
               <button
                 onClick={handlePrevious}
                 disabled={currentQuestionIndex === 0}
-                className={`flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all ${currentQuestionIndex === 0
+                className={`flex items-center gap-2 px-4 sm:px-6 py-3 rounded-xl font-semibold transition-all ${currentQuestionIndex === 0
                   ? 'opacity-50 cursor-not-allowed'
                   : ''
                   }`}
@@ -426,7 +426,7 @@ export const GeniusAssessment = () => {
                   whileTap={{ scale: 0.95 }}
                   onClick={handleSubmit}
                   disabled={!allQuestionsAnswered}
-                  className="px-8 py-4 rounded-xl font-bold text-white flex items-center gap-2"
+                  className="px-5 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-white flex items-center gap-2"
                   style={allQuestionsAnswered
                     ? { background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.6), rgba(16, 185, 129, 0.6))', boxShadow: '0 0 20px rgba(34, 197, 94, 0.3)' }
                     : { background: 'rgba(255, 255, 255, 0.1)', cursor: 'not-allowed', opacity: 0.5 }
@@ -441,7 +441,7 @@ export const GeniusAssessment = () => {
                   whileTap={{ scale: 0.95 }}
                   onClick={handleNext}
                   disabled={!selectedAnswer}
-                  className="px-8 py-4 rounded-xl font-bold text-white flex items-center gap-2"
+                  className="px-5 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-white flex items-center gap-2"
                   style={selectedAnswer
                     ? { background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(236, 72, 153, 0.6))', boxShadow: '0 0 20px rgba(139, 92, 246, 0.3)' }
                     : { background: 'rgba(255, 255, 255, 0.1)', cursor: 'not-allowed', opacity: 0.5 }

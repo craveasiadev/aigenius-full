@@ -159,7 +159,7 @@ export const AIAnalysis = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: '#0a0a1a' }}>
+      <div className="min-h-screen flex items-center justify-center px-4" style={{ background: '#0a0a1a' }}>
         <div className="text-center">
           <motion.div
             animate={{ rotate: 360 }}
@@ -181,8 +181,8 @@ export const AIAnalysis = () => {
 
   if (error || !analysis || !profile) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: '#0a0a1a' }}>
-        <div className="text-center rounded-2xl p-8 max-w-md" style={{ background: 'rgba(15, 15, 30, 0.5)', backdropFilter: 'blur(30px)', WebkitBackdropFilter: 'blur(30px)', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
+      <div className="min-h-screen flex items-center justify-center px-4" style={{ background: '#0a0a1a' }}>
+        <div className="text-center rounded-2xl p-6 sm:p-8 w-full max-w-md" style={{ background: 'rgba(15, 15, 30, 0.5)', backdropFilter: 'blur(30px)', WebkitBackdropFilter: 'blur(30px)', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
           <div className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ background: 'rgba(239, 68, 68, 0.15)' }}>
             <span className="text-3xl">!</span>
           </div>
@@ -230,27 +230,27 @@ export const AIAnalysis = () => {
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-4 md:px-8 py-12" style={{ position: 'relative', zIndex: 1 }}>
+      <main className="max-w-5xl mx-auto px-4 md:px-8 py-8 md:py-12 pb-24 sm:pb-28" style={{ position: 'relative', zIndex: 1 }}>
         {/* Success Message */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="rounded-2xl p-8 mb-8 text-center"
+          className="rounded-2xl p-5 sm:p-8 mb-6 sm:mb-8 text-center"
           style={{ background: 'rgba(15, 15, 30, 0.5)', backdropFilter: 'blur(30px)', WebkitBackdropFilter: 'blur(30px)', border: '1px solid rgba(139, 92, 246, 0.15)' }}
         >
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.2, type: 'spring' }}
-            className="w-24 h-24 mx-auto mb-6 rounded-full flex items-center justify-center"
+            className="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-5 sm:mb-6 rounded-full flex items-center justify-center"
             style={{ background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(236, 72, 153, 0.6))', boxShadow: '0 0 40px rgba(139, 92, 246, 0.3)' }}
           >
-            <Sparkles className="w-12 h-12 text-white" />
+            <Sparkles className="w-10 h-10 sm:w-12 sm:h-12 text-white" />
           </motion.div>
-          <h2 className="text-3xl font-bold mb-3" style={{ color: 'white' }}>
+          <h2 className="text-2xl sm:text-3xl font-bold mb-3" style={{ color: 'white' }}>
             Analysis Complete!
           </h2>
-          <p className="text-lg" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
+          <p className="text-base sm:text-lg" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
             We've analyzed {profile.genius_name}'s responses and identified key strengths and growth opportunities
           </p>
         </motion.div>
@@ -260,15 +260,15 @@ export const AIAnalysis = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="rounded-2xl p-8 mb-8"
+          className="rounded-2xl p-5 sm:p-8 mb-6 sm:mb-8"
           style={{ background: 'rgba(15, 15, 30, 0.5)', backdropFilter: 'blur(30px)', WebkitBackdropFilter: 'blur(30px)', border: '1px solid rgba(255, 255, 255, 0.06)' }}
         >
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: 'rgba(34, 197, 94, 0.15)', border: '1px solid rgba(34, 197, 94, 0.2)' }}>
+            <div className="w-12 h-12 shrink-0 rounded-xl flex items-center justify-center" style={{ background: 'rgba(34, 197, 94, 0.15)', border: '1px solid rgba(34, 197, 94, 0.2)' }}>
               <TrendingUp className="w-6 h-6" style={{ color: 'rgba(74, 222, 128, 1)' }} />
             </div>
-            <div>
-              <h3 className="text-2xl font-bold" style={{ color: 'white' }}>
+            <div className="min-w-0">
+              <h3 className="text-xl sm:text-2xl font-bold" style={{ color: 'white' }}>
                 Key Strengths
               </h3>
               <p className="text-sm" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
@@ -297,20 +297,20 @@ export const AIAnalysis = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="rounded-2xl p-8 mb-8"
+          className="rounded-2xl p-5 sm:p-8 mb-6 sm:mb-8"
           style={{ background: 'rgba(15, 15, 30, 0.5)', backdropFilter: 'blur(30px)', WebkitBackdropFilter: 'blur(30px)', border: '1px solid rgba(255, 255, 255, 0.06)' }}
         >
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: 'rgba(59, 130, 246, 0.15)', border: '1px solid rgba(59, 130, 246, 0.2)' }}>
+            <div className="w-12 h-12 shrink-0 rounded-xl flex items-center justify-center" style={{ background: 'rgba(59, 130, 246, 0.15)', border: '1px solid rgba(59, 130, 246, 0.2)' }}>
               <Brain className="w-6 h-6" style={{ color: 'rgba(96, 165, 250, 1)' }} />
             </div>
-            <div>
-              <h3 className="text-2xl font-bold" style={{ color: 'white' }}>
+            <div className="min-w-0">
+              <h3 className="text-xl sm:text-2xl font-bold" style={{ color: 'white' }}>
                 Learning Style
               </h3>
             </div>
           </div>
-          <p className="text-lg" style={{ color: 'white' }}>
+          <p className="text-base sm:text-lg" style={{ color: 'white' }}>
             {analysis.learningStyle}
           </p>
         </motion.div>
@@ -320,15 +320,15 @@ export const AIAnalysis = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
-          className="rounded-2xl p-8 mb-8"
+          className="rounded-2xl p-5 sm:p-8 mb-6 sm:mb-8"
           style={{ background: 'rgba(15, 15, 30, 0.5)', backdropFilter: 'blur(30px)', WebkitBackdropFilter: 'blur(30px)', border: '1px solid rgba(255, 255, 255, 0.06)' }}
         >
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: 'rgba(249, 115, 22, 0.15)', border: '1px solid rgba(249, 115, 22, 0.2)' }}>
+            <div className="w-12 h-12 shrink-0 rounded-xl flex items-center justify-center" style={{ background: 'rgba(249, 115, 22, 0.15)', border: '1px solid rgba(249, 115, 22, 0.2)' }}>
               <Target className="w-6 h-6" style={{ color: 'rgba(251, 146, 60, 1)' }} />
             </div>
-            <div>
-              <h3 className="text-2xl font-bold" style={{ color: 'white' }}>
+            <div className="min-w-0">
+              <h3 className="text-xl sm:text-2xl font-bold" style={{ color: 'white' }}>
                 Growth Opportunities
               </h3>
               <p className="text-sm" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
@@ -347,7 +347,7 @@ export const AIAnalysis = () => {
                 className="p-5 rounded-xl transition-all"
                 style={{ background: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(255, 255, 255, 0.06)' }}
               >
-                <h4 className="text-lg font-bold mb-2" style={{ color: 'white' }}>
+                <h4 className="text-base sm:text-lg font-bold mb-2" style={{ color: 'white' }}>
                   {index + 1}. {area.title}
                 </h4>
                 <p className="text-sm" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
@@ -369,7 +369,7 @@ export const AIAnalysis = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate(`/parent/genius-profiles/${profileId}/priorities/${quizId}`)}
-            className="px-8 py-4 rounded-xl font-bold text-white inline-flex items-center gap-3"
+            className="w-full sm:w-auto px-6 sm:px-8 py-4 rounded-xl font-bold text-white inline-flex items-center justify-center gap-3"
             style={{ background: 'linear-gradient(135deg, rgba(249, 115, 22, 0.6), rgba(236, 72, 153, 0.6))', boxShadow: '0 0 30px rgba(249, 115, 22, 0.3)' }}
           >
             Select Priority Focus Areas

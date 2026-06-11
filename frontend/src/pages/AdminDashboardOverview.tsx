@@ -89,7 +89,7 @@ export default function AdminDashboardOverview() {
     <AdminLayout>
       <div className="space-y-8">
         <div>
-          <h1 className="text-3xl font-bold mb-2" style={{ color: 'white' }}>Dashboard Overview</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold mb-2" style={{ color: 'white' }}>Dashboard Overview</h1>
           <p style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
             Live data from Laravel database. Chapters represent kid learning progress milestones.
           </p>
@@ -143,14 +143,14 @@ export default function AdminDashboardOverview() {
             ) : (
               <div className="space-y-3">
                 {topChapters.map((chapter, idx) => (
-                  <div key={chapter.chapter_code} className="flex items-center justify-between p-3 rounded-lg" style={{ background: 'rgba(255, 255, 255, 0.04)' }}>
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center text-white font-bold text-sm">
+                  <div key={chapter.chapter_code} className="flex items-center justify-between gap-2 p-3 rounded-lg" style={{ background: 'rgba(255, 255, 255, 0.04)' }}>
+                    <div className="flex items-center gap-3 min-w-0 flex-1">
+                      <div className="w-8 h-8 flex-shrink-0 rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center text-white font-bold text-sm">
                         {idx + 1}
                       </div>
-                      <span className="font-medium" style={{ color: 'white' }}>{chapter.chapter_code}</span>
+                      <span className="font-medium truncate" style={{ color: 'white' }}>{chapter.chapter_code}</span>
                     </div>
-                    <span className="text-sm" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>{chapter.count} completions</span>
+                    <span className="text-sm flex-shrink-0 whitespace-nowrap" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>{chapter.count} completions</span>
                   </div>
                 ))}
               </div>

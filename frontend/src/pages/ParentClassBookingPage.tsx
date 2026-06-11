@@ -202,7 +202,7 @@ export const ParentClassBookingPage = () => {
   const selectedSlot = activeClass?.slots?.find((s) => s.id === selectedSlotId);
 
   return (
-    <div className="min-h-screen pb-24" style={{ background: '#0a0a1a', color: '#fff' }}>
+    <div className="min-h-screen pb-24 sm:pb-28 overflow-x-hidden" style={{ background: '#0a0a1a', color: '#fff', paddingBottom: 'calc(env(safe-area-inset-bottom) + 96px)' }}>
       {/* Ambient gradient orbs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 0 }}>
         <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] rounded-full opacity-30" style={{ background: 'radial-gradient(circle, rgba(139, 92, 246, 0.3), transparent 70%)', filter: 'blur(80px)' }} />
@@ -232,7 +232,7 @@ export const ParentClassBookingPage = () => {
           border: '1px solid rgba(255, 255, 255, 0.08)',
         }}>
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-            <div>
+            <div className="min-w-0">
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-black" style={{ color: '#fff' }}>Book a Class</h1>
               <p className="mt-2 max-w-2xl text-sm sm:text-base font-medium" style={{ color: 'rgba(255,255,255,0.6)' }}>
                 Choose a class, select which child to register, pick a slot, and confirm your booking.
@@ -240,7 +240,7 @@ export const ParentClassBookingPage = () => {
             </div>
             <button
               onClick={() => navigate('/p/classes')}
-              className="flex items-center gap-2 px-5 py-2.5 font-bold rounded-xl transition-colors whitespace-nowrap"
+              className="flex items-center justify-center gap-2 w-full md:w-auto px-5 py-2.5 font-bold rounded-xl transition-colors whitespace-nowrap"
               style={{
                 background: 'rgba(255,255,255,0.1)',
                 backdropFilter: 'blur(10px)',
@@ -308,8 +308,8 @@ export const ParentClassBookingPage = () => {
                           <User className="w-5 h-5" style={{ color: 'rgba(255,255,255,0.5)' }} />
                         )}
                       </div>
-                      <div className="text-left">
-                        <div className="font-bold text-sm" style={{ color: '#fff' }}>{child.first_name}</div>
+                      <div className="text-left min-w-0">
+                        <div className="font-bold text-sm truncate" style={{ color: '#fff' }}>{child.first_name}</div>
                         {child.age && <div className="text-xs" style={{ color: 'rgba(255,255,255,0.4)' }}>Age {child.age}</div>}
                       </div>
                     </button>
@@ -344,13 +344,13 @@ export const ParentClassBookingPage = () => {
                         }}
                       >
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{
+                          <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{
                             background: 'rgba(255,255,255,0.06)',
                           }}>
                             <Icon className="w-5 h-5 text-purple-300" />
                           </div>
-                          <div>
-                            <div className="font-bold" style={{ color: '#fff' }}>{item.title}</div>
+                          <div className="min-w-0">
+                            <div className="font-bold truncate" style={{ color: '#fff' }}>{item.title}</div>
                             <div className="text-xs" style={{ color: 'rgba(255,255,255,0.5)' }}>
                               {item.level} · {item.duration_minutes} mins
                             </div>
@@ -407,16 +407,16 @@ export const ParentClassBookingPage = () => {
                               cursor: isFull ? 'not-allowed' : 'pointer',
                             }}
                           >
-                            <div className="flex items-center justify-between">
-                              <div>
+                            <div className="flex items-center justify-between gap-2">
+                              <div className="min-w-0">
                                 <div className="text-sm" style={{ color: 'rgba(255,255,255,0.5)' }}>{formatDate(slot.start_time)}</div>
-                                <div className="text-lg font-semibold" style={{ color: '#fff' }}>
+                                <div className="text-base sm:text-lg font-semibold" style={{ color: '#fff' }}>
                                   {formatTime(slot.start_time)} - {formatTime(slot.end_time)}
                                 </div>
                               </div>
-                              <div className="text-xs flex items-center gap-2" style={{ color: 'rgba(255,255,255,0.5)' }}>
-                                <MapPin className="w-4 h-4" />
-                                {slot.location || 'Online'}
+                              <div className="text-xs flex items-center gap-2 flex-shrink-0 max-w-[40%]" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                                <MapPin className="w-4 h-4 flex-shrink-0" />
+                                <span className="truncate">{slot.location || 'Online'}</span>
                               </div>
                             </div>
                             <div className="mt-3 flex items-center justify-between">
@@ -465,9 +465,9 @@ export const ParentClassBookingPage = () => {
                           <span style={{ color: 'rgba(255,255,255,0.5)' }}>Child</span>
                           <span className="font-semibold" style={{ color: '#fff' }}>{selectedChild.first_name}</span>
                         </div>
-                        <div className="flex items-center justify-between">
-                          <span style={{ color: 'rgba(255,255,255,0.5)' }}>Class</span>
-                          <span className="font-semibold" style={{ color: '#fff' }}>{activeClass?.title}</span>
+                        <div className="flex items-center justify-between gap-3">
+                          <span className="flex-shrink-0" style={{ color: 'rgba(255,255,255,0.5)' }}>Class</span>
+                          <span className="font-semibold min-w-0 truncate text-right" style={{ color: '#fff' }}>{activeClass?.title}</span>
                         </div>
                         {selectedSlot && (
                           <div className="flex items-center justify-between">
@@ -581,7 +581,7 @@ export const ParentClassBookingPage = () => {
               initial={{ y: 30, opacity: 0, scale: 0.95 }}
               animate={{ y: 0, opacity: 1, scale: 1 }}
               exit={{ y: 30, opacity: 0, scale: 0.95 }}
-              className="relative w-full max-w-md rounded-3xl shadow-2xl overflow-hidden"
+              className="relative w-full max-w-md mx-auto rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto"
               style={{
                 background: 'rgba(15, 15, 30, 0.85)',
                 backdropFilter: 'blur(40px)',
@@ -622,18 +622,18 @@ export const ParentClassBookingPage = () => {
                   background: 'rgba(255,255,255,0.04)',
                   border: '1px solid rgba(255,255,255,0.08)',
                 }}>
-                  <div className="flex justify-between">
-                    <span style={{ color: 'rgba(255,255,255,0.4)' }}>Class</span>
-                    <span className="font-semibold" style={{ color: '#fff' }}>{successBooking.class_title}</span>
+                  <div className="flex justify-between gap-3">
+                    <span className="flex-shrink-0" style={{ color: 'rgba(255,255,255,0.4)' }}>Class</span>
+                    <span className="font-semibold min-w-0 truncate text-right" style={{ color: '#fff' }}>{successBooking.class_title}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span style={{ color: 'rgba(255,255,255,0.4)' }}>Child</span>
-                    <span className="font-semibold" style={{ color: '#fff' }}>{successBooking.child_name}</span>
+                  <div className="flex justify-between gap-3">
+                    <span className="flex-shrink-0" style={{ color: 'rgba(255,255,255,0.4)' }}>Child</span>
+                    <span className="font-semibold min-w-0 truncate text-right" style={{ color: '#fff' }}>{successBooking.child_name}</span>
                   </div>
                   {successBooking.slot_time && (
-                    <div className="flex justify-between">
-                      <span style={{ color: 'rgba(255,255,255,0.4)' }}>When</span>
-                      <span className="font-semibold" style={{ color: '#fff' }}>{successBooking.slot_time}</span>
+                    <div className="flex justify-between gap-3">
+                      <span className="flex-shrink-0" style={{ color: 'rgba(255,255,255,0.4)' }}>When</span>
+                      <span className="font-semibold min-w-0 truncate text-right" style={{ color: '#fff' }}>{successBooking.slot_time}</span>
                     </div>
                   )}
                 </div>
@@ -643,8 +643,8 @@ export const ParentClassBookingPage = () => {
                   <div className="text-xs uppercase tracking-wider font-bold" style={{ color: 'rgba(255,255,255,0.4)' }}>
                     Your Booking Number
                   </div>
-                  <div className="flex items-center justify-center gap-2">
-                    <code className="text-lg font-mono font-bold text-cyan-300 px-4 py-2 rounded-xl" style={{
+                  <div className="flex items-center justify-center gap-2 min-w-0">
+                    <code className="text-base sm:text-lg font-mono font-bold text-cyan-300 px-4 py-2 rounded-xl min-w-0 truncate" style={{
                       background: 'rgba(34, 211, 238, 0.08)',
                       border: '1px solid rgba(34, 211, 238, 0.15)',
                     }}>
@@ -652,7 +652,7 @@ export const ParentClassBookingPage = () => {
                     </code>
                     <button
                       onClick={() => handleCopyOrderId(successBooking.order_id)}
-                      className="p-2 rounded-lg transition-colors"
+                      className="p-2 rounded-lg transition-colors flex-shrink-0"
                       title="Copy booking number"
                       style={{ background: 'rgba(255,255,255,0.04)' }}
                     >

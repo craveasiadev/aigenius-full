@@ -805,7 +805,7 @@ export const OperationModule = () => {
                             border: '1px solid rgba(255, 255, 255, 0.06)',
                           }}
                         >
-                          <div className="flex items-center gap-4 mb-3">
+                          <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-3">
                             <div className="relative shrink-0">
                               <div className="w-16 h-16 rounded-full overflow-hidden" style={{ border: '2px solid rgba(255, 255, 255, 0.12)', background: 'rgba(0,0,0,0.3)' }}>
                                 <img src={member.avatarUrl} alt={member.name} className="w-full h-[200%] object-cover object-top" />
@@ -826,7 +826,7 @@ export const OperationModule = () => {
                               <h3 className="text-white font-bold text-lg truncate">{member.name}</h3>
                               <span className="inline-block px-2 py-0.5 rounded text-xs font-bold" style={{ background: 'rgba(255, 255, 255, 0.06)', color: 'rgba(255, 255, 255, 0.5)' }}>{ROLE_INFO[member.role].title}</span>
                             </div>
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 ml-auto">
                               <motion.button
                                 whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.9 }}
@@ -918,7 +918,7 @@ export const OperationModule = () => {
                     </div>
 
                     {/* Bottom actions */}
-                    <div className="flex gap-3">
+                    <div className="flex flex-col sm:flex-row gap-3">
                       {hiredStaff.length < MAX_STAFF && (
                         <motion.button
                           whileHover={{ scale: 1.02 }}
@@ -1038,8 +1038,8 @@ export const OperationModule = () => {
                     style={{ background: 'rgba(34, 197, 94, 0.06)', border: '1px solid rgba(34, 197, 94, 0.15)' }}
                   >
                     <div className="flex items-center justify-between flex-wrap gap-3">
-                      <div className="flex items-center gap-3">
-                        <div className="flex -space-x-3">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="flex -space-x-3 shrink-0">
                           {hiredStaff.slice(0, 4).map((member) => (
                             <motion.div
                               key={member.id}
@@ -1051,9 +1051,9 @@ export const OperationModule = () => {
                             </motion.div>
                           ))}
                         </div>
-                        <div>
+                        <div className="min-w-0">
                           <p className="text-white font-bold">{hiredStaff.length}/{MAX_STAFF} Team Member{hiredStaff.length > 1 ? 's' : ''} Hired!</p>
-                          <p className="text-green-400 text-sm">{hiredStaff.map(s => s.name).join(', ')}</p>
+                          <p className="text-green-400 text-sm truncate">{hiredStaff.map(s => s.name).join(', ')}</p>
                           {hiredStaff.length >= MAX_STAFF && (
                             <p className="text-yellow-400 text-xs mt-1">Staff limit reached!</p>
                           )}
@@ -1154,10 +1154,10 @@ export const OperationModule = () => {
                 className="flex flex-col h-[75vh]"
               >
                 {/* Interview Header */}
-                <div className="flex items-center gap-4 mb-4 pb-4" style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
-                  <div className="flex-1">
-                    <h2 className="text-3xl font-bold text-white flex items-center gap-2">
-                      <MessageCircle style={{ color: 'rgba(255,255,255,0.4)' }} /> Interviewing {selectedStaff.name}
+                <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-4 pb-4" style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
+                  <div className="flex-1 min-w-0">
+                    <h2 className="text-xl sm:text-3xl font-bold text-white flex items-center gap-2 min-w-0">
+                      <MessageCircle className="shrink-0" style={{ color: 'rgba(255,255,255,0.4)' }} /> <span className="truncate">Interviewing {selectedStaff.name}</span>
                     </h2>
                     <p className="text-sm flex items-center gap-2" style={{ color: 'rgba(255,255,255,0.5)' }}>
                       Position: <span className="text-white font-bold">{ROLE_INFO[selectedStaff.role].title}</span>
@@ -1295,7 +1295,7 @@ export const OperationModule = () => {
                   </div>
 
                   {/* Decision Buttons */}
-                  <div className="flex gap-4">
+                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                     <motion.button
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
@@ -1311,7 +1311,7 @@ export const OperationModule = () => {
                       whileTap={{ scale: isHiring ? 1 : 0.98 }}
                       onClick={confirmHire}
                       disabled={isHiring}
-                      className="flex-[2] py-4 text-white rounded-2xl font-black text-lg flex items-center justify-center gap-3 disabled:opacity-60"
+                      className="flex-[2] min-w-0 py-4 px-3 text-white rounded-2xl font-black text-base sm:text-lg flex items-center justify-center gap-2 sm:gap-3 disabled:opacity-60"
                       style={{ background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.6), rgba(16, 185, 129, 0.6))', boxShadow: '0 0 20px rgba(34, 197, 94, 0.3)' }}
                     >
                       {isHiring ? (
@@ -1321,8 +1321,8 @@ export const OperationModule = () => {
                         </>
                       ) : (
                         <>
-                          <ThumbsUp className="w-6 h-6" />
-                          HIRE {selectedStaff.name.toUpperCase()}!
+                          <ThumbsUp className="w-6 h-6 shrink-0" />
+                          <span className="truncate">HIRE {selectedStaff.name.toUpperCase()}!</span>
                         </>
                       )}
                     </motion.button>
@@ -1371,11 +1371,11 @@ export const OperationModule = () => {
                       className="p-4 rounded-xl flex items-center gap-4"
                       style={{ background: 'rgba(15, 15, 30, 0.5)', border: '1px solid rgba(255, 255, 255, 0.06)' }}
                     >
-                      <div className="w-12 h-12 rounded-xl overflow-hidden" style={{ border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                      <div className="w-12 h-12 rounded-xl overflow-hidden shrink-0" style={{ border: '1px solid rgba(255, 255, 255, 0.08)' }}>
                         <img src={member.avatarUrl} alt={member.name} className="w-full h-full object-cover" />
                       </div>
-                      <div className="flex-1">
-                        <h3 className="text-white font-bold">{member.name}</h3>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-white font-bold truncate">{member.name}</h3>
                         <div className="flex gap-4 mt-2">
                           <div className="flex-1">
                             <div className="flex justify-between text-xs mb-1">
@@ -1533,7 +1533,7 @@ export const OperationModule = () => {
               initial={{ scale: 0.9, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
-              className="rounded-3xl p-8 max-w-md"
+              className="rounded-3xl p-5 sm:p-8 w-full max-w-md mx-auto max-h-[85vh] overflow-y-auto"
               style={{
                 background: 'rgba(15, 15, 30, 0.7)',
                 backdropFilter: 'blur(40px)',
@@ -1574,13 +1574,14 @@ export const OperationModule = () => {
             initial={{ opacity: 0, y: 50, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 50, scale: 0.95 }}
-            className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[9999]"
+            className="fixed left-1/2 -translate-x-1/2 z-[9999] w-full max-w-md px-4"
+            style={{ bottom: 'calc(env(safe-area-inset-bottom) + 104px)' }}
           >
-            <div className={`${GLASS} rounded-2xl px-4 py-3 flex items-center gap-2 max-w-md`}>
-              <span className="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-violet-600 border-b-[3px] border-violet-800">
+            <div className={`${GLASS} rounded-2xl px-4 py-3 flex items-center gap-2 w-full`}>
+              <span className="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-violet-600 border-b-[3px] border-violet-800 shrink-0">
                 <Sparkles className="w-4 h-4 text-white" />
               </span>
-              <span className="text-sm font-bold text-slate-900 dark:text-white">{geniMessage}</span>
+              <span className="text-sm font-bold text-slate-900 dark:text-white min-w-0">{geniMessage}</span>
             </div>
           </motion.div>
         )}

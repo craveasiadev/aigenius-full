@@ -297,7 +297,7 @@ export const AddGeniusProfile = () => {
         </div>
       </header>
 
-      <main className="relative z-10 flex items-center justify-center px-4 md:px-8 py-8">
+      <main className="relative z-10 flex items-center justify-center px-4 md:px-8 py-8 pb-24 sm:pb-28" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 96px)' }}>
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -318,7 +318,7 @@ export const AddGeniusProfile = () => {
               <div className="w-20 h-20 mx-auto mb-4 rounded-3xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(99, 102, 241, 0.6))' }}>
                 <User className="w-10 h-10 text-white" />
               </div>
-              <h2 className="text-3xl font-bold mb-2" style={{ color: 'white' }}>
+              <h2 className="text-2xl sm:text-3xl font-bold mb-2" style={{ color: 'white' }}>
                 Create Genius Profile
               </h2>
               <p style={{ color: 'rgba(255, 255, 255, 0.5)' }}>Tell us about your child</p>
@@ -342,15 +342,15 @@ export const AddGeniusProfile = () => {
                 <label className="block text-sm font-medium mb-3" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
                   Profile Picture
                 </label>
-                <div className="flex items-center gap-6">
-                  <div className="w-32 h-32 rounded-2xl overflow-hidden flex-shrink-0" style={{ background: 'rgba(139, 92, 246, 0.2)', border: '1px solid rgba(139, 92, 246, 0.3)' }}>
+                <div className="flex items-center gap-4 sm:gap-6">
+                  <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-2xl overflow-hidden flex-shrink-0" style={{ background: 'rgba(139, 92, 246, 0.2)', border: '1px solid rgba(139, 92, 246, 0.3)' }}>
                     <img
                       src={previewUrl || getDefaultAvatar()}
                       alt="Profile preview"
                       className="w-full h-full object-cover"
                     />
                   </div>
-                  <div className="flex-1">
+                  <div className="flex-1 min-w-0">
                     <label className="cursor-pointer">
                       <div className="flex items-center gap-3 justify-center py-2.5 px-4 rounded-xl font-semibold transition-all" style={{ background: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.08)', color: 'white' }}>
                         <Upload className="w-5 h-5" />
@@ -560,7 +560,7 @@ export const AddGeniusProfile = () => {
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="w-full max-w-lg rounded-2xl p-6 md:p-8"
+              className="w-full max-w-lg mx-auto rounded-2xl p-6 md:p-8 max-h-[90vh] overflow-y-auto"
               style={{ background: 'rgba(15, 15, 30, 0.8)', backdropFilter: 'blur(40px)', WebkitBackdropFilter: 'blur(40px)', border: '1px solid rgba(255, 255, 255, 0.1)', boxShadow: '0 25px 50px rgba(0, 0, 0, 0.5)' }}
             >
               {/* Success Header */}
@@ -596,7 +596,7 @@ export const AddGeniusProfile = () => {
                       {copiedId ? 'Copied!' : 'Copy'}
                     </button>
                   </div>
-                  <code className="text-xl font-mono block" style={{ color: 'rgba(167, 139, 250, 1)' }}>
+                  <code className="text-lg sm:text-xl font-mono block break-all" style={{ color: 'rgba(167, 139, 250, 1)' }}>
                     {createdProfileData.genius_id}
                   </code>
                 </div>
@@ -622,7 +622,7 @@ export const AddGeniusProfile = () => {
                       </button>
                     </div>
                   </div>
-                  <code className="text-xl font-mono block" style={{ color: 'rgba(167, 139, 250, 1)' }}>
+                  <code className="text-lg sm:text-xl font-mono block break-all" style={{ color: 'rgba(167, 139, 250, 1)' }}>
                     {showPassword ? generatedPassword : '••••••••••••'}
                   </code>
                 </div>
@@ -634,7 +634,7 @@ export const AddGeniusProfile = () => {
                   <Mail className="w-5 h-5" style={{ color: 'rgba(96, 165, 250, 1)' }} />
                   <span className="text-sm font-medium" style={{ color: 'rgba(96, 165, 250, 1)' }}>Send to Email</span>
                 </div>
-                <p className="text-xs mb-3" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
+                <p className="text-xs mb-3 break-all" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
                   We'll send these credentials to: <span style={{ color: 'white' }}>{parentEmail}</span>
                 </p>
                 <button

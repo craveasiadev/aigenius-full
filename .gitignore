@@ -6,6 +6,8 @@
 **/.env.local
 !**/.env.example
 !**/.env.production.example
+# Root runtime env file (carries live secrets — never commit)
+/env
 
 # Build / vendor artifacts (shouldn't be in repo — they're rebuilt in Docker)
 frontend/node_modules
@@ -19,6 +21,12 @@ backend/storage/framework/cache/data
 backend/storage/framework/sessions
 backend/storage/framework/views
 backend/bootstrap/cache/*.php
+
+# Secrets / private keys — never commit
+qbot
+qbot.ppk
+*.ppk
+*.pem
 
 # Docker
 *.pid

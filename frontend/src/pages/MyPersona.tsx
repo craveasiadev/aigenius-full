@@ -181,7 +181,7 @@ export const MyPersona = () => {
 
   if (!personaData || !geniusProfile) {
     return (
-      <div className="min-h-screen pb-24 relative overflow-hidden" style={{ background: '#0a0a1a' }}>
+      <div className="min-h-screen relative overflow-hidden" style={{ background: '#0a0a1a', paddingBottom: 'calc(env(safe-area-inset-bottom) + 96px)' }}>
         {/* Gradient orbs */}
         <div className="fixed top-[-20%] left-[-10%] w-[500px] h-[500px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%)', filter: 'blur(60px)' }} />
         <div className="fixed bottom-[-20%] right-[-10%] w-[500px] h-[500px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, transparent 70%)', filter: 'blur(60px)' }} />
@@ -189,7 +189,7 @@ export const MyPersona = () => {
 
         <TopNav userName={displayName} />
 
-        <div className="max-w-4xl mx-auto px-4 py-12 pt-20 md:pt-24 relative z-10">
+        <div className="max-w-4xl mx-auto px-4 py-12 pt-20 md:pt-24 relative z-10 min-w-0">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -203,7 +203,7 @@ export const MyPersona = () => {
             >
               <Sparkles className="w-16 h-16 text-white" />
             </motion.div>
-            <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-violet-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
+            <h1 className="text-2xl sm:text-4xl font-bold mb-4 bg-gradient-to-r from-violet-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
               Discover Your Genius Persona
             </h1>
             <p className="text-lg mb-8" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
@@ -235,7 +235,7 @@ export const MyPersona = () => {
     .filter(Boolean) as Discovery[];
 
   return (
-    <div className="min-h-screen pb-24 relative overflow-hidden" style={{ background: '#0a0a1a' }}>
+    <div className="min-h-screen relative overflow-hidden" style={{ background: '#0a0a1a', paddingBottom: 'calc(env(safe-area-inset-bottom) + 96px)' }}>
       {/* Gradient orbs */}
       <div className="fixed top-[-20%] left-[-10%] w-[500px] h-[500px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%)', filter: 'blur(60px)' }} />
       <div className="fixed bottom-[-20%] right-[-10%] w-[500px] h-[500px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, transparent 70%)', filter: 'blur(60px)' }} />
@@ -244,7 +244,7 @@ export const MyPersona = () => {
       <div className="relative z-10">
         <TopNav userName={displayName} />
 
-        <div className="max-w-[1400px] mx-auto p-6 pt-20 md:pt-24">
+        <div className="max-w-[1400px] mx-auto p-4 sm:p-6 pt-20 md:pt-24 min-w-0">
           <motion.button
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -264,13 +264,13 @@ export const MyPersona = () => {
             className="mb-8 relative"
           >
             <div className="absolute inset-0 rounded-3xl" style={{ background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(99, 102, 241, 0.08))', filter: 'blur(40px)' }} />
-            <div className="relative rounded-3xl p-8" style={{ background: 'rgba(15, 15, 30, 0.5)', backdropFilter: 'blur(30px)', WebkitBackdropFilter: 'blur(30px)', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
+            <div className="relative rounded-3xl p-5 sm:p-8" style={{ background: 'rgba(15, 15, 30, 0.5)', backdropFilter: 'blur(30px)', WebkitBackdropFilter: 'blur(30px)', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
               <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-                <div className="flex items-center gap-6">
+                <div className="flex items-center gap-4 sm:gap-6 min-w-0">
                   <motion.div
                     animate={{ scale: [1, 1.05, 1] }}
                     transition={{ duration: 3, repeat: Infinity }}
-                    className="w-24 h-24 rounded-3xl flex items-center justify-center shadow-2xl overflow-hidden"
+                    className="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 rounded-3xl flex items-center justify-center shadow-2xl overflow-hidden"
                     style={{ background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(99, 102, 241, 0.6))', boxShadow: '0 0 30px rgba(139, 92, 246, 0.3)' }}
                   >
                     {avatarUrl ? (
@@ -283,11 +283,11 @@ export const MyPersona = () => {
                       <span className="text-5xl text-white">{displayName.charAt(0)}</span>
                     )}
                   </motion.div>
-                  <div>
-                    <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-violet-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
+                  <div className="min-w-0">
+                    <h1 className="text-2xl sm:text-4xl font-bold mb-2 bg-gradient-to-r from-violet-400 via-blue-400 to-purple-400 bg-clip-text text-transparent truncate">
                       {displayName}
                     </h1>
-                    <p className="text-lg mb-3" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
+                    <p className="text-base sm:text-lg mb-3" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
                       Age {geniusProfile.age} - Discovering my genius
                     </p>
                     <motion.div
@@ -394,9 +394,9 @@ export const MyPersona = () => {
               {traitEntries.length > 0 ? (
                 traitEntries.slice(0, 8).map(([trait, score]) => (
                   <div key={trait} className="rounded-2xl p-4" style={{ background: 'rgba(15, 15, 30, 0.5)', backdropFilter: 'blur(30px)', WebkitBackdropFilter: 'blur(30px)', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
-                    <div className="flex items-center justify-between text-sm mb-2" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
-                      <span className="font-semibold">{String(trait)}</span>
-                      <span className="font-bold" style={{ color: 'rgba(139, 92, 246, 0.8)' }}>{Math.round(Number(score))}</span>
+                    <div className="flex items-center justify-between gap-2 text-sm mb-2" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+                      <span className="font-semibold truncate min-w-0">{String(trait)}</span>
+                      <span className="font-bold flex-shrink-0" style={{ color: 'rgba(139, 92, 246, 0.8)' }}>{Math.round(Number(score))}</span>
                     </div>
                     <div className="w-full h-2 rounded-full overflow-hidden" style={{ background: 'rgba(255, 255, 255, 0.06)' }}>
                       <div
@@ -564,28 +564,28 @@ export const MyPersona = () => {
 
               <div className="rounded-2xl p-6" style={{ background: 'rgba(15, 15, 30, 0.5)', backdropFilter: 'blur(30px)', WebkitBackdropFilter: 'blur(30px)', border: '1px solid rgba(99, 102, 241, 0.15)' }}>
                 <div className="flex items-center justify-between flex-wrap gap-4">
-                  <div>
+                  <div className="min-w-0">
                     <h3 className="text-lg font-bold text-white mb-2 flex items-center gap-2">
                       <Brain className="w-5 h-5" style={{ color: 'rgba(139, 92, 246, 0.8)' }} />
                       Your Entrepreneurial Profile
                     </h3>
                     <div className="flex flex-wrap gap-4 text-sm">
                       {entrepreneurialProfile?.entrepreneurialStyle && (
-                        <div className="flex items-center gap-2">
-                          <Star className="w-4 h-4 text-yellow-400" />
-                          <span style={{ color: 'rgba(255, 255, 255, 0.5)' }}>{entrepreneurialProfile.entrepreneurialStyle}</span>
+                        <div className="flex items-center gap-2 min-w-0">
+                          <Star className="w-4 h-4 text-yellow-400 flex-shrink-0" />
+                          <span className="break-words min-w-0" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>{entrepreneurialProfile.entrepreneurialStyle}</span>
                         </div>
                       )}
                       {entrepreneurialProfile?.leadershipTraits && entrepreneurialProfile.leadershipTraits.length > 0 && (
-                        <div className="flex items-center gap-2">
-                          <Users className="w-4 h-4" style={{ color: 'rgba(99, 102, 241, 0.8)' }} />
-                          <span style={{ color: 'rgba(255, 255, 255, 0.5)' }}>{entrepreneurialProfile.leadershipTraits.join(', ')}</span>
+                        <div className="flex items-center gap-2 min-w-0">
+                          <Users className="w-4 h-4 flex-shrink-0" style={{ color: 'rgba(99, 102, 241, 0.8)' }} />
+                          <span className="break-words min-w-0" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>{entrepreneurialProfile.leadershipTraits.join(', ')}</span>
                         </div>
                       )}
                       {entrepreneurialProfile?.socialValues && entrepreneurialProfile.socialValues.length > 0 && (
-                        <div className="flex items-center gap-2">
-                          <Heart className="w-4 h-4" style={{ color: 'rgba(236, 72, 153, 0.8)' }} />
-                          <span style={{ color: 'rgba(255, 255, 255, 0.5)' }}>{entrepreneurialProfile.socialValues.join(', ')}</span>
+                        <div className="flex items-center gap-2 min-w-0">
+                          <Heart className="w-4 h-4 flex-shrink-0" style={{ color: 'rgba(236, 72, 153, 0.8)' }} />
+                          <span className="break-words min-w-0" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>{entrepreneurialProfile.socialValues.join(', ')}</span>
                         </div>
                       )}
                     </div>
@@ -743,7 +743,7 @@ export const MyPersona = () => {
                 transition={{ delay: 0.4 }}
                 className="mb-8"
               >
-            <div className="rounded-2xl p-8" style={{ background: 'rgba(15, 15, 30, 0.5)', backdropFilter: 'blur(30px)', WebkitBackdropFilter: 'blur(30px)', border: '1px solid rgba(99, 102, 241, 0.15)' }}>
+            <div className="rounded-2xl p-5 sm:p-8" style={{ background: 'rgba(15, 15, 30, 0.5)', backdropFilter: 'blur(30px)', WebkitBackdropFilter: 'blur(30px)', border: '1px solid rgba(99, 102, 241, 0.15)' }}>
               <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
                 <Lightbulb className="w-6 h-6 text-yellow-400" />
                 Your Personality Summary
@@ -796,7 +796,7 @@ export const MyPersona = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
-                className="rounded-2xl p-8 text-center"
+                className="rounded-2xl p-5 sm:p-8 text-center"
                 style={{ background: 'rgba(15, 15, 30, 0.5)', backdropFilter: 'blur(30px)', WebkitBackdropFilter: 'blur(30px)', border: '1px solid rgba(168, 85, 247, 0.15)' }}
               >
             <motion.div
@@ -807,7 +807,7 @@ export const MyPersona = () => {
             >
               <BookOpen className="w-10 h-10 text-white" />
             </motion.div>
-            <h2 className="text-3xl font-bold text-white mb-4">
+            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4 break-words">
               Keep Discovering, {displayName}!
             </h2>
             <p className="text-lg mb-6" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
@@ -847,7 +847,7 @@ export const MyPersona = () => {
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
               onClick={(e) => e.stopPropagation()}
-              className="rounded-3xl p-8 max-w-md w-full relative"
+              className="rounded-3xl p-6 sm:p-8 max-w-md w-full mx-auto relative max-h-[90vh] overflow-y-auto"
               style={{ background: 'rgba(15, 15, 30, 0.8)', backdropFilter: 'blur(40px)', WebkitBackdropFilter: 'blur(40px)', border: '1px solid rgba(255, 255, 255, 0.08)' }}
             >
               <div className="text-center">
@@ -886,7 +886,7 @@ export const MyPersona = () => {
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
               onClick={(e) => e.stopPropagation()}
-              className="rounded-3xl p-8 max-w-3xl w-full relative my-8"
+              className="rounded-3xl p-6 sm:p-8 max-w-3xl w-full mx-auto relative my-8 max-h-[85vh] overflow-y-auto"
               style={{ background: 'rgba(15, 15, 30, 0.8)', backdropFilter: 'blur(40px)', WebkitBackdropFilter: 'blur(40px)', border: '1px solid rgba(139, 92, 246, 0.15)' }}
             >
               <button
@@ -904,13 +904,13 @@ export const MyPersona = () => {
 
                 return (
                   <div>
-                    <div className="flex items-center gap-4 mb-6">
-                      <div className="w-16 h-16 rounded-2xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(99, 102, 241, 0.6))' }}>
+                    <div className="flex items-center gap-4 mb-6 pr-12">
+                      <div className="w-14 h-14 sm:w-16 sm:h-16 flex-shrink-0 rounded-2xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(99, 102, 241, 0.6))' }}>
                         <Icon className="w-8 h-8 text-white" />
                       </div>
-                      <div>
-                        <h3 className="text-3xl font-bold text-white">{discovery?.label}</h3>
-                        <p style={{ color: 'rgba(139, 92, 246, 0.8)' }}>{discovery?.short_description}</p>
+                      <div className="min-w-0">
+                        <h3 className="text-2xl sm:text-3xl font-bold text-white break-words">{discovery?.label}</h3>
+                        <p className="break-words" style={{ color: 'rgba(139, 92, 246, 0.8)' }}>{discovery?.short_description}</p>
                       </div>
                     </div>
 

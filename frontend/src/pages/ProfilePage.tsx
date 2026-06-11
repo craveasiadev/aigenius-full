@@ -220,12 +220,12 @@ export const ProfilePage = () => {
           className={`${GLASS} rounded-3xl p-5 sm:p-6`}
         >
           {/* Avatar — solid violet square with first letter; 3D-bordered */}
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center w-full min-w-0">
             <span className="w-20 h-20 rounded-2xl bg-violet-600 border-b-[5px] border-violet-800 flex items-center justify-center text-white text-4xl font-extrabold uppercase">
               {geniusProfile?.genius_name?.[0] ?? 'P'}
             </span>
 
-            <h1 className="mt-3 text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+            <h1 className="mt-3 text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white max-w-full truncate text-center">
               {geniusProfile?.genius_name}
             </h1>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
@@ -253,12 +253,12 @@ export const ProfilePage = () => {
             {stats.map(({ Icon, label, value, tone }) => (
               <div
                 key={label}
-                className="flex flex-col items-center text-center rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-white/10 p-2"
+                className="flex flex-col items-center text-center rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-white/10 p-2 min-w-0"
               >
                 <span className={`${ICON_TILE} w-9 h-9 mb-1.5`}>
                   <Icon className={`w-4 h-4 ${tone}`} />
                 </span>
-                <p className="text-sm font-extrabold text-slate-900 dark:text-white tabular-nums">
+                <p className="w-full text-sm font-extrabold text-slate-900 dark:text-white tabular-nums truncate">
                   {value}
                 </p>
                 <p className="text-[10px] uppercase tracking-wider font-bold text-slate-500 dark:text-slate-400">
@@ -352,7 +352,7 @@ export const ProfilePage = () => {
               <span className={`${ICON_TILE} w-11 h-11 flex-shrink-0`}>
                 <item.Icon className={`w-5 h-5 ${item.tone}`} />
               </span>
-              <p className="flex-1 text-left text-sm sm:text-base font-bold text-slate-900 dark:text-white">
+              <p className="flex-1 min-w-0 text-left text-sm sm:text-base font-bold text-slate-900 dark:text-white truncate">
                 {item.name}
               </p>
               <ChevronRight className="w-5 h-5 text-slate-400 dark:text-slate-500 flex-shrink-0" />
@@ -396,9 +396,9 @@ export const ProfilePage = () => {
 // ─────────────────────────────────────────────────────────────────────
 function StatRow({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <div className="flex items-center justify-between py-2 text-sm">
-      <span className="text-slate-600 dark:text-slate-300">{label}</span>
-      <span className="font-extrabold tabular-nums text-slate-900 dark:text-white">{value}</span>
+    <div className="flex items-center justify-between gap-3 py-2 text-sm">
+      <span className="min-w-0 truncate text-slate-600 dark:text-slate-300">{label}</span>
+      <span className="font-extrabold tabular-nums text-slate-900 dark:text-white text-right shrink-0">{value}</span>
     </div>
   );
 }

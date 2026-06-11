@@ -45,11 +45,11 @@ export default function AdminRewards() {
 
   return (
     <AdminLayout>
-      <div className="p-8 space-y-6">
+      <div className="p-4 sm:p-8 space-y-6">
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-white mb-2">Rewards</h1>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="min-w-0">
+            <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">Rewards</h1>
             <p className="text-gray-400">Manage badges, vouchers, and bonuses</p>
             <p className="text-yellow-500 text-sm mt-2">
               ⚠️ Mock data - Not connected to database yet
@@ -59,7 +59,7 @@ export default function AdminRewards() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setShowAddModal(true)}
-            className="flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg text-white font-medium shadow-lg"
+            className="flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg text-white font-medium shadow-lg shrink-0"
           >
             <Plus className="w-5 h-5" />
             Add Reward
@@ -73,7 +73,7 @@ export default function AdminRewards() {
               key={reward.reward_code}
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="bg-gray-800 rounded-xl p-6 border border-gray-700 hover:border-purple-500/50 transition-colors"
+              className="bg-gray-800 rounded-xl p-5 sm:p-6 border border-gray-700 hover:border-purple-500/50 transition-colors min-w-0"
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
@@ -90,14 +90,14 @@ export default function AdminRewards() {
                 </span>
               </div>
 
-              <h3 className="text-lg font-bold text-white mb-2">
+              <h3 className="text-lg font-bold text-white mb-2 truncate">
                 {reward.name}
               </h3>
-              <p className="text-gray-400 text-sm mb-4">
+              <p className="text-gray-400 text-sm mb-4 line-clamp-2">
                 {reward.description_short}
               </p>
 
-              <div className="flex items-center gap-2 mb-4">
+              <div className="flex flex-wrap items-center gap-2 mb-4">
                 <span className="px-2 py-1 bg-blue-500/20 text-blue-400 rounded text-xs font-medium">
                   {reward.type}
                 </span>
@@ -118,7 +118,7 @@ export default function AdminRewards() {
                 </button>
               </div>
 
-              <p className="text-xs text-gray-500 mt-4 font-mono">
+              <p className="text-xs text-gray-500 mt-4 font-mono truncate">
                 {reward.reward_code}
               </p>
             </motion.div>

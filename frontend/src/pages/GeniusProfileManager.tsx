@@ -154,7 +154,7 @@ export const GeniusProfileManager = () => {
 
       <TopNav userName={currentUser?.name || 'Parent'} />
 
-      <main className="page-container pt-24 md:pt-28 pb-20" style={{ position: 'relative', zIndex: 1 }}>
+      <main className="page-container pt-24 md:pt-28 pb-24 sm:pb-28" style={{ position: 'relative', zIndex: 1, paddingBottom: 'calc(env(safe-area-inset-bottom) + 96px)' }}>
 
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
@@ -201,7 +201,7 @@ export const GeniusProfileManager = () => {
             <div className="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(59, 130, 246, 0.15)', border: '1px solid rgba(59, 130, 246, 0.2)' }}>
               <Link2 className="w-6 h-6" style={{ color: 'rgba(96, 165, 250, 1)' }} />
             </div>
-            <div>
+            <div className="min-w-0">
               <h3 className="text-xl font-bold mb-1" style={{ color: 'white' }}>Link Account</h3>
               <p className="text-sm max-w-xl" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
                 Does your child already have a student account? Enter their Genius ID and password below to link them to your parent dashboard.
@@ -331,7 +331,7 @@ export const GeniusProfileManager = () => {
                   <span className="capitalize">{profile.gender}</span>
                 </div>
 
-                <div className="inline-block px-3 py-1 rounded-full text-xs font-medium" style={{ background: 'rgba(139, 92, 246, 0.15)', color: 'rgba(167, 139, 250, 1)', border: '1px solid rgba(139, 92, 246, 0.2)' }}>
+                <div className="inline-block max-w-full break-words px-3 py-1 rounded-full text-xs font-medium" style={{ background: 'rgba(139, 92, 246, 0.15)', color: 'rgba(167, 139, 250, 1)', border: '1px solid rgba(139, 92, 246, 0.2)' }}>
                   Genius ID: {profile.genius_id || 'N/A'}
                 </div>
               </div>

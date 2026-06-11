@@ -229,7 +229,14 @@ export const ParentDashboard = () => {
         showTokenCounter={false}
       />
 
-      <main className="page-container pt-24 md:pt-28 px-4 sm:px-6 md:px-8" style={{ position: 'relative', zIndex: 1 }}>
+      <main
+        className="page-container pt-24 md:pt-28 px-4 sm:px-6 md:px-8"
+        style={{
+          position: 'relative',
+          zIndex: 1,
+          paddingBottom: 'calc(env(safe-area-inset-bottom) + 96px)',
+        }}
+      >
         <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -284,6 +291,7 @@ export const ParentDashboard = () => {
                   border: '1px solid rgba(139, 92, 246, 0.3)',
                   borderRadius: '12px',
                   padding: '8px 16px',
+                  minHeight: '40px',
                   color: 'white',
                   fontWeight: 600,
                   fontSize: '0.85rem',
@@ -307,6 +315,7 @@ export const ParentDashboard = () => {
                     border: '1px solid rgba(139, 92, 246, 0.3)',
                     borderRadius: '12px',
                     padding: '8px 16px',
+                    minHeight: '40px',
                     color: 'white',
                     fontWeight: 600,
                     fontSize: '0.85rem',
@@ -330,6 +339,7 @@ export const ParentDashboard = () => {
                   border: '1px solid rgba(255, 255, 255, 0.1)',
                   borderRadius: '12px',
                   padding: '8px 16px',
+                  minHeight: '40px',
                   color: 'rgba(255, 255, 255, 0.8)',
                   fontWeight: 600,
                   fontSize: '0.85rem',
@@ -396,9 +406,9 @@ export const ParentDashboard = () => {
                       }}
                     />
                   </div>
-                  <div>
+                  <div className="min-w-0 flex-1">
                     <h3
-                      className="text-xl font-bold"
+                      className="text-xl font-bold truncate"
                       style={{
                         color: 'rgba(255, 255, 255, 0.95)',
                         transition: 'color 0.2s ease',
@@ -407,7 +417,7 @@ export const ParentDashboard = () => {
                       {profile.genius_name}
                     </h3>
                     <p
-                      className="text-sm font-medium"
+                      className="text-sm font-medium truncate"
                       style={{ color: 'rgba(255, 255, 255, 0.4)' }}
                     >
                       Age {calculateAge(profile.date_of_birth)} · Genius

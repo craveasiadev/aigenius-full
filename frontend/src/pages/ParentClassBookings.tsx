@@ -88,7 +88,7 @@ export const ParentClassBookings = () => {
 
       <TopNav userName={currentUser?.name || 'Parent'} />
 
-      <div className="max-w-5xl mx-auto px-6 py-10 pt-20 md:pt-24 relative" style={{ zIndex: 1 }}>
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-10 pt-20 md:pt-24 relative" style={{ zIndex: 1 }}>
         <button
           onClick={() => navigate('/p/dashboard')}
           className="flex items-center gap-2 mb-6 transition-colors"
@@ -100,20 +100,20 @@ export const ParentClassBookings = () => {
           Back to Parent Dashboard
         </button>
 
-        <div className="rounded-3xl p-8" style={{
+        <div className="rounded-3xl p-5 sm:p-8" style={{
           background: 'linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(168, 85, 247, 0.15), rgba(59, 130, 246, 0.15))',
           backdropFilter: 'blur(30px)',
           WebkitBackdropFilter: 'blur(30px)',
           border: '1px solid rgba(255, 255, 255, 0.06)',
         }}>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div>
-              <h1 className="text-3xl font-black" style={{ color: '#fff' }}>Workshop RSVPs</h1>
-              <p className="mt-2" style={{ color: 'rgba(255,255,255,0.5)' }}>Track your kids' class bookings. Tap a booking to view QR code.</p>
+            <div className="min-w-0">
+              <h1 className="text-2xl sm:text-3xl font-black" style={{ color: '#fff' }}>Workshop RSVPs</h1>
+              <p className="mt-2 text-sm sm:text-base" style={{ color: 'rgba(255,255,255,0.5)' }}>Track your kids' class bookings. Tap a booking to view QR code.</p>
             </div>
             <button
               onClick={() => navigate('/p/book-class')}
-              className="px-5 py-2.5 font-bold rounded-xl shadow-lg whitespace-nowrap"
+              className="w-full sm:w-auto px-5 py-2.5 font-bold rounded-xl shadow-lg whitespace-nowrap"
               style={{
                 background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(99, 102, 241, 0.6))',
                 boxShadow: '0 0 20px rgba(139, 92, 246, 0.3)',
@@ -173,9 +173,9 @@ export const ParentClassBookings = () => {
                       <span className={`text-xs px-3 py-1 rounded-full font-semibold ${badge.classes}`}>
                         {badge.label}
                       </span>
-                      <div className="flex items-center gap-1.5 text-xs" style={{ color: 'rgba(255,255,255,0.3)' }}>
-                        <QrCode className="w-3.5 h-3.5" />
-                        <span className="font-mono">{booking.order_id}</span>
+                      <div className="flex items-center gap-1.5 text-xs max-w-[120px] sm:max-w-none" style={{ color: 'rgba(255,255,255,0.3)' }}>
+                        <QrCode className="w-3.5 h-3.5 flex-shrink-0" />
+                        <span className="font-mono truncate">{booking.order_id}</span>
                       </div>
                     </div>
                   </div>
@@ -212,7 +212,7 @@ export const ParentClassBookings = () => {
               initial={{ y: 30, opacity: 0, scale: 0.95 }}
               animate={{ y: 0, opacity: 1, scale: 1 }}
               exit={{ y: 30, opacity: 0, scale: 0.95 }}
-              className="relative w-full max-w-md rounded-3xl shadow-2xl overflow-hidden"
+              className="relative w-full max-w-md rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto"
               style={{
                 background: 'rgba(15, 15, 30, 0.85)',
                 backdropFilter: 'blur(40px)',
@@ -264,16 +264,16 @@ export const ParentClassBookings = () => {
                   border: '1px solid rgba(255,255,255,0.08)',
                 }}>
                   {selectedBooking.student && (
-                    <div className="flex justify-between">
-                      <span style={{ color: 'rgba(255,255,255,0.4)' }}>Student</span>
-                      <span className="font-semibold" style={{ color: '#fff' }}>
+                    <div className="flex justify-between gap-3">
+                      <span className="flex-shrink-0" style={{ color: 'rgba(255,255,255,0.4)' }}>Student</span>
+                      <span className="font-semibold text-right truncate min-w-0" style={{ color: '#fff' }}>
                         {selectedBooking.student.first_name || selectedBooking.student.genius_name}
                       </span>
                     </div>
                   )}
-                  <div className="flex justify-between">
-                    <span style={{ color: 'rgba(255,255,255,0.4)' }}>Payment</span>
-                    <span className="font-semibold capitalize" style={{ color: '#fff' }}>{selectedBooking.payment_method?.replace('_', ' ') || '-'}</span>
+                  <div className="flex justify-between gap-3">
+                    <span className="flex-shrink-0" style={{ color: 'rgba(255,255,255,0.4)' }}>Payment</span>
+                    <span className="font-semibold capitalize text-right truncate min-w-0" style={{ color: '#fff' }}>{selectedBooking.payment_method?.replace('_', ' ') || '-'}</span>
                   </div>
                   {selectedBooking.checked_in_at && (
                     <div className="flex justify-between">
@@ -290,13 +290,13 @@ export const ParentClassBookings = () => {
                   <div className="text-xs uppercase tracking-wider font-bold" style={{ color: 'rgba(255,255,255,0.4)' }}>
                     Booking Number
                   </div>
-                  <div className="flex items-center justify-center gap-2">
-                    <code className="text-base font-mono font-bold text-cyan-300 px-4 py-2 rounded-xl" style={{ background: 'rgba(34, 211, 238, 0.08)', border: '1px solid rgba(34, 211, 238, 0.15)' }}>
+                  <div className="flex items-center justify-center gap-2 min-w-0">
+                    <code className="text-base font-mono font-bold text-cyan-300 px-4 py-2 rounded-xl truncate min-w-0" style={{ background: 'rgba(34, 211, 238, 0.08)', border: '1px solid rgba(34, 211, 238, 0.15)' }}>
                       {selectedBooking.order_id}
                     </code>
                     <button
                       onClick={() => handleCopy(selectedBooking.order_id)}
-                      className="p-2 rounded-lg transition-colors"
+                      className="p-2 rounded-lg transition-colors flex-shrink-0"
                       style={{ background: 'rgba(255,255,255,0.04)' }}
                     >
                       {copied ? (

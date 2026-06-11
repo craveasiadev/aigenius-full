@@ -65,7 +65,7 @@ export default function AdminMembers() {
     <AdminLayout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold mb-2" style={{ color: 'white' }}>Members</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold mb-2" style={{ color: 'white' }}>Members</h1>
           <p style={{ color: 'rgba(255, 255, 255, 0.5)' }}>Live parent and kid records from Laravel database.</p>
         </div>
 
@@ -84,10 +84,10 @@ export default function AdminMembers() {
           </div>
         </div>
 
-        <div className="flex items-center gap-4" style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
+        <div className="flex items-center gap-2 sm:gap-4 overflow-x-auto scrollbar-hide" style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
           <button
             onClick={() => setActiveTab('parents')}
-            className="flex items-center gap-2 px-4 py-3 border-b-2 transition-colors"
+            className="flex flex-shrink-0 items-center gap-2 px-3 sm:px-4 py-3 border-b-2 transition-colors whitespace-nowrap"
             style={activeTab === 'parents'
               ? { borderColor: 'rgb(45, 212, 191)', color: 'white' }
               : { borderColor: 'transparent', color: 'rgba(255, 255, 255, 0.4)' }
@@ -99,7 +99,7 @@ export default function AdminMembers() {
 
           <button
             onClick={() => setActiveTab('genius')}
-            className="flex items-center gap-2 px-4 py-3 border-b-2 transition-colors"
+            className="flex flex-shrink-0 items-center gap-2 px-3 sm:px-4 py-3 border-b-2 transition-colors whitespace-nowrap"
             style={activeTab === 'genius'
               ? { borderColor: 'rgb(45, 212, 191)', color: 'white' }
               : { borderColor: 'transparent', color: 'rgba(255, 255, 255, 0.4)' }

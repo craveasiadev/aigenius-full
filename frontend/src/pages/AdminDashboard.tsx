@@ -337,9 +337,9 @@ export const AdminDashboard = () => {
 
       <TopNav userName={currentUser.name} />
 
-      <div className="max-w-[1400px] mx-auto p-6 pt-20 md:pt-24 relative z-10">
+      <div className="max-w-[1400px] mx-auto p-4 sm:p-6 pt-20 md:pt-24 pb-24 sm:pb-28 relative z-10" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 96px)' }}>
         <div className="mb-6">
-          <h1 className="text-3xl font-bold mb-2" style={{ color: 'white' }}>AI Genius AIpreneur Master Admin Dashboard</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold mb-2" style={{ color: 'white' }}>AI Genius AIpreneur Master Admin Dashboard</h1>
           <p className="mb-6" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>Monitor teachers, track engagement, and measure growth across all programs.</p>
 
           <div className="flex gap-2 overflow-x-auto pb-2">
@@ -349,7 +349,7 @@ export const AdminDashboard = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setActiveTab(tab)}
-                className="px-6 py-2 rounded-lg font-semibold whitespace-nowrap transition-all"
+                className="px-4 sm:px-6 py-2 rounded-lg font-semibold whitespace-nowrap transition-all text-sm sm:text-base"
                 style={activeTab === tab
                   ? { background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(99, 102, 241, 0.6))', color: 'white', boxShadow: '0 0 20px rgba(139, 92, 246, 0.3)' }
                   : { background: 'rgba(15, 15, 30, 0.5)', color: 'rgba(255, 255, 255, 0.5)', border: '1px solid rgba(255, 255, 255, 0.06)' }
@@ -476,17 +476,17 @@ export const AdminDashboard = () => {
                     </div>
                     <div className="space-y-4">
                       {teachers.slice(0, 4).map((teacher, i) => (
-                        <div key={teacher.id} className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold" style={{ background: 'linear-gradient(135deg, rgb(249, 115, 22), rgb(234, 179, 8))' }}>
+                        <div key={teacher.id} className="flex items-center justify-between gap-3">
+                          <div className="flex items-center gap-3 min-w-0 flex-1">
+                            <div className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0" style={{ background: 'linear-gradient(135deg, rgb(249, 115, 22), rgb(234, 179, 8))' }}>
                               {i + 1}
                             </div>
-                            <div>
-                              <p className="font-semibold" style={{ color: 'white' }}>{teacher.name}</p>
-                              <p className="text-sm" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>{teacher.email.split('@')[0]}</p>
+                            <div className="min-w-0">
+                              <p className="font-semibold truncate" style={{ color: 'white' }}>{teacher.name}</p>
+                              <p className="text-sm truncate" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>{teacher.email.split('@')[0]}</p>
                             </div>
                           </div>
-                          <div className="text-right">
+                          <div className="text-right flex-shrink-0">
                             <p className="font-bold" style={{ color: 'white' }}>{teacher.studentCount}</p>
                             <p className="text-xs" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>students</p>
                           </div>
@@ -525,37 +525,37 @@ export const AdminDashboard = () => {
                     </div>
                     <div className="space-y-3">
                       <div className="flex items-center gap-3 p-3 rounded-lg" style={{ background: 'rgba(59, 130, 246, 0.1)', border: '1px solid rgba(59, 130, 246, 0.15)' }}>
-                        <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'rgb(59, 130, 246)' }}>
+                        <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: 'rgb(59, 130, 246)' }}>
                           <BookOpen className="w-4 h-4 text-white" />
                         </div>
-                        <div>
+                        <div className="min-w-0">
                           <p className="font-medium" style={{ color: 'white' }}>New chapter uploaded: AI & Space Adventures</p>
                           <p className="text-sm" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>2 hours ago</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-3 p-3 rounded-lg" style={{ background: 'rgba(34, 197, 94, 0.1)', border: '1px solid rgba(34, 197, 94, 0.15)' }}>
-                        <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'rgb(34, 197, 94)' }}>
+                        <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: 'rgb(34, 197, 94)' }}>
                           <Users className="w-4 h-4 text-white" />
                         </div>
-                        <div>
+                        <div className="min-w-0">
                           <p className="font-medium" style={{ color: 'white' }}>Teacher Sarah joined AI Trainer Programme</p>
                           <p className="text-sm" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>6 hours ago</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-3 p-3 rounded-lg" style={{ background: 'rgba(249, 115, 22, 0.1)', border: '1px solid rgba(249, 115, 22, 0.15)' }}>
-                        <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'rgb(249, 115, 22)' }}>
+                        <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: 'rgb(249, 115, 22)' }}>
                           <Award className="w-4 h-4 text-white" />
                         </div>
-                        <div>
+                        <div className="min-w-0">
                           <p className="font-medium" style={{ color: 'white' }}>3 subscriptions expiring in 7 days</p>
                           <p className="text-sm" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>1 day ago</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-3 p-3 rounded-lg" style={{ background: 'rgba(34, 197, 94, 0.1)', border: '1px solid rgba(34, 197, 94, 0.15)' }}>
-                        <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'rgb(34, 197, 94)' }}>
+                        <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: 'rgb(34, 197, 94)' }}>
                           <Award className="w-4 h-4 text-white" />
                         </div>
-                        <div>
+                        <div className="min-w-0">
                           <p className="font-medium" style={{ color: 'white' }}>{stats.totalBadges} badges earned this month</p>
                           <p className="text-sm" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>2 days ago</p>
                         </div>
@@ -568,23 +568,23 @@ export const AdminDashboard = () => {
 
             {activeTab === 'Teachers' && (
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl font-bold" style={{ color: 'white' }}>Teacher Directory</h2>
-                  <div className="relative">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+                  <h2 className="text-xl sm:text-2xl font-bold" style={{ color: 'white' }}>Teacher Directory</h2>
+                  <div className="relative w-full sm:w-auto">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: 'rgba(255, 255, 255, 0.4)' }} />
                     <input
                       type="text"
                       placeholder="Search by name, region, or status"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-10 pr-4 py-2 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+                      className="w-full sm:w-auto pl-10 pr-4 py-2 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
                       style={glassInput}
                     />
                   </div>
                 </div>
 
-                <div className="rounded-2xl overflow-hidden" style={glassCard}>
-                  <table className="w-full">
+                <div className="rounded-2xl overflow-x-auto" style={glassCard}>
+                  <table className="w-full min-w-[640px]">
                     <thead style={{ background: 'rgba(0, 0, 0, 0.3)', borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
                       <tr>
                         <th className="text-left p-4 font-semibold" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>Teacher Name</th>
@@ -633,16 +633,16 @@ export const AdminDashboard = () => {
 
             {activeTab === 'Students' && (
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl font-bold" style={{ color: 'white' }}>Student Overview</h2>
-                  <div className="relative">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+                  <h2 className="text-xl sm:text-2xl font-bold" style={{ color: 'white' }}>Student Overview</h2>
+                  <div className="relative w-full sm:w-auto">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: 'rgba(255, 255, 255, 0.4)' }} />
                     <input
                       type="text"
                       placeholder="Search by name, ID, or teacher"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-10 pr-4 py-2 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+                      className="w-full sm:w-auto pl-10 pr-4 py-2 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
                       style={glassInput}
                     />
                   </div>
@@ -650,27 +650,27 @@ export const AdminDashboard = () => {
 
                 <div className="space-y-4">
                   {filteredStudents.map((student) => (
-                    <div key={student.id} className="rounded-2xl p-6 transition-all" style={{ ...glassCard, borderColor: 'rgba(255, 255, 255, 0.06)' }}>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-xl" style={{ background: 'linear-gradient(135deg, rgb(234, 179, 8), rgb(249, 115, 22))' }}>
+                    <div key={student.id} className="rounded-2xl p-4 sm:p-6 transition-all" style={{ ...glassCard, borderColor: 'rgba(255, 255, 255, 0.06)' }}>
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                        <div className="flex items-center gap-4 min-w-0">
+                          <div className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-xl flex-shrink-0" style={{ background: 'linear-gradient(135deg, rgb(234, 179, 8), rgb(249, 115, 22))' }}>
                             {student.name[0]}
                           </div>
-                          <div>
-                            <h3 className="font-bold text-lg" style={{ color: 'white' }}>{student.name}</h3>
-                            <p className="text-sm" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>Teacher: {student.teacher_name || 'Not assigned'}</p>
+                          <div className="min-w-0">
+                            <h3 className="font-bold text-lg truncate" style={{ color: 'white' }}>{student.name}</h3>
+                            <p className="text-sm truncate" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>Teacher: {student.teacher_name || 'Not assigned'}</p>
                           </div>
                         </div>
                         <button
                           onClick={() => handleViewProfile(student, 'student')}
-                          className="px-4 py-2 rounded-lg text-sm font-semibold text-white hover:opacity-90"
+                          className="w-full sm:w-auto flex-shrink-0 px-4 py-2 rounded-lg text-sm font-semibold text-white hover:opacity-90"
                           style={{ background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(99, 102, 241, 0.6))', boxShadow: '0 0 20px rgba(139, 92, 246, 0.3)' }}
                         >
                           Open Profile
                         </button>
                       </div>
 
-                      <div className="mt-4 grid grid-cols-3 gap-4">
+                      <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
                           <p className="text-sm mb-1" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>Current Chapter</p>
                           <p className="font-medium" style={{ color: 'white' }}>{student.current_chapter || 'None'}</p>
@@ -707,23 +707,23 @@ export const AdminDashboard = () => {
 
             {activeTab === 'Parents' && (
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl font-bold" style={{ color: 'white' }}>Parent Management</h2>
-                  <div className="relative">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+                  <h2 className="text-xl sm:text-2xl font-bold" style={{ color: 'white' }}>Parent Management</h2>
+                  <div className="relative w-full sm:w-auto">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: 'rgba(255, 255, 255, 0.4)' }} />
                     <input
                       type="text"
                       placeholder="Search parents"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-10 pr-4 py-2 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+                      className="w-full sm:w-auto pl-10 pr-4 py-2 rounded-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
                       style={glassInput}
                     />
                   </div>
                 </div>
 
-                <div className="rounded-2xl overflow-hidden" style={glassCard}>
-                  <table className="w-full">
+                <div className="rounded-2xl overflow-x-auto" style={glassCard}>
+                  <table className="w-full min-w-[640px]">
                     <thead style={{ background: 'rgba(0, 0, 0, 0.3)', borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
                       <tr>
                         <th className="text-left p-4 font-semibold" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>Parent Name</th>
@@ -772,9 +772,9 @@ export const AdminDashboard = () => {
 
             {activeTab === 'Chapters & Content' && (
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl font-bold" style={{ color: 'white' }}>AI Genius Chapters Management</h2>
-                  <button className="px-6 py-3 rounded-xl font-semibold text-white hover:opacity-90" style={{ background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(99, 102, 241, 0.6))', boxShadow: '0 0 20px rgba(139, 92, 246, 0.3)' }}>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+                  <h2 className="text-xl sm:text-2xl font-bold" style={{ color: 'white' }}>AI Genius Chapters Management</h2>
+                  <button className="w-full sm:w-auto px-6 py-3 rounded-xl font-semibold text-white hover:opacity-90" style={{ background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(99, 102, 241, 0.6))', boxShadow: '0 0 20px rgba(139, 92, 246, 0.3)' }}>
                     + Add New Chapter
                   </button>
                 </div>
@@ -785,7 +785,7 @@ export const AdminDashboard = () => {
                       <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style={{ background: 'linear-gradient(135deg, rgb(6, 182, 212), rgb(59, 130, 246))' }}>
                         <BookOpen className="w-6 h-6 text-white" />
                       </div>
-                      <h3 className="font-bold text-lg mb-2" style={{ color: 'white' }}>{chapter.title}</h3>
+                      <h3 className="font-bold text-lg mb-2 line-clamp-2" style={{ color: 'white' }}>{chapter.title}</h3>
                       <p className="text-sm mb-1" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>Who do you want to be?</p>
                       <div className="flex flex-wrap gap-2 mb-3">
                         <span className="px-2 py-1 rounded text-xs" style={{ background: 'rgba(255, 255, 255, 0.06)', color: 'rgba(255, 255, 255, 0.6)' }}>
@@ -802,7 +802,7 @@ export const AdminDashboard = () => {
 
                       <p className="font-semibold mb-2" style={{ color: 'white' }}>{Math.floor(Math.random() * 300) + 50} students engaged</p>
 
-                      <div className="flex items-center justify-between">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
                         <span className="px-3 py-1 rounded-full text-xs font-semibold" style={chapter.status === 'completed'
                           ? { background: 'rgba(34, 197, 94, 0.15)', color: 'rgb(34, 197, 94)' }
                           : { background: 'rgba(234, 179, 8, 0.15)', color: 'rgb(234, 179, 8)' }
@@ -826,17 +826,17 @@ export const AdminDashboard = () => {
                   <h3 className="text-xl font-bold mb-4" style={{ color: 'white' }}>Top 5 Most Engaging Chapters</h3>
                   <div className="space-y-3">
                     {chapters.slice(0, 2).map((chapter, i) => (
-                      <div key={chapter.id} className="flex items-center justify-between p-3 rounded-lg" style={{ background: 'rgba(255, 255, 255, 0.04)' }}>
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm" style={{ background: 'linear-gradient(135deg, rgb(234, 179, 8), rgb(249, 115, 22))' }}>
+                      <div key={chapter.id} className="flex items-center justify-between gap-3 p-3 rounded-lg" style={{ background: 'rgba(255, 255, 255, 0.04)' }}>
+                        <div className="flex items-center gap-3 min-w-0 flex-1">
+                          <div className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0" style={{ background: 'linear-gradient(135deg, rgb(234, 179, 8), rgb(249, 115, 22))' }}>
                             {i + 1}
                           </div>
-                          <div>
-                            <p className="font-semibold" style={{ color: 'white' }}>{chapter.title}</p>
-                            <p className="text-sm" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>By {chapter.student_name}</p>
+                          <div className="min-w-0">
+                            <p className="font-semibold truncate" style={{ color: 'white' }}>{chapter.title}</p>
+                            <p className="text-sm truncate" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>By {chapter.student_name}</p>
                           </div>
                         </div>
-                        <div className="text-right">
+                        <div className="text-right flex-shrink-0">
                           <p className="font-bold" style={{ color: 'white' }}>{Math.floor(Math.random() * 200) + 150}</p>
                           <p className="text-xs" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>students engaged</p>
                         </div>
@@ -849,9 +849,9 @@ export const AdminDashboard = () => {
 
             {activeTab === 'Team' && (
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl font-bold" style={{ color: 'white' }}>Team Management</h2>
-                  <button className="px-6 py-3 rounded-xl font-semibold text-white hover:opacity-90 flex items-center gap-2" style={{ background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(99, 102, 241, 0.6))', boxShadow: '0 0 20px rgba(139, 92, 246, 0.3)' }}>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+                  <h2 className="text-xl sm:text-2xl font-bold" style={{ color: 'white' }}>Team Management</h2>
+                  <button className="w-full sm:w-auto px-6 py-3 rounded-xl font-semibold text-white hover:opacity-90 flex items-center justify-center gap-2" style={{ background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(99, 102, 241, 0.6))', boxShadow: '0 0 20px rgba(139, 92, 246, 0.3)' }}>
                     <UserPlus className="w-5 h-5" />
                     Add Team Member
                   </button>
@@ -895,8 +895,8 @@ export const AdminDashboard = () => {
                   </div>
                 </div>
 
-                <div className="rounded-2xl overflow-hidden" style={glassCard}>
-                  <table className="w-full">
+                <div className="rounded-2xl overflow-x-auto" style={glassCard}>
+                  <table className="w-full min-w-[720px]">
                     <thead style={{ background: 'rgba(0, 0, 0, 0.3)', borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
                       <tr>
                         <th className="text-left p-4 font-semibold" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>Name</th>
@@ -960,7 +960,7 @@ export const AdminDashboard = () => {
             {activeTab === 'System Settings' && (
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
                 <h2 className="text-2xl font-bold mb-6" style={{ color: 'white' }}>AI Settings</h2>
-                <div className="rounded-2xl p-8" style={glassCard}>
+                <div className="rounded-2xl p-4 sm:p-8" style={glassCard}>
                   <div className="space-y-6">
                     <div>
                       <label className="block text-sm font-medium mb-2" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
@@ -1011,7 +1011,7 @@ export const AdminDashboard = () => {
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between pt-4" style={{ borderTop: '1px solid rgba(255, 255, 255, 0.06)' }}>
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-4" style={{ borderTop: '1px solid rgba(255, 255, 255, 0.06)' }}>
                       <p className="text-sm" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>
                         Changes take effect immediately after saving
                       </p>
@@ -1020,7 +1020,7 @@ export const AdminDashboard = () => {
                         whileTap={{ scale: 0.98 }}
                         onClick={handleSaveAISettings}
                         disabled={savingSettings}
-                        className="px-8 py-3 rounded-xl font-semibold text-white"
+                        className="w-full sm:w-auto px-8 py-3 rounded-xl font-semibold text-white"
                         style={savingSettings
                           ? { background: 'rgba(107, 114, 128, 0.5)', cursor: 'not-allowed' }
                           : { background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(99, 102, 241, 0.6))', boxShadow: '0 0 20px rgba(139, 92, 246, 0.3)' }
@@ -1038,10 +1038,10 @@ export const AdminDashboard = () => {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="rounded-2xl p-12 text-center"
+                className="rounded-2xl p-8 sm:p-12 text-center"
                 style={glassCard}
               >
-                <h3 className="text-2xl font-bold mb-4" style={{ color: 'white' }}>{activeTab}</h3>
+                <h3 className="text-xl sm:text-2xl font-bold mb-4" style={{ color: 'white' }}>{activeTab}</h3>
                 <p className="text-lg" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>This section is coming soon!</p>
               </motion.div>
             )}

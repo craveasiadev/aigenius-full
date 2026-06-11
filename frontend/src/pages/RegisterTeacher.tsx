@@ -193,7 +193,7 @@ export const RegisterTeacher = () => {
               {errors.phone && <p className="text-red-400 text-xs mt-1">{errors.phone}</p>}
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs sm:text-sm font-medium mb-1.5" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
                   Experience

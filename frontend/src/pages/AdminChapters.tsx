@@ -101,18 +101,18 @@ export default function AdminChapters() {
 
   return (
     <AdminLayout>
-      <div className="p-8 space-y-6">
+      <div className="p-4 sm:p-8 space-y-6 pb-24 sm:pb-28">
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold mb-2" style={{ color: 'white' }}>Chapters</h1>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="min-w-0">
+            <h1 className="text-2xl sm:text-3xl font-bold mb-2" style={{ color: 'white' }}>Chapters</h1>
             <p style={{ color: 'rgba(255, 255, 255, 0.5)' }}>Manage chapter content and settings</p>
           </div>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleAddChapter}
-            className="flex items-center gap-2 px-4 py-3 rounded-lg text-white font-medium"
+            className="flex items-center justify-center gap-2 w-full sm:w-auto px-4 py-3 rounded-lg text-white font-medium"
             style={{ background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(99, 102, 241, 0.6))', boxShadow: '0 0 20px rgba(139, 92, 246, 0.3)' }}
           >
             <Plus className="w-5 h-5" />
@@ -148,8 +148,8 @@ export default function AdminChapters() {
             <p style={{ color: 'rgba(255, 255, 255, 0.4)' }}>No chapters found</p>
           </div>
         ) : (
-          <div className="rounded-xl overflow-hidden" style={glassCard}>
-            <table className="w-full">
+          <div className="rounded-xl overflow-x-auto" style={glassCard}>
+            <table className="w-full min-w-[640px]">
               <thead style={{ background: 'rgba(0, 0, 0, 0.3)' }}>
                 <tr>
                   <th className="px-6 py-4 text-left text-sm font-medium" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
@@ -215,7 +215,7 @@ export default function AdminChapters() {
                     <td className="px-6 py-4">
                       <button
                         onClick={() => handleEditChapter(chapter.chapter_code)}
-                        className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm transition-colors"
+                        className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm transition-colors whitespace-nowrap"
                         style={{ background: 'rgba(255, 255, 255, 0.06)', color: 'white', border: '1px solid rgba(255, 255, 255, 0.08)' }}
                       >
                         <Edit className="w-4 h-4" />

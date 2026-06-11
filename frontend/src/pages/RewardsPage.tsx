@@ -491,15 +491,15 @@ export const RewardsPage = () => {
                       </span>
 
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-0.5">
-                          <h3 className="font-bold text-slate-900 dark:text-white">{a.name}</h3>
-                          {claimed && <Star className="w-4 h-4 text-amber-500 fill-amber-500" />}
+                        <div className="flex items-center gap-2 mb-0.5 min-w-0">
+                          <h3 className="font-bold text-slate-900 dark:text-white truncate min-w-0">{a.name}</h3>
+                          {claimed && <Star className="w-4 h-4 text-amber-500 fill-amber-500 shrink-0" />}
                           {claimed ? (
-                            <span className="inline-flex items-center gap-0.5 text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
+                            <span className="inline-flex items-center gap-0.5 text-[10px] font-bold text-emerald-600 dark:text-emerald-400 shrink-0 whitespace-nowrap">
                               <Check className="w-3 h-3" /> Claimed
                             </span>
                           ) : pendingClaim ? (
-                            <span className="inline-flex items-center gap-0.5 text-[10px] font-bold text-amber-600 dark:text-amber-400">
+                            <span className="inline-flex items-center gap-0.5 text-[10px] font-bold text-amber-600 dark:text-amber-400 shrink-0 whitespace-nowrap">
                               <Loader2 className="w-3 h-3 animate-spin" /> Claiming…
                             </span>
                           ) : null}

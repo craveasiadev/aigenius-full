@@ -171,7 +171,7 @@ export const ClassBookingPage = () => {
 
       <TopNav userName={displayName} />
 
-      <div className="max-w-6xl mx-auto px-6 py-10 pt-20 md:pt-24" style={{ position: 'relative', zIndex: 1 }}>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-10 pt-20 md:pt-24" style={{ position: 'relative', zIndex: 1 }}>
         <button
           onClick={() => smartBack()}
           className="flex items-center gap-2 mb-6"
@@ -183,7 +183,7 @@ export const ClassBookingPage = () => {
 
         {/* Hero header glass card */}
         <div
-          className="rounded-3xl p-8"
+          className="rounded-3xl p-5 sm:p-8"
           style={{
             background: 'rgba(15, 15, 30, 0.5)',
             backdropFilter: 'blur(30px)',
@@ -193,7 +193,7 @@ export const ClassBookingPage = () => {
         >
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div>
-              <h1 className="text-3xl md:text-4xl font-black" style={{ color: 'white' }}>Workshops & Live Classes</h1>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-black" style={{ color: 'white' }}>Workshops & Live Classes</h1>
               <p className="mt-2 max-w-2xl" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
                 Choose a class, pick a slot, and book your seat. Learn with mentors, build real skills, and power up your shop.
               </p>
@@ -234,7 +234,7 @@ export const ClassBookingPage = () => {
                     >
                       <div className="flex items-center gap-3">
                         <div
-                          className="w-10 h-10 rounded-xl flex items-center justify-center"
+                          className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
                           style={{
                             background: 'rgba(139, 92, 246, 0.15)',
                             border: '1px solid rgba(139, 92, 246, 0.2)',
@@ -242,9 +242,9 @@ export const ClassBookingPage = () => {
                         >
                           <Icon className="w-5 h-5" style={{ color: 'rgba(196, 167, 255, 0.9)' }} />
                         </div>
-                        <div>
-                          <div className="font-bold" style={{ color: 'white' }}>{item.title}</div>
-                          <div className="text-xs" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>{item.level} · {item.duration_minutes} mins</div>
+                        <div className="min-w-0">
+                          <div className="font-bold truncate" style={{ color: 'white' }}>{item.title}</div>
+                          <div className="text-xs truncate" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>{item.level} · {item.duration_minutes} mins</div>
                         </div>
                       </div>
                       <div className="text-sm mt-2" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>{item.description}</div>
@@ -297,14 +297,14 @@ export const ClassBookingPage = () => {
                             cursor: isFull ? 'not-allowed' : 'pointer',
                           }}
                         >
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <div className="text-sm" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>{formatDate(slot.start_time)}</div>
-                              <div className="text-lg font-semibold" style={{ color: 'white' }}>{formatTime(slot.start_time)} - {formatTime(slot.end_time)}</div>
+                          <div className="flex items-center justify-between gap-2">
+                            <div className="min-w-0">
+                              <div className="text-sm truncate" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>{formatDate(slot.start_time)}</div>
+                              <div className="text-base sm:text-lg font-semibold truncate" style={{ color: 'white' }}>{formatTime(slot.start_time)} - {formatTime(slot.end_time)}</div>
                             </div>
-                            <div className="text-xs flex items-center gap-2" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>
-                              <MapPin className="w-4 h-4" />
-                              {slot.location || 'Online'}
+                            <div className="text-xs flex items-center gap-2 flex-shrink-0" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>
+                              <MapPin className="w-4 h-4 flex-shrink-0" />
+                              <span className="truncate max-w-[5rem]">{slot.location || 'Online'}</span>
                             </div>
                           </div>
                           <div className="mt-3 text-sm" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>{spotsLeft} seats left</div>
@@ -437,16 +437,16 @@ export const ClassBookingPage = () => {
                           border: '1px solid rgba(255, 255, 255, 0.06)',
                         }}
                       >
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <div className="font-semibold" style={{ color: 'white' }}>{booking.slot?.course?.title || 'Class Booking'}</div>
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="min-w-0">
+                            <div className="font-semibold truncate" style={{ color: 'white' }}>{booking.slot?.course?.title || 'Class Booking'}</div>
                             {booking.slot?.start_time && (
-                              <div className="text-sm" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>
+                              <div className="text-sm truncate" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>
                                 {formatDate(booking.slot.start_time)} · {formatTime(booking.slot.start_time)}
                               </div>
                             )}
                           </div>
-                          <div className={`text-xs px-3 py-1 rounded-full ${
+                          <div className={`text-xs px-3 py-1 rounded-full flex-shrink-0 whitespace-nowrap ${
                             booking.payment_status === 'completed'
                               ? 'bg-green-500/20 text-green-300'
                               : booking.payment_status === 'pay_later'

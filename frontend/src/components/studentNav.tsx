@@ -131,13 +131,14 @@ export function StudentMoreSheet({ show, onClose, extraItems = [] }: StudentMore
             exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 28, stiffness: 320 }}
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-md mx-3 mb-24 rounded-3xl border border-white/10 bg-slate-900/95 backdrop-blur-md shadow-xl shadow-black/40 overflow-hidden"
+            style={{ marginBottom: 'calc(env(safe-area-inset-bottom) + 96px)' }}
+            className="w-full max-w-md mx-3 max-h-[80vh] flex flex-col rounded-3xl border border-white/10 bg-slate-900/95 backdrop-blur-md shadow-xl shadow-black/40 overflow-hidden"
           >
             {/* Header — left cluster swaps between the main "All
                 shortcuts" label and a back-arrow "Settings" label when
                 the sub-panel is open. Right cluster has the gear toggle
                 (hidden when already in settings view) + close button. */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-white/10">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-white/10 shrink-0">
               <div className="flex items-center gap-2.5 min-w-0">
                 {view === 'settings' ? (
                   <>
@@ -189,7 +190,7 @@ export function StudentMoreSheet({ show, onClose, extraItems = [] }: StudentMore
 
             {/* Grid — animates left/right on view change so the swap
                 between main and settings reads as a single panel pivot. */}
-            <div className="p-4">
+            <div className="p-4 overflow-y-auto">
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div
                   key={view}
@@ -197,7 +198,7 @@ export function StudentMoreSheet({ show, onClose, extraItems = [] }: StudentMore
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: view === 'settings' ? -24 : 24 }}
                   transition={{ duration: 0.22, ease: 'easeOut' }}
-                  className="grid grid-cols-4 gap-2"
+                  className="grid grid-cols-3 sm:grid-cols-4 gap-2"
                 >
                   {items.map((item, i) => {
                     const Icon = item.icon;

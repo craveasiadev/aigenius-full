@@ -176,7 +176,7 @@ export const TokenHistoryPage = () => {
           className={`${GLASS} rounded-3xl p-5`}
         >
           <div className="flex items-center gap-4">
-            <span className="w-14 h-14 rounded-2xl bg-amber-500 border-b-[5px] border-amber-700 flex items-center justify-center">
+            <span className="shrink-0 w-14 h-14 rounded-2xl bg-amber-500 border-b-[5px] border-amber-700 flex items-center justify-center">
               <Zap className="w-7 h-7 text-white" />
             </span>
             <div className="flex-1 min-w-0">
@@ -193,9 +193,9 @@ export const TokenHistoryPage = () => {
             <button
               type="button"
               onClick={() => navigate('/s/aipreneur/ai-tokens', withFrom(location))}
-              className={`${BTN_3D_PRIMARY} min-h-[40px] px-3 text-sm`}
+              className={`${BTN_3D_PRIMARY} shrink-0 min-h-[40px] px-3 text-sm`}
             >
-              <Sparkles className="w-4 h-4" />
+              <Sparkles className="w-4 h-4 shrink-0" />
               Top up
             </button>
           </div>

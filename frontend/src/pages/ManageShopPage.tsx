@@ -309,7 +309,7 @@ export const ManageShopPage = () => {
                         exit={{ opacity: 0, x: 16 }}
                         className="flex items-center justify-between p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-white/10"
                       >
-                        <div className="flex items-center gap-3 min-w-0">
+                        <div className="flex items-center gap-3 min-w-0 flex-1">
                           <span className="w-9 h-9 rounded-full bg-violet-600 border-b-[3px] border-violet-800 text-white font-extrabold text-sm flex items-center justify-center shrink-0">
                             {order.customer_name.charAt(0).toUpperCase()}
                           </span>
@@ -347,9 +347,9 @@ export const ManageShopPage = () => {
                       key={c.id}
                       className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-white/10"
                     >
-                      <div className="flex justify-between items-start mb-2">
-                        <h3 className="font-bold text-sm text-slate-900 dark:text-white">{c.campaign_name}</h3>
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-300">
+                      <div className="flex justify-between items-start gap-2 mb-2">
+                        <h3 className="font-bold text-sm text-slate-900 dark:text-white truncate min-w-0 flex-1">{c.campaign_name}</h3>
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 shrink-0">
                           Active
                         </span>
                       </div>
@@ -394,15 +394,15 @@ export const ManageShopPage = () => {
                     key={m.id}
                     className="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-white/10"
                   >
-                    <div className="flex items-center gap-2 min-w-0">
-                      <span className="w-8 h-8 rounded-full bg-slate-700 text-white text-xs font-extrabold flex items-center justify-center">
+                    <div className="flex items-center gap-2 min-w-0 flex-1">
+                      <span className="w-8 h-8 rounded-full bg-slate-700 text-white text-xs font-extrabold flex items-center justify-center shrink-0">
                         {(m.name?.charAt(0) || 'S').toUpperCase()}
                       </span>
                       <span className="font-bold text-sm capitalize text-slate-900 dark:text-white truncate">{m.staff_role}</span>
                     </div>
                     <span
                       className={[
-                        'text-sm font-bold tabular-nums',
+                        'text-sm font-bold tabular-nums shrink-0',
                         m.mood > 70 ? 'text-emerald-600 dark:text-emerald-400'
                           : m.mood > 40 ? 'text-amber-600 dark:text-amber-400'
                           : 'text-rose-600 dark:text-rose-400',
@@ -430,7 +430,7 @@ export const ManageShopPage = () => {
                     key={p.id}
                     className="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-white/10"
                   >
-                    <div className="flex items-center gap-2 min-w-0">
+                    <div className="flex items-center gap-2 min-w-0 flex-1">
                       <div className="w-10 h-10 rounded-xl overflow-hidden bg-slate-200 dark:bg-slate-900 flex items-center justify-center shrink-0">
                         {p.image_url ? (
                           <img src={getAssetUrl(p.image_url)} alt={p.product_name} className="w-full h-full object-cover" />
@@ -443,7 +443,7 @@ export const ManageShopPage = () => {
                         <p className="text-[10px] uppercase tracking-wide text-slate-500 dark:text-slate-400">{p.positioning_strategy}</p>
                       </div>
                     </div>
-                    <span className="font-bold text-sm text-emerald-600 dark:text-emerald-400">RM {p.price}</span>
+                    <span className="font-bold text-sm text-emerald-600 dark:text-emerald-400 shrink-0">RM {p.price}</span>
                   </div>
                 ))}
                 {products.length === 0 && (

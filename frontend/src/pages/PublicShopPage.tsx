@@ -521,7 +521,7 @@ export const PublicShopPage = () => {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.3 }}
-                  className="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-200 to-white mb-2 break-words"
+                  className="text-2xl sm:text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-200 to-white mb-2 break-words"
                 >
                   {shopInfo.shop_name}
                 </motion.h1>
@@ -850,7 +850,7 @@ export const PublicShopPage = () => {
       </div>
 
       {/* Footer */}
-      <div className="py-12 px-6 relative z-10" style={{ background: 'linear-gradient(to top, #0a0a1a, transparent)' }}>
+      <div className="pt-12 px-6 relative z-10" style={{ background: 'linear-gradient(to top, #0a0a1a, transparent)', paddingBottom: 'calc(env(safe-area-inset-bottom) + 96px)' }}>
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-8">
             <motion.div
@@ -877,7 +877,7 @@ export const PublicShopPage = () => {
               </div>
             </motion.div>
 
-            <div className="flex items-center justify-center gap-4 text-sm mb-6" style={{ color: 'rgba(255, 255, 255, 0.3)' }}>
+            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm mb-6" style={{ color: 'rgba(255, 255, 255, 0.3)' }}>
               <div className="flex items-center gap-2">
                 <Sparkles className="w-4 h-4" />
                 <span>AI-Powered</span>

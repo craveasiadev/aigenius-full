@@ -93,23 +93,23 @@ export const ProfileSuccess = () => {
       <div style={{ position: 'fixed', bottom: '-20%', right: '-10%', width: '50%', height: '50%', borderRadius: '50%', background: 'radial-gradient(circle, rgba(16, 185, 129, 0.1), transparent 70%)', pointerEvents: 'none', zIndex: 0 }} />
       <div style={{ position: 'fixed', top: '50%', right: '20%', width: '30%', height: '30%', borderRadius: '50%', background: 'radial-gradient(circle, rgba(139, 92, 246, 0.08), transparent 70%)', pointerEvents: 'none', zIndex: 0 }} />
 
-      <main className="relative z-10 flex items-center justify-center min-h-screen px-4 py-12">
+      <main className="relative z-10 flex items-center justify-center min-h-screen px-4 py-12 pb-24 sm:pb-28" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 96px)' }}>
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
           className="w-full max-w-2xl"
         >
-          <div className="rounded-2xl p-8 md:p-12 text-center" style={{ background: 'rgba(15, 15, 30, 0.5)', backdropFilter: 'blur(30px)', WebkitBackdropFilter: 'blur(30px)', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
+          <div className="rounded-2xl p-6 sm:p-8 md:p-12 text-center" style={{ background: 'rgba(15, 15, 30, 0.5)', backdropFilter: 'blur(30px)', WebkitBackdropFilter: 'blur(30px)', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
             {/* Success Icon */}
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-              className="w-32 h-32 mx-auto mb-8 rounded-full flex items-center justify-center relative"
+              className="w-24 h-24 sm:w-32 sm:h-32 mx-auto mb-8 rounded-full flex items-center justify-center relative"
               style={{ background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.6), rgba(16, 185, 129, 0.6))', boxShadow: '0 0 40px rgba(34, 197, 94, 0.3)' }}
             >
-              <PartyPopper className="w-16 h-16 text-white" />
+              <PartyPopper className="w-12 h-12 sm:w-16 sm:h-16 text-white" />
               <motion.div
                 animate={{
                   scale: [1, 1.2, 1],
@@ -129,7 +129,7 @@ export const ProfileSuccess = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="text-4xl font-bold mb-4"
+              className="text-2xl sm:text-4xl font-bold mb-4"
               style={{ color: 'white' }}
             >
               Genius Profile Created!
@@ -139,7 +139,7 @@ export const ProfileSuccess = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="text-xl mb-8"
+              className="text-base sm:text-xl mb-8 break-words"
               style={{ color: 'rgba(255, 255, 255, 0.5)' }}
             >
               {profile?.genius_name}'s personalized learning journey is ready to begin
@@ -151,22 +151,22 @@ export const ProfileSuccess = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
-                className="rounded-2xl p-6 mb-8"
+                className="rounded-2xl p-4 sm:p-6 mb-8"
                 style={{ background: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(255, 255, 255, 0.06)' }}
               >
-                <div className="flex items-center gap-6 mb-6">
-                  <div className="w-24 h-24 rounded-2xl overflow-hidden" style={{ background: 'rgba(59, 130, 246, 0.15)', border: '1px solid rgba(59, 130, 246, 0.2)' }}>
+                <div className="flex items-center gap-4 sm:gap-6 mb-6">
+                  <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden flex-shrink-0" style={{ background: 'rgba(59, 130, 246, 0.15)', border: '1px solid rgba(59, 130, 246, 0.2)' }}>
                     <img
                       src={profile.profile_picture_url || getDefaultAvatar(profile.gender)}
                       alt={profile.genius_name}
                       className="w-full h-full object-cover"
                     />
                   </div>
-                  <div className="text-left flex-1">
-                    <h3 className="text-2xl font-bold mb-2" style={{ color: 'white' }}>
+                  <div className="text-left flex-1 min-w-0">
+                    <h3 className="text-xl sm:text-2xl font-bold mb-2 truncate" style={{ color: 'white' }}>
                       {profile.genius_name}
                     </h3>
-                    <p style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
+                    <p className="truncate" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
                       Age {calculateAge(profile.date_of_birth)} - {profile.gender}
                     </p>
                   </div>
@@ -187,7 +187,7 @@ export const ProfileSuccess = () => {
                           <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(34, 197, 94, 0.15)', border: '1px solid rgba(34, 197, 94, 0.2)' }}>
                             <span className="font-bold" style={{ color: 'rgba(74, 222, 128, 1)' }}>{index + 1}</span>
                           </div>
-                          <span className="font-semibold" style={{ color: 'white' }}>
+                          <span className="font-semibold min-w-0 break-words" style={{ color: 'white' }}>
                             {priority}
                           </span>
                         </div>
@@ -210,7 +210,7 @@ export const ProfileSuccess = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => navigate('/parent/genius-profiles/add')}
-                  className="px-8 py-4 rounded-xl font-bold text-white flex items-center gap-3 justify-center"
+                  className="w-full sm:w-auto px-8 py-4 rounded-xl font-bold text-white flex items-center gap-3 justify-center"
                   style={{ background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.6), rgba(6, 182, 212, 0.6))', boxShadow: '0 0 20px rgba(59, 130, 246, 0.3)' }}
                 >
                   <Plus className="w-5 h-5" />
@@ -222,7 +222,7 @@ export const ProfileSuccess = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => navigate('/p/dashboard')}
-                className="px-8 py-4 rounded-xl font-bold transition-all flex items-center gap-3 justify-center"
+                className="w-full sm:w-auto px-8 py-4 rounded-xl font-bold transition-all flex items-center gap-3 justify-center"
                 style={{ color: 'white', background: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.08)' }}
               >
                 <Home className="w-5 h-5" />

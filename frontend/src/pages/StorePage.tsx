@@ -133,7 +133,7 @@ export const StorePage = () => {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0a0a1a', paddingBottom: '6rem', position: 'relative', overflow: 'hidden' }}>
+    <div style={{ minHeight: '100vh', background: '#0a0a1a', paddingBottom: 'calc(env(safe-area-inset-bottom) + 96px)', position: 'relative', overflow: 'hidden' }}>
       {/* Fixed gradient orbs for ambient background lighting */}
       <div style={{
         position: 'fixed', top: '-20%', left: '-10%', width: '500px', height: '500px',
@@ -163,17 +163,18 @@ export const StorePage = () => {
           maxWidth: '72rem', margin: '0 auto', padding: '0 1rem',
           height: '64px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', minWidth: 0 }}>
             <div style={{
               width: '40px', height: '40px', borderRadius: '14px',
               background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(168, 85, 247, 0.6))',
               backdropFilter: 'blur(10px)',
               border: '1px solid rgba(139, 92, 246, 0.3)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
+              flexShrink: 0,
             }}>
               <ShoppingBag style={{ width: '20px', height: '20px', color: 'white' }} />
             </div>
-            <h1 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'white', margin: 0, letterSpacing: '-0.01em' }}>
+            <h1 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'white', margin: 0, letterSpacing: '-0.01em', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               Rewards Store
             </h1>
           </div>
@@ -187,6 +188,7 @@ export const StorePage = () => {
             WebkitBackdropFilter: 'blur(20px)',
             borderRadius: '9999px',
             border: '1px solid rgba(245, 158, 11, 0.15)',
+            flexShrink: 0, marginLeft: '0.5rem',
           }}>
             <span style={{ fontSize: '1.2rem' }}>🪙</span>
             <span style={{ fontWeight: 700, color: '#fbbf24', fontSize: '0.95rem' }}>
@@ -216,9 +218,9 @@ export const StorePage = () => {
             background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(168, 85, 247, 0.1) 40%, rgba(236, 72, 153, 0.15) 100%)',
             pointerEvents: 'none',
           }} />
-          <div style={{ position: 'relative', zIndex: 10 }}>
+          <div style={{ position: 'relative', zIndex: 10, paddingRight: '3.5rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.625rem' }}>
-              <Sparkles style={{ width: '18px', height: '18px', color: 'rgba(255,255,255,0.9)' }} />
+              <Sparkles style={{ width: '18px', height: '18px', color: 'rgba(255,255,255,0.9)', flexShrink: 0 }} />
               <span style={{ color: 'rgba(255, 255, 255, 0.6)', fontSize: '0.85rem', fontWeight: 500 }}>Daily Special</span>
             </div>
             <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'white', marginBottom: '0.35rem' }}>
@@ -471,7 +473,8 @@ export const StorePage = () => {
               exit={{ scale: 0.9, y: 20 }}
               onClick={(e) => e.stopPropagation()}
               style={{
-                width: '100%', maxWidth: '28rem', overflow: 'hidden',
+                width: '100%', maxWidth: '28rem',
+                maxHeight: 'calc(100vh - 2rem)', overflowY: 'auto',
                 borderRadius: '1.75rem',
                 background: 'rgba(15, 15, 30, 0.85)',
                 backdropFilter: 'blur(40px) saturate(150%)',

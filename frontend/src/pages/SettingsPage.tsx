@@ -50,7 +50,7 @@ function ToggleRow({ icon, label, value, onToggle }: ToggleRowProps) {
       className={`${GLASS} ${GLASS_HOVER} w-full rounded-2xl px-3 py-3 flex items-center gap-3`}
     >
       <span className={ICON_TILE}>{icon}</span>
-      <span className="flex-1 text-left text-sm font-semibold text-slate-900 dark:text-white">
+      <span className="flex-1 min-w-0 text-left text-sm font-semibold text-slate-900 dark:text-white truncate">
         {label}
       </span>
       <span
@@ -243,7 +243,7 @@ export const SettingsPage = () => {
             <span className={ICON_TILE}>
               <User className="w-4 h-4 text-slate-700 dark:text-slate-200" />
             </span>
-            <span className="flex-1 text-sm font-semibold text-slate-900 dark:text-white">
+            <span className="flex-1 min-w-0 text-sm font-semibold text-slate-900 dark:text-white truncate">
               My Profile
             </span>
           </button>
@@ -256,7 +256,7 @@ export const SettingsPage = () => {
             <span className={ICON_TILE}>
               <Gem className="w-4 h-4 text-amber-500" />
             </span>
-            <span className="flex-1 text-sm font-semibold text-slate-900 dark:text-white">
+            <span className="flex-1 min-w-0 text-sm font-semibold text-slate-900 dark:text-white truncate">
               Top Up Tokens
             </span>
           </button>

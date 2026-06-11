@@ -211,11 +211,11 @@ export const EditGeniusProfile = () => {
             className="flex items-center gap-2 sm:gap-3 cursor-pointer"
             onClick={() => navigate('/parent/genius-profiles')}
           >
-            <div className="w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(99, 102, 241, 0.6))' }}>
+            <div className="w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(99, 102, 241, 0.6))' }}>
               <User className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-white" />
             </div>
-            <div>
-              <h1 className="text-sm sm:text-base md:text-lg font-bold" style={{ color: 'white' }}>
+            <div className="min-w-0">
+              <h1 className="text-sm sm:text-base md:text-lg font-bold truncate" style={{ color: 'white' }}>
                 Edit Genius Profile
               </h1>
               <p className="text-[10px] sm:text-xs hidden xs:block" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
@@ -226,7 +226,7 @@ export const EditGeniusProfile = () => {
         </div>
       </header>
 
-      <main className="relative z-10 flex items-center justify-center px-3 sm:px-4 md:px-8 py-4 sm:py-6 md:py-8">
+      <main className="relative z-10 flex items-center justify-center px-3 sm:px-4 md:px-8 py-4 sm:py-6 md:py-8 pb-24 sm:pb-28" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 96px)' }}>
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}

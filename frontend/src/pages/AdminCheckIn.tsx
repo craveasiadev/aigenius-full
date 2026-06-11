@@ -219,8 +219,8 @@ export default function AdminCheckIn() {
       <div className="space-y-6 font-sans max-w-4xl mx-auto">
         {/* Header */}
         <div>
-          <h1 className="text-3xl font-black tracking-tight flex items-center gap-3" style={{ color: 'white' }}>
-            <ScanLine className="w-8 h-8" style={{ color: 'rgb(34, 197, 94)' }} />
+          <h1 className="text-2xl sm:text-3xl font-black tracking-tight flex items-center gap-3" style={{ color: 'white' }}>
+            <ScanLine className="w-7 h-7 sm:w-8 sm:h-8 flex-shrink-0" style={{ color: 'rgb(34, 197, 94)' }} />
             Workshop Check-in
           </h1>
           <p className="mt-2" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
@@ -334,8 +334,8 @@ export default function AdminCheckIn() {
                   style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.2)' }}
                 >
                   <AlertTriangle className="w-5 h-5 flex-shrink-0" style={{ color: 'rgb(239, 68, 68)' }} />
-                  <span className="text-sm font-medium" style={{ color: 'rgb(248, 113, 113)' }}>{searchError}</span>
-                  <button onClick={clearSearch} className="ml-auto" style={{ color: 'rgba(248, 113, 113, 0.6)' }}>
+                  <span className="text-sm font-medium min-w-0 break-words" style={{ color: 'rgb(248, 113, 113)' }}>{searchError}</span>
+                  <button onClick={clearSearch} className="ml-auto flex-shrink-0" style={{ color: 'rgba(248, 113, 113, 0.6)' }}>
                     <X className="w-4 h-4" />
                   </button>
                 </motion.div>
@@ -364,45 +364,45 @@ export default function AdminCheckIn() {
                     {/* Order ID */}
                     <div className="flex items-center gap-3">
                       <QrCode className="w-5 h-5 flex-shrink-0" style={{ color: 'rgb(139, 92, 246)' }} />
-                      <code className="text-sm font-mono font-bold px-3 py-1.5 rounded-lg" style={{ color: 'rgb(167, 139, 250)', background: 'rgba(139, 92, 246, 0.1)' }}>
+                      <code className="text-sm font-mono font-bold px-3 py-1.5 rounded-lg break-all min-w-0" style={{ color: 'rgb(167, 139, 250)', background: 'rgba(139, 92, 246, 0.1)' }}>
                         {foundBooking.order_id}
                       </code>
                     </div>
 
                     {/* Details Grid */}
                     <div className="grid grid-cols-2 gap-3">
-                      <div className="flex items-start gap-2.5 p-3 rounded-xl" style={glassInner}>
+                      <div className="flex items-start gap-2.5 p-3 rounded-xl min-w-0" style={glassInner}>
                         <User className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: 'rgba(255, 255, 255, 0.4)' }} />
-                        <div>
+                        <div className="min-w-0">
                           <div className="text-[10px] uppercase tracking-wider font-bold" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>Student</div>
-                          <div className="text-sm font-bold mt-0.5" style={{ color: 'white' }}>
+                          <div className="text-sm font-bold mt-0.5 break-words" style={{ color: 'white' }}>
                             {foundBooking.customer_name || 'N/A'}
                           </div>
                         </div>
                       </div>
-                      <div className="flex items-start gap-2.5 p-3 rounded-xl" style={glassInner}>
+                      <div className="flex items-start gap-2.5 p-3 rounded-xl min-w-0" style={glassInner}>
                         <Calendar className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: 'rgba(255, 255, 255, 0.4)' }} />
-                        <div>
+                        <div className="min-w-0">
                           <div className="text-[10px] uppercase tracking-wider font-bold" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>Class</div>
-                          <div className="text-sm font-bold mt-0.5" style={{ color: 'white' }}>
+                          <div className="text-sm font-bold mt-0.5 break-words" style={{ color: 'white' }}>
                             {foundBooking.slot?.course?.title || 'N/A'}
                           </div>
                         </div>
                       </div>
-                      <div className="flex items-start gap-2.5 p-3 rounded-xl" style={glassInner}>
+                      <div className="flex items-start gap-2.5 p-3 rounded-xl min-w-0" style={glassInner}>
                         <Clock className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: 'rgba(255, 255, 255, 0.4)' }} />
-                        <div>
+                        <div className="min-w-0">
                           <div className="text-[10px] uppercase tracking-wider font-bold" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>Slot</div>
-                          <div className="text-sm font-bold mt-0.5" style={{ color: 'white' }}>
+                          <div className="text-sm font-bold mt-0.5 break-words" style={{ color: 'white' }}>
                             {foundBooking.slot?.start_time
                               ? new Date(foundBooking.slot.start_time).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })
                               : 'N/A'}
                           </div>
                         </div>
                       </div>
-                      <div className="flex items-start gap-2.5 p-3 rounded-xl" style={glassInner}>
+                      <div className="flex items-start gap-2.5 p-3 rounded-xl min-w-0" style={glassInner}>
                         <CreditCard className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: 'rgba(255, 255, 255, 0.4)' }} />
-                        <div>
+                        <div className="min-w-0">
                           <div className="text-[10px] uppercase tracking-wider font-bold" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>Payment</div>
                           <div className="mt-0.5">
                             {(() => {
@@ -427,7 +427,7 @@ export default function AdminCheckIn() {
                     {foundBooking.checked_in_at && (
                       <div className="flex items-center gap-3 p-3 rounded-xl" style={{ background: 'rgba(34, 197, 94, 0.1)', border: '1px solid rgba(34, 197, 94, 0.2)' }}>
                         <CheckCircle className="w-5 h-5 flex-shrink-0" style={{ color: 'rgb(74, 222, 128)' }} />
-                        <div>
+                        <div className="min-w-0">
                           <div className="font-bold text-sm" style={{ color: 'rgb(74, 222, 128)' }}>Already Checked In</div>
                           <div className="text-xs" style={{ color: 'rgba(34, 197, 94, 0.7)' }}>
                             {new Date(foundBooking.checked_in_at).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
@@ -440,7 +440,7 @@ export default function AdminCheckIn() {
                     {!foundBooking.checked_in_at && foundBooking.payment_status !== 'completed' && foundBooking.payment_status !== 'pay_later' && (
                       <div className="flex items-center gap-3 p-3 rounded-xl" style={{ background: 'rgba(234, 179, 8, 0.1)', border: '1px solid rgba(234, 179, 8, 0.2)' }}>
                         <Ban className="w-5 h-5 flex-shrink-0" style={{ color: 'rgb(250, 204, 21)' }} />
-                        <div>
+                        <div className="min-w-0">
                           <div className="font-bold text-sm" style={{ color: 'rgb(250, 204, 21)' }}>Cannot Check In</div>
                           <div className="text-xs" style={{ color: 'rgba(234, 179, 8, 0.7)' }}>
                             Payment is {foundBooking.payment_status}. Only paid or pay-later bookings can be checked in.
@@ -467,7 +467,7 @@ export default function AdminCheckIn() {
                           ) : (
                             <AlertTriangle className="w-5 h-5 flex-shrink-0" style={{ color: 'rgb(248, 113, 113)' }} />
                           )}
-                          <span className="text-sm font-bold" style={{ color: checkInResult.success ? 'rgb(74, 222, 128)' : 'rgb(248, 113, 113)' }}>
+                          <span className="text-sm font-bold min-w-0 break-words" style={{ color: checkInResult.success ? 'rgb(74, 222, 128)' : 'rgb(248, 113, 113)' }}>
                             {checkInResult.message}
                           </span>
                         </motion.div>

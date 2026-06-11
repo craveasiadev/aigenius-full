@@ -1186,7 +1186,7 @@ export function ShopMiniGame({
             can't slide under floating buttons on tablet widths. The
             inner pills collapse down at narrow viewports. ─────── */}
       <div
-        className="absolute left-1/2 -translate-x-1/2 pointer-events-auto max-w-[calc(100vw-180px)]"
+        className="absolute left-1/2 -translate-x-1/2 pointer-events-auto max-w-[calc(100vw-1rem)]"
         style={{ top: 'calc(env(safe-area-inset-top) + 12px)' }}
       >
         {/* HUD tray — system frosted dark-glass surface (matches the GLASS
@@ -1356,8 +1356,8 @@ export function ShopMiniGame({
             never stack on top of each other. Hidden on the smallest
             mobile where there's no spare vertical room. ───────── */}
       <div
-        className="absolute left-1/2 -translate-x-1/2 pointer-events-none hidden md:block max-w-[60vw]"
-        style={{ top: 'calc(env(safe-area-inset-top) + 70px)' }}
+        className="absolute left-1/2 -translate-x-1/2 pointer-events-none hidden md:block max-w-[min(60vw,420px)]"
+        style={{ top: 'calc(env(safe-area-inset-top) + 104px)' }}
       >
         <div className="px-4 py-1.5 rounded-2xl bg-gradient-to-r from-amber-300 via-orange-300 to-pink-300 text-orange-900 font-black text-xs uppercase tracking-widest shadow-lg shadow-orange-500/20 border border-orange-200 truncate">
           <span className="inline-flex items-center gap-1.5">

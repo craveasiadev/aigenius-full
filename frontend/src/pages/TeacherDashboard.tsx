@@ -130,7 +130,10 @@ export const TeacherDashboard = () => {
 
       <TopNav userName={currentUser.name} />
 
-      <div className="relative z-10 max-w-[1400px] mx-auto px-4 sm:px-6 pt-20 md:pt-24 pb-12">
+      <div
+        className="relative z-10 max-w-[1400px] mx-auto px-4 sm:px-6 pt-20 md:pt-24"
+        style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 96px)' }}
+      >
         {/* ── Mission Control banner ─────────────────────────────── */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
@@ -338,7 +341,7 @@ export const TeacherDashboard = () => {
                       className={`${FIELD} pl-10 pr-4 py-3 text-sm sm:text-base`}
                     />
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex flex-wrap gap-2">
                     {['All', 'Active', 'Completed'].map((filter, idx) => (
                       <button
                         key={filter}
@@ -461,11 +464,11 @@ export const TeacherDashboard = () => {
                     Assign chapters and watch students level up.
                   </p>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2 min-w-0">
                   <select
                     value={selectedChapterFilter}
                     onChange={(e) => setSelectedChapterFilter(e.target.value)}
-                    className={`${FIELD} px-3 py-2.5 text-sm`}
+                    className={`${FIELD} flex-1 min-w-0 sm:flex-none px-3 py-2.5 text-sm`}
                   >
                     <option>All Chapters</option>
                     <option>Dream Chapters</option>
@@ -882,7 +885,10 @@ export const TeacherDashboard = () => {
         </AnimatePresence>
       </div>
 
-      <footer className="relative z-10 mt-12 py-6 px-4 text-center text-xs sm:text-sm text-slate-500 dark:text-slate-400 border-t border-slate-200 dark:border-white/10">
+      <footer
+        className="relative z-10 mt-12 pt-6 px-4 text-center text-xs sm:text-sm text-slate-500 dark:text-slate-400 border-t border-slate-200 dark:border-white/10"
+        style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 96px)' }}
+      >
         AI Genius AIpreneur · Empowering Educators · © CRAVE Group
       </footer>
     </div>

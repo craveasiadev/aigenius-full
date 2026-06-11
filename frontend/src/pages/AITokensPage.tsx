@@ -334,7 +334,7 @@ export const AITokensPage = () => {
                     </span>
                   ) : null}
 
-                  <div className="mt-3 flex items-baseline gap-2">
+                  <div className="mt-3 flex flex-wrap items-baseline gap-x-2 gap-y-1">
                     {pkg.originalPrice && (
                       <span className="text-xs line-through text-slate-400 dark:text-slate-500">
                         RM {pkg.originalPrice.toFixed(2)}
@@ -406,7 +406,7 @@ export const AITokensPage = () => {
               exit={{ scale: 0.95, y: 20, opacity: 0 }}
               transition={{ type: 'spring', stiffness: 300, damping: 26 }}
               onClick={(e) => e.stopPropagation()}
-              className={`${GLASS} w-full max-w-md rounded-3xl overflow-hidden`}
+              className={`${GLASS} w-full max-w-md rounded-3xl overflow-y-auto max-h-[90vh] mx-auto`}
             >
               {/* Header */}
               <div className="relative px-6 pt-6 pb-5 text-center border-b border-slate-200/70 dark:border-white/10">

@@ -92,7 +92,7 @@ export const PaymentCallbackPage = () => {
         animate={{ opacity: 1, scale: 1 }}
         className="w-full max-w-md relative z-10"
       >
-        <div className="rounded-2xl overflow-hidden p-8 text-center" style={{ background: 'rgba(15, 15, 30, 0.5)', backdropFilter: 'blur(30px)', WebkitBackdropFilter: 'blur(30px)', border: '1px solid rgba(255, 255, 255, 0.06)', boxShadow: '0 25px 50px rgba(0, 0, 0, 0.3)' }}>
+        <div className="rounded-2xl overflow-hidden p-6 sm:p-8 text-center" style={{ background: 'rgba(15, 15, 30, 0.5)', backdropFilter: 'blur(30px)', WebkitBackdropFilter: 'blur(30px)', border: '1px solid rgba(255, 255, 255, 0.06)', boxShadow: '0 25px 50px rgba(0, 0, 0, 0.3)' }}>
           {/* Status Icon */}
           <div className="mb-6">
             {status === 'loading' && (
@@ -148,20 +148,20 @@ export const PaymentCallbackPage = () => {
           {/* Transaction Details */}
           {orderId && status !== 'loading' && (
             <div className="rounded-xl p-4 mb-6 text-left" style={{ background: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-sm" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>Order ID</span>
-                <span className="text-white font-mono text-sm">{orderId}</span>
+              <div className="flex justify-between items-center gap-3 mb-2">
+                <span className="text-sm shrink-0" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>Order ID</span>
+                <span className="text-white font-mono text-sm truncate min-w-0 text-right">{orderId}</span>
               </div>
               {amount && (
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>Amount</span>
-                  <span className="text-white font-bold">RM {parseFloat(amount).toFixed(2)}</span>
+                <div className="flex justify-between items-center gap-3 mb-2">
+                  <span className="text-sm shrink-0" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>Amount</span>
+                  <span className="text-white font-bold truncate min-w-0 text-right">RM {parseFloat(amount).toFixed(2)}</span>
                 </div>
               )}
               {tranId && (
-                <div className="flex justify-between items-center">
-                  <span className="text-sm" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>Transaction ID</span>
-                  <span className="text-white font-mono text-sm">{tranId}</span>
+                <div className="flex justify-between items-center gap-3">
+                  <span className="text-sm shrink-0" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>Transaction ID</span>
+                  <span className="text-white font-mono text-sm truncate min-w-0 text-right">{tranId}</span>
                 </div>
               )}
             </div>
@@ -173,7 +173,7 @@ export const PaymentCallbackPage = () => {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="flex items-center justify-center gap-4 mb-6"
+              className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 mb-6"
             >
               <div className="flex items-center gap-2 px-4 py-2 rounded-xl" style={{ background: 'rgba(139, 92, 246, 0.1)', border: '1px solid rgba(139, 92, 246, 0.2)' }}>
                 <Sparkles className="w-5 h-5" style={{ color: 'rgba(139, 92, 246, 0.8)' }} />

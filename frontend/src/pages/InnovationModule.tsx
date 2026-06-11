@@ -836,7 +836,8 @@ export const InnovationModule = () => {
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className={`fixed top-6 left-1/2 -translate-x-1/2 z-[9999] p-4 rounded-3xl border-4 flex items-center gap-3 shadow-xl max-w-lg ${message.type === 'success'
+              style={{ top: 'max(env(safe-area-inset-top), 1.5rem)' }}
+              className={`fixed left-1/2 -translate-x-1/2 z-[9999] p-4 rounded-3xl border-4 flex items-center gap-3 shadow-xl w-[calc(100vw-1.5rem)] max-w-lg ${message.type === 'success'
                 ? 'bg-green-500/20 border-green-400 text-green-100'
                 : 'bg-red-500/20 border-red-400 text-red-100'
                 }`}
@@ -844,8 +845,8 @@ export const InnovationModule = () => {
               <div className={`p-2 rounded-full flex-shrink-0 ${message.type === 'success' ? 'bg-green-500' : 'bg-red-500'}`}>
                 {message.type === 'success' ? <CheckCircle className="w-5 h-5 text-white" /> : <Lock className="w-5 h-5 text-white" />}
               </div>
-              <p className="font-bold text-lg">{message.text}</p>
-              <button onClick={() => setMessage(null)} className="ml-auto opacity-50 hover:opacity-100">
+              <p className="font-bold text-base sm:text-lg min-w-0 break-words">{message.text}</p>
+              <button onClick={() => setMessage(null)} className="ml-auto flex-shrink-0 opacity-50 hover:opacity-100">
                 <X className="w-6 h-6" />
               </button>
             </motion.div>
@@ -864,7 +865,7 @@ export const InnovationModule = () => {
         </div>
 
         {/* Tech Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {INNOVATIONS.map((tech) => {
             const projectMeta = catalogById.get(tech.id);
             const requiredLevel = projectMeta?.unlock_level ?? tech.unlockLevel;
@@ -884,7 +885,7 @@ export const InnovationModule = () => {
                 whileTap={{ scale: 0.98 }}
                 onClick={() => !isUnlocked && isLevelUnlocked && setSelectedTech(tech)}
                 disabled={isUnlocked || !isLevelUnlocked}
-                className={`text-left relative rounded-[2.5rem] p-6 border-4 transition-all overflow-hidden h-full flex flex-col group ${isUnlocked
+                className={`text-left relative rounded-[2rem] sm:rounded-[2.5rem] p-5 sm:p-6 border-4 transition-all overflow-hidden h-full flex flex-col group ${isUnlocked
                   ? 'bg-gradient-to-br from-slate-800 to-slate-900 border-green-500 opacity-90'
                   : isLevelUnlocked
                     ? `bg-gradient-to-br ${tech.bg} ${tech.border} hover:shadow-[0_0_30px_rgba(255,255,255,0.1)]`
@@ -911,7 +912,7 @@ export const InnovationModule = () => {
                   </span>
                 </div>
 
-                <h3 className="text-2xl font-black text-white mb-2 leading-tight">{tech.name}</h3>
+                <h3 className="text-xl sm:text-2xl font-black text-white mb-2 leading-tight break-words">{tech.name}</h3>
                 <p className="text-blue-100/80 text-sm font-medium mb-4 flex-grow">{tech.description}</p>
 
                 {previewUrl && (
@@ -950,10 +951,10 @@ export const InnovationModule = () => {
         </div>
 
         {/* Tech Management */}
-        <div className="mt-8 rounded-[2.5rem] p-6 md:p-8 border-4 border-cyan-500/30 bg-gradient-to-br from-slate-900/95 to-slate-800/95">
+        <div className="mt-8 rounded-[2rem] sm:rounded-[2.5rem] p-5 sm:p-6 md:p-8 border-4 border-cyan-500/30 bg-gradient-to-br from-slate-900/95 to-slate-800/95">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-3 mb-6">
-            <div>
-              <h2 className="text-3xl font-black text-white">Tech Management</h2>
+            <div className="min-w-0">
+              <h2 className="text-2xl sm:text-3xl font-black text-white">Tech Management</h2>
               <p className="text-cyan-200 font-medium">
                 Activate up to {maxActiveTech} tech items inside your simulator and upgrade each to level 6.
               </p>
@@ -986,7 +987,7 @@ export const InnovationModule = () => {
                 const nextUpgradeCost = Math.max(0, innovationUpgradeStepCost) * Math.min(6, level + 1);
 
                 return (
-                  <div key={innovation.id} className="rounded-2xl border border-white/10 bg-black/25 p-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                  <div key={innovation.id} className="rounded-2xl border border-white/10 bg-black/25 p-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between min-w-0">
                     <div className="min-w-0">
                       <div className="flex flex-wrap items-center gap-2 mb-1">
                         <h3 className="text-lg font-black text-white">{tech.name}</h3>
@@ -1005,11 +1006,11 @@ export const InnovationModule = () => {
                       )}
                     </div>
 
-                    <div className="flex flex-col sm:flex-row gap-2">
+                    <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto flex-shrink-0">
                       <button
                         onClick={() => handleToggleInnovation(tech.id, !isActive)}
                         disabled={isActivationPending || !canActivate}
-                        className={`px-4 py-2 rounded-xl text-sm font-bold transition-colors ${isActive
+                        className={`w-full sm:w-auto px-4 py-2 rounded-xl text-sm font-bold transition-colors ${isActive
                           ? 'bg-rose-500/20 border border-rose-400/40 text-rose-200 hover:bg-rose-500/30'
                           : 'bg-emerald-500/20 border border-emerald-400/40 text-emerald-200 hover:bg-emerald-500/30'} ${isActivationPending || !canActivate ? 'opacity-50 cursor-not-allowed' : ''}`}
                       >
@@ -1025,7 +1026,7 @@ export const InnovationModule = () => {
                       <button
                         onClick={() => handleUpgradeOwnedInnovation(tech.id)}
                         disabled={isUpgradePending || !canUpgrade}
-                        className={`px-4 py-2 rounded-xl text-sm font-bold transition-colors ${canUpgrade
+                        className={`w-full sm:w-auto px-4 py-2 rounded-xl text-sm font-bold transition-colors ${canUpgrade
                           ? 'bg-yellow-500/20 border border-yellow-400/40 text-yellow-200 hover:bg-yellow-500/30'
                           : 'bg-white/10 border border-white/20 text-white/50'} ${isUpgradePending ? 'opacity-50 cursor-not-allowed' : ''}`}
                       >
@@ -1044,7 +1045,7 @@ export const InnovationModule = () => {
         </div>
 
         {/* WORKSHOP BANNER */}
-        <div className="mt-12 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-[3rem] p-12 relative overflow-hidden shadow-2xl">
+        <div className="mt-12 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-8 md:p-12 relative overflow-hidden shadow-2xl">
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-20 pointer-events-none" />
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/4" />
 
@@ -1053,16 +1054,16 @@ export const InnovationModule = () => {
               <span className="inline-block bg-white/20 backdrop-blur-md px-4 py-1 rounded-full text-xs font-black text-white uppercase tracking-widest mb-4 border border-white/30">
                 Live Workshop
               </span>
-              <h2 className="text-4xl md:text-5xl font-black text-white mb-2 tracking-tight leading-none">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-2 tracking-tight leading-none">
                 Learn Real <span className="text-yellow-300">Coding!</span>
               </h2>
-              <p className="text-indigo-100 text-lg font-medium max-w-xl">
+              <p className="text-indigo-100 text-base sm:text-lg font-medium max-w-xl">
                 Join our expert mentors and learn how to build your own apps, games, and website in just 4 weeks.
               </p>
             </div>
 
-            <div className="bg-white p-2 rounded-[2rem] rotate-2 shadow-2xl">
-              <div className="bg-[#0f172a] rounded-[1.5rem] p-6 border-4 border-indigo-100 w-full max-w-sm">
+            <div className="bg-white p-2 rounded-[2rem] sm:rotate-2 shadow-2xl w-full max-w-sm">
+              <div className="bg-[#0f172a] rounded-[1.5rem] p-5 sm:p-6 border-4 border-indigo-100 w-full">
                 <div className="flex -space-x-3 mb-4 justify-center">
                   {[1, 2, 3, 4, 5].map(i => (
                     <div key={i} className="w-10 h-10 rounded-full bg-gradient-to-br from-gray-200 to-gray-400 border-2 border-white ring-2 ring-[#0f172a]" />
@@ -1086,31 +1087,31 @@ export const InnovationModule = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4"
+            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-2 sm:p-4"
           >
             <motion.div
               initial={{ scale: 0.9, y: 50, opacity: 0 }}
               animate={{ scale: 1, y: 0, opacity: 1 }}
               exit={{ scale: 0.9, y: 50, opacity: 0 }}
-              className="w-full max-w-4xl max-h-[95vh] overflow-y-auto custom-scrollbar bg-[#1e293b] border-4 border-white/10 rounded-[3rem] p-6 md:p-8 shadow-2xl relative"
+              className="w-full max-w-4xl max-h-[95vh] overflow-y-auto custom-scrollbar bg-[#1e293b] border-4 border-white/10 rounded-[1.75rem] sm:rounded-[3rem] p-4 sm:p-6 md:p-8 shadow-2xl relative"
             >
               {/* Modal Close */}
               <button
                 onClick={() => setSelectedTech(null)}
-                className="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/10 hover:bg-red-500 hover:text-white flex items-center justify-center transition-all z-20"
+                className="absolute top-3 right-3 sm:top-6 sm:right-6 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/10 hover:bg-red-500 hover:text-white flex items-center justify-center transition-all z-20"
               >
                 <X className="w-6 h-6" />
               </button>
 
-              <div className="text-center mb-8">
-                <h2 className="text-4xl font-black text-white mb-2">Invent the <span className={selectedTech.color}>{selectedTech.name}</span></h2>
-                <p className="text-blue-200 text-lg">Complete the puzzles to build your invention!</p>
+              <div className="text-center mb-6 sm:mb-8 px-10 sm:px-12">
+                <h2 className="text-2xl sm:text-4xl font-black text-white mb-2 break-words">Invent the <span className={selectedTech.color}>{selectedTech.name}</span></h2>
+                <p className="text-blue-200 text-base sm:text-lg">Complete the puzzles to build your invention!</p>
               </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
                 {/* Game Section */}
                 <div className="space-y-6">
-                  <div className="bg-[#0f172a] rounded-[2rem] p-6 border-4 border-blue-500/30 relative overflow-hidden">
+                  <div className="bg-[#0f172a] rounded-[1.5rem] sm:rounded-[2rem] p-4 sm:p-6 border-4 border-blue-500/30 relative overflow-hidden">
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="text-white font-black text-xl flex items-center gap-2">
                         {showLesson ? (
@@ -1373,7 +1374,7 @@ export const InnovationModule = () => {
                                   ))}
                                 </div>
                               </div>
-                              <div className="grid grid-cols-2 gap-4">
+                              <div className="grid grid-cols-2 gap-2 sm:gap-4">
                                 {/* Left column — code concepts */}
                                 <div className="space-y-3">
                                   {currentGame.pairs.map((pair, i) => {
@@ -1391,7 +1392,7 @@ export const InnovationModule = () => {
                                           if (isMatched) return;
                                           setMatchSelected(isActive ? null : pair.left);
                                         }}
-                                        className={`w-full p-3 rounded-xl font-bold text-sm transition-all border-2 ${
+                                        className={`w-full p-3 rounded-xl font-bold text-sm transition-all border-2 break-words ${
                                           isMatched
                                             ? 'bg-green-500/20 border-green-500/50 text-green-300'
                                             : isActive
@@ -1428,7 +1429,7 @@ export const InnovationModule = () => {
                                           }
                                           setMatchSelected(null);
                                         }}
-                                        className={`w-full p-3 rounded-xl font-bold text-sm transition-all border-2 ${
+                                        className={`w-full p-3 rounded-xl font-bold text-sm transition-all border-2 break-words ${
                                           isMatched
                                             ? 'bg-green-500/20 border-green-500/50 text-green-300'
                                             : matchSelected
@@ -1505,7 +1506,7 @@ export const InnovationModule = () => {
                 {/* Design Section — locked until all games are complete */}
                 <div className="space-y-6" ref={unlockSectionRef}>
                   {!allGamesComplete ? (
-                    <div className="bg-[#0f172a] rounded-[2rem] p-8 border-4 border-white/10 flex flex-col items-center justify-center text-center min-h-[300px]">
+                    <div className="bg-[#0f172a] rounded-[1.5rem] sm:rounded-[2rem] p-6 sm:p-8 border-4 border-white/10 flex flex-col items-center justify-center text-center min-h-[300px]">
                       <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mb-4">
                         <Lock className="w-10 h-10 text-white/20" />
                       </div>
@@ -1528,7 +1529,7 @@ export const InnovationModule = () => {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, type: 'spring' }}
                     >
-                      <div className="bg-[#0f172a] rounded-[2rem] p-6 border-4 border-purple-500/30">
+                      <div className="bg-[#0f172a] rounded-[1.5rem] sm:rounded-[2rem] p-4 sm:p-6 border-4 border-purple-500/30">
                         <h3 className="text-white font-black text-xl mb-4 flex items-center gap-2">
                           <Sparkles className="text-pink-400" />
                           Design Your Invention
@@ -1598,7 +1599,7 @@ export const InnovationModule = () => {
                           <button
                             onClick={handleUnlock}
                             disabled={!canPay}
-                            className={`w-full py-5 rounded-[2rem] text-2xl font-black shadow-xl transition-all flex items-center justify-center gap-3 mt-6 ${
+                            className={`w-full py-4 sm:py-5 px-4 rounded-[1.5rem] sm:rounded-[2rem] text-lg sm:text-2xl font-black shadow-xl transition-all flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-6 text-center ${
                               canPay
                                 ? 'bg-gradient-to-r from-yellow-400 to-orange-500 text-white shadow-orange-500/30 hover:scale-[1.02] active:scale-95'
                                 : 'bg-gray-700/50 text-white/30 cursor-not-allowed shadow-none'

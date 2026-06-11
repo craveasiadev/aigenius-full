@@ -157,7 +157,10 @@ export const ShopAnalyticsPage = () => {
         </div>
       </header>
 
-      <main className="max-w-2xl mx-auto px-4 pt-6 pb-32 space-y-4">
+      <main
+        className="max-w-2xl mx-auto px-4 pt-6 pb-32 space-y-4"
+        style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 128px)' }}
+      >
         {error && (
           <div className="rounded-2xl bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-400/30 px-3 py-2 text-sm text-rose-700 dark:text-rose-300">
             {error}
@@ -192,10 +195,10 @@ export const ShopAnalyticsPage = () => {
                 <p className="text-[11px] uppercase tracking-wide text-slate-500 dark:text-slate-400 font-semibold">
                   {s.label}
                 </p>
-                <p className="text-xl font-extrabold text-slate-900 dark:text-white tabular-nums">
+                <p className="text-xl font-extrabold text-slate-900 dark:text-white tabular-nums truncate">
                   {s.value}
                 </p>
-                <p className="text-xs text-slate-500 dark:text-slate-400">{s.sub}</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{s.sub}</p>
               </div>
             );
           })}
@@ -227,9 +230,9 @@ export const ShopAnalyticsPage = () => {
                     key={day.date}
                     className="rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-white/10 px-3 py-2.5"
                   >
-                    <div className="flex justify-between text-xs mb-1.5">
-                      <span className="text-slate-500 dark:text-slate-400">{day.date}</span>
-                      <span className="font-bold text-slate-900 dark:text-white tabular-nums">
+                    <div className="flex justify-between items-baseline gap-2 text-xs mb-1.5">
+                      <span className="min-w-0 truncate text-slate-500 dark:text-slate-400">{day.date}</span>
+                      <span className="font-bold text-slate-900 dark:text-white tabular-nums shrink-0">
                         {formatNumber(revenue)} coins
                       </span>
                     </div>
@@ -272,12 +275,12 @@ export const ShopAnalyticsPage = () => {
 
 function Row({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
-    <div className="flex items-center justify-between rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-white/10 px-3 py-2.5">
-      <span className="flex items-center gap-2 text-slate-600 dark:text-slate-300">
-        {icon}
-        {label}
+    <div className="flex items-center justify-between gap-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-white/10 px-3 py-2.5">
+      <span className="flex items-center gap-2 min-w-0 text-slate-600 dark:text-slate-300">
+        <span className="shrink-0">{icon}</span>
+        <span className="truncate">{label}</span>
       </span>
-      <span className="font-bold text-slate-900 dark:text-white tabular-nums">{value}</span>
+      <span className="font-bold text-slate-900 dark:text-white tabular-nums shrink-0">{value}</span>
     </div>
   );
 }

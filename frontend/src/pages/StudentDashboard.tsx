@@ -135,7 +135,10 @@ export const StudentDashboard = () => {
           : 'Your shop is live! Keep creating products and running marketing campaigns to attract more customers. 🚀';
 
   return (
-    <div className={`${PAGE} pb-24 overflow-x-hidden`}>
+    <div
+      className={`${PAGE} pb-24 sm:pb-28 overflow-x-hidden`}
+      style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 96px)' }}
+    >
       <StarfieldBackground />
       <DottedBackground />
 
@@ -293,7 +296,7 @@ export const StudentDashboard = () => {
                       className={`rounded-2xl p-3 text-center bg-white dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 ring-1 ring-inset ${GAME_ACCENTS[item.accent].ring}`}
                     >
                       <span className="text-2xl block mb-0.5">{item.emoji}</span>
-                      <p className="text-lg sm:text-xl font-black text-slate-900 dark:text-white">
+                      <p className="text-lg sm:text-xl font-black text-slate-900 dark:text-white truncate">
                         {item.value}
                       </p>
                       <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">

@@ -179,7 +179,7 @@ export const Register = () => {
       className={`${PAGE} touch-manipulation overflow-y-auto`}
       style={{
         paddingTop: 'max(env(safe-area-inset-top), 1.5rem)',
-        paddingBottom: 'max(env(safe-area-inset-bottom), 1.5rem)',
+        paddingBottom: 'calc(env(safe-area-inset-bottom) + 96px)',
         paddingLeft: 'max(env(safe-area-inset-left), 1rem)',
         paddingRight: 'max(env(safe-area-inset-right), 1rem)',
       }}

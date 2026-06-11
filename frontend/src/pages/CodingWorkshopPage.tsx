@@ -12,7 +12,7 @@ export const CodingWorkshopPage = () => {
   const displayName = geniusProfile?.first_name || 'Friend';
 
   return (
-    <div className="min-h-screen text-white pb-24" style={{ background: '#0a0a1a' }}>
+    <div className="min-h-screen text-white pb-24 sm:pb-28 overflow-x-hidden" style={{ background: '#0a0a1a', paddingBottom: 'calc(env(safe-area-inset-bottom) + 96px)' }}>
       {/* Glassmorphism ambient background orbs */}
       <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
         <div style={{ position: 'absolute', top: '-10%', left: '20%', width: 500, height: 500, borderRadius: '50%', background: 'rgba(139, 92, 246, 0.12)', filter: 'blur(120px)' }} />
@@ -22,7 +22,7 @@ export const CodingWorkshopPage = () => {
 
       <TopNav userName={displayName} />
 
-      <div className="max-w-5xl mx-auto px-6 py-10 pt-20 md:pt-24" style={{ position: 'relative', zIndex: 1 }}>
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 pt-20 md:pt-24" style={{ position: 'relative', zIndex: 1 }}>
         <button
           onClick={() => smartBack()}
           className="flex items-center gap-2 mb-6"
@@ -34,7 +34,7 @@ export const CodingWorkshopPage = () => {
 
         {/* Main glass card */}
         <div
-          className="rounded-3xl p-8"
+          className="rounded-3xl p-5 sm:p-8"
           style={{
             background: 'rgba(15, 15, 30, 0.5)',
             backdropFilter: 'blur(30px)',
@@ -44,7 +44,7 @@ export const CodingWorkshopPage = () => {
         >
           <div className="flex items-center gap-3 mb-4">
             <div
-              className="w-12 h-12 rounded-2xl flex items-center justify-center"
+              className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0"
               style={{
                 background: 'rgba(6, 182, 212, 0.15)',
                 border: '1px solid rgba(6, 182, 212, 0.25)',
@@ -52,7 +52,7 @@ export const CodingWorkshopPage = () => {
             >
               <Code className="w-6 h-6" style={{ color: 'rgba(165, 243, 252, 0.9)' }} />
             </div>
-            <h1 className="text-3xl font-black" style={{ color: 'white' }}>Coding Workshop</h1>
+            <h1 className="text-2xl sm:text-3xl font-black min-w-0" style={{ color: 'white' }}>Coding Workshop</h1>
           </div>
           <p className="max-w-2xl" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
             Learn how to build real apps, games, and smart shop tech. Each workshop is kid-friendly
@@ -100,7 +100,7 @@ export const CodingWorkshopPage = () => {
 
           <div className="mt-8 flex flex-col sm:flex-row gap-3">
             <button
-              className="px-6 py-3 rounded-2xl font-bold"
+              className="w-full sm:w-auto px-6 py-3 rounded-2xl font-bold"
               style={{
                 background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(99, 102, 241, 0.6))',
                 boxShadow: '0 0 20px rgba(139, 92, 246, 0.3)',
@@ -111,7 +111,7 @@ export const CodingWorkshopPage = () => {
               Join the next workshop
             </button>
             <button
-              className="px-6 py-3 rounded-2xl transition-all"
+              className="w-full sm:w-auto px-6 py-3 rounded-2xl transition-all"
               style={{
                 background: 'transparent',
                 border: '1px solid rgba(255, 255, 255, 0.12)',

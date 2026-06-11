@@ -126,7 +126,7 @@ export const CompareKids = () => {
 
       <TopNav userName={currentUser?.name || 'Parent'} />
 
-      <main className="max-w-3xl mx-auto px-4 py-8 pt-24 md:pt-28 relative" style={{ zIndex: 1 }}>
+      <main className="max-w-3xl mx-auto px-4 py-8 pt-24 md:pt-28 relative" style={{ zIndex: 1, paddingBottom: 'calc(env(safe-area-inset-bottom) + 96px)' }}>
         {/* Back Button */}
         <motion.button
           initial={{ opacity: 0, x: -10 }}
@@ -150,10 +150,10 @@ export const CompareKids = () => {
           <div className="w-16 h-16 mx-auto rounded-2xl flex items-center justify-center mb-4" style={{ background: 'rgba(99, 102, 241, 0.15)', border: '1px solid rgba(99, 102, 241, 0.2)' }}>
             <BarChart2 className="w-8 h-8 text-indigo-400" />
           </div>
-          <h1 className="text-3xl md:text-4xl font-black mb-3" style={{ color: '#fff' }}>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-black mb-3" style={{ color: '#fff' }}>
             Compare Your Kids
           </h1>
-          <p className="text-lg max-w-xl mx-auto" style={{ color: 'rgba(255,255,255,0.5)' }}>
+          <p className="text-base sm:text-lg max-w-xl mx-auto" style={{ color: 'rgba(255,255,255,0.5)' }}>
             See how each child's unique persona traits compare side by side to understand their strengths.
           </p>
         </motion.div>
@@ -169,7 +169,7 @@ export const CompareKids = () => {
             {kidsWithPersona.map((kid, index) => {
               const colorSet = KID_COLORS[index % KID_COLORS.length];
               return (
-                <div key={kid.profile.id} className="flex items-center gap-2 px-4 py-2 rounded-full" style={{
+                <div key={kid.profile.id} className="flex items-center gap-2 px-4 py-2 rounded-full max-w-full min-w-0" style={{
                   background: 'rgba(15, 15, 30, 0.5)',
                   backdropFilter: 'blur(30px)',
                   WebkitBackdropFilter: 'blur(30px)',
@@ -184,8 +184,8 @@ export const CompareKids = () => {
                       </div>
                     )}
                   </div>
-                  <div className={`w-2.5 h-2.5 rounded-full ${colorSet.dot}`} />
-                  <span className="text-sm font-bold" style={{ color: '#fff' }}>{kid.profile.genius_name}</span>
+                  <div className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${colorSet.dot}`} />
+                  <span className="text-sm font-bold truncate" style={{ color: '#fff' }}>{kid.profile.genius_name}</span>
                 </div>
               );
             })}
@@ -285,11 +285,11 @@ export const CompareKids = () => {
                 >
                   {/* Trait Header */}
                   <div className="flex items-center gap-4 mb-6">
-                    <div className={`w-12 h-12 rounded-2xl ${trait.bg} flex items-center justify-center`}>
+                    <div className={`w-12 h-12 rounded-2xl ${trait.bg} flex items-center justify-center flex-shrink-0`}>
                       <TraitIcon className={`w-6 h-6 ${trait.text}`} />
                     </div>
-                    <div>
-                      <h3 className="font-bold text-lg" style={{ color: '#fff' }}>{trait.label}</h3>
+                    <div className="min-w-0">
+                      <h3 className="font-bold text-lg truncate" style={{ color: '#fff' }}>{trait.label}</h3>
                       <p className="text-sm" style={{ color: 'rgba(255,255,255,0.5)' }}>Comparative Analysis</p>
                     </div>
                   </div>
@@ -302,12 +302,12 @@ export const CompareKids = () => {
 
                       return (
                         <div key={kid.profile.id}>
-                          <div className="flex items-center justify-between mb-2">
-                            <div className="flex items-center gap-2">
-                              <div className={`w-2 h-2 rounded-full ${colorSet.dot}`} />
-                              <span className="text-sm font-bold" style={{ color: 'rgba(255,255,255,0.7)' }}>{kid.profile.genius_name}</span>
+                          <div className="flex items-center justify-between gap-2 mb-2">
+                            <div className="flex items-center gap-2 min-w-0">
+                              <div className={`w-2 h-2 rounded-full flex-shrink-0 ${colorSet.dot}`} />
+                              <span className="text-sm font-bold truncate" style={{ color: 'rgba(255,255,255,0.7)' }}>{kid.profile.genius_name}</span>
                             </div>
-                            <span className="text-sm font-bold" style={{ color: '#fff' }}>{score}/100</span>
+                            <span className="text-sm font-bold flex-shrink-0" style={{ color: '#fff' }}>{score}/100</span>
                           </div>
                           <div className="w-full h-4 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.04)' }}>
                             <motion.div
@@ -357,8 +357,8 @@ export const CompareKids = () => {
                       </div>
                     )}
                   </div>
-                  <div>
-                    <span className="font-bold block" style={{ color: '#fff' }}>{kid.profile.genius_name}</span>
+                  <div className="min-w-0">
+                    <span className="font-bold block truncate" style={{ color: '#fff' }}>{kid.profile.genius_name}</span>
                     <span className="text-xs" style={{ color: 'rgba(255,255,255,0.5)' }}>Quiz not completed</span>
                   </div>
                 </div>
@@ -375,7 +375,7 @@ export const CompareKids = () => {
             transition={{ delay: 0.7 }}
             className="mt-12"
           >
-            <h3 className="font-bold text-2xl mb-6 text-center" style={{ color: '#fff' }}>Individual Highlights</h3>
+            <h3 className="font-bold text-xl sm:text-2xl mb-6 text-center" style={{ color: '#fff' }}>Individual Highlights</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {kidsWithPersona.map((kid, index) => {
                 const colorSet = KID_COLORS[index % KID_COLORS.length];
@@ -396,7 +396,7 @@ export const CompareKids = () => {
                     border: '1px solid rgba(255, 255, 255, 0.06)',
                   }}>
                     <div className="flex items-center gap-4 mb-6">
-                      <div className="w-12 h-12 rounded-2xl overflow-hidden" style={{ background: 'rgba(255,255,255,0.08)' }}>
+                      <div className="w-12 h-12 rounded-2xl overflow-hidden flex-shrink-0" style={{ background: 'rgba(255,255,255,0.08)' }}>
                         {kid.profile.profile_picture_url ? (
                           <img src={kid.profile.profile_picture_url} alt="" className="w-full h-full object-cover" />
                         ) : (
@@ -405,10 +405,10 @@ export const CompareKids = () => {
                           </div>
                         )}
                       </div>
-                      <div>
-                        <h4 className="font-bold text-lg" style={{ color: '#fff' }}>{kid.profile.genius_name}</h4>
+                      <div className="min-w-0">
+                        <h4 className="font-bold text-lg truncate" style={{ color: '#fff' }}>{kid.profile.genius_name}</h4>
                         <div className="flex items-center gap-2">
-                          <div className={`w-2 h-2 rounded-full ${colorSet.dot}`} />
+                          <div className={`w-2 h-2 rounded-full flex-shrink-0 ${colorSet.dot}`} />
                           <span className="text-sm" style={{ color: 'rgba(255,255,255,0.5)' }}>Average Score: {avg}</span>
                         </div>
                       </div>
@@ -418,18 +418,18 @@ export const CompareKids = () => {
                       {best && (
                         <div className="p-3 rounded-xl" style={{ background: 'rgba(34, 197, 94, 0.08)', border: '1px solid rgba(34, 197, 94, 0.15)' }}>
                           <div className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: 'rgba(74, 222, 128, 0.9)' }}>Top Strength</div>
-                          <div className="flex items-center justify-between">
-                            <span className="font-bold" style={{ color: '#fff' }}>{best[0]}</span>
-                            <span className="font-black" style={{ color: 'rgba(74, 222, 128, 0.9)' }}>{best[1]}</span>
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="font-bold truncate" style={{ color: '#fff' }}>{best[0]}</span>
+                            <span className="font-black flex-shrink-0" style={{ color: 'rgba(74, 222, 128, 0.9)' }}>{best[1]}</span>
                           </div>
                         </div>
                       )}
                       {weakest && weakest[0] !== best?.[0] && (
                         <div className="p-3 rounded-xl" style={{ background: 'rgba(245, 158, 11, 0.08)', border: '1px solid rgba(245, 158, 11, 0.15)' }}>
                           <div className="text-xs font-bold uppercase tracking-wider mb-1" style={{ color: 'rgba(251, 191, 36, 0.9)' }}>Growth Area</div>
-                          <div className="flex items-center justify-between">
-                            <span className="font-bold" style={{ color: '#fff' }}>{weakest[0]}</span>
-                            <span className="font-black" style={{ color: 'rgba(251, 191, 36, 0.9)' }}>{weakest[1]}</span>
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="font-bold truncate" style={{ color: '#fff' }}>{weakest[0]}</span>
+                            <span className="font-black flex-shrink-0" style={{ color: 'rgba(251, 191, 36, 0.9)' }}>{weakest[1]}</span>
                           </div>
                         </div>
                       )}

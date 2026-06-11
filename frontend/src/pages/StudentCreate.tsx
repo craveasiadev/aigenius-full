@@ -112,7 +112,7 @@ export const StudentCreate = () => {
   const gradients = getChapterGradients();
 
   return (
-    <div className="min-h-screen pb-24 relative overflow-hidden" style={{ background: '#0a0a1a' }}>
+    <div className="min-h-screen relative overflow-x-hidden" style={{ background: '#0a0a1a', paddingBottom: 'calc(env(safe-area-inset-bottom) + 96px)' }}>
       {/* Gradient orbs */}
       <div className="fixed top-[-20%] left-[-10%] w-[500px] h-[500px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%)', filter: 'blur(60px)' }} />
       <div className="fixed bottom-[-20%] right-[-10%] w-[500px] h-[500px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, transparent 70%)', filter: 'blur(60px)' }} />
@@ -120,7 +120,7 @@ export const StudentCreate = () => {
 
       <TopNav userName={geniusProfile?.genius_name || currentUser.name} />
 
-      <div className="max-w-[1400px] mx-auto p-6 pt-20 md:pt-24 relative z-10">
+      <div className="max-w-[1400px] mx-auto px-4 py-6 sm:p-6 pt-20 md:pt-24 relative z-10">
         <motion.button
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -135,12 +135,12 @@ export const StudentCreate = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
+          className="text-center mb-8 sm:mb-12"
         >
-          <h1 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-violet-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-violet-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
             Choose Your Next Adventure
           </h1>
-          <p className="text-xl" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
+          <p className="text-base sm:text-xl" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
             Each chapter helps you learn, create, and grow in new ways!
           </p>
         </motion.div>

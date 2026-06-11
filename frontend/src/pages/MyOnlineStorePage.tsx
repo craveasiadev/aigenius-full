@@ -198,7 +198,10 @@ export const MyOnlineStorePage = () => {
           </div>
         </header>
 
-        <main className="max-w-2xl mx-auto px-4 pt-10 pb-32 text-center">
+        <main
+          className="max-w-2xl mx-auto px-4 pt-10 pb-32 text-center"
+          style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 96px)' }}
+        >
           <span className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-violet-600 border-b-[5px] border-violet-800 mx-auto mb-5">
             <Store className="w-10 h-10 text-white" />
           </span>
@@ -256,7 +259,10 @@ export const MyOnlineStorePage = () => {
         </div>
       </header>
 
-      <main className="max-w-3xl mx-auto px-4 pt-6 pb-32">
+      <main
+        className="max-w-3xl mx-auto px-4 pt-6 pb-32"
+        style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 96px)' }}
+      >
         {/* ── Shop header card ─────────────────────────────────────── */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -431,7 +437,7 @@ export const MyOnlineStorePage = () => {
               animate={{ scale: 1, y: 0, opacity: 1 }}
               exit={{ scale: 0.95, y: 16, opacity: 0 }}
               transition={{ type: 'spring', stiffness: 300, damping: 26 }}
-              className={`${GLASS} max-w-md w-full rounded-3xl p-6 text-center`}
+              className={`${GLASS} max-w-md w-full rounded-3xl p-6 text-center max-h-[90vh] overflow-y-auto`}
             >
               <span className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-violet-600 border-b-[5px] border-violet-800 mb-3">
                 <Lightbulb className="w-7 h-7 text-white" />
@@ -482,7 +488,7 @@ export const MyOnlineStorePage = () => {
               animate={{ scale: 1, y: 0, opacity: 1 }}
               exit={{ scale: 0.95, y: 16, opacity: 0 }}
               transition={{ type: 'spring', stiffness: 300, damping: 26 }}
-              className={`${GLASS} max-w-md w-full rounded-3xl p-6 text-center`}
+              className={`${GLASS} max-w-md w-full rounded-3xl p-6 text-center max-h-[90vh] overflow-y-auto`}
               onClick={(e) => e.stopPropagation()}
             >
               <span className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-amber-500 border-b-[5px] border-amber-700 mb-3">
@@ -526,7 +532,7 @@ export const MyOnlineStorePage = () => {
               animate={{ scale: 1, y: 0, opacity: 1 }}
               exit={{ scale: 0.95, y: 16, opacity: 0 }}
               transition={{ type: 'spring', stiffness: 300, damping: 26 }}
-              className={`${GLASS} max-w-md w-full rounded-3xl p-6`}
+              className={`${GLASS} max-w-md w-full rounded-3xl p-6 max-h-[90vh] overflow-y-auto`}
               onClick={(e) => e.stopPropagation()}
             >
               <h3 className="text-xl font-extrabold text-slate-900 dark:text-white mb-4">
@@ -536,7 +542,7 @@ export const MyOnlineStorePage = () => {
                 <input
                   readOnly
                   value={`${window.location.origin}/shop/${business.shop_url_slug}`}
-                  className={`${FIELD} flex-1 px-3 py-3 text-sm`}
+                  className={`${FIELD} flex-1 min-w-0 px-3 py-3 text-sm`}
                 />
                 <button
                   type="button"

@@ -284,32 +284,32 @@ export const FinancePage = () => {
                         <motion.div
                             initial={{ y: 20, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
-                            className="relative overflow-hidden rounded-3xl p-8 shadow-2xl shadow-orange-500/20"
+                            className="relative overflow-hidden rounded-3xl p-5 sm:p-8 shadow-2xl shadow-orange-500/20"
                             style={{ background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.85), rgba(234, 88, 12, 0.85))', backdropFilter: 'blur(30px)', border: '1px solid rgba(255, 255, 255, 0.15)' }}
                         >
                             <div className="absolute top-0 right-0 p-32 bg-white/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none" />
                             <div className="absolute bottom-0 left-0 p-24 bg-black/10 rounded-full blur-2xl -ml-12 -mb-12 pointer-events-none" />
 
-                            <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-6">
-                                <div>
-                                    <div className="flex items-center gap-2 text-orange-100 font-bold mb-1 opacity-80">
-                                        <PiggyBank className="w-5 h-5" />
+                            <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6">
+                                <div className="min-w-0 text-center sm:text-left">
+                                    <div className="flex items-center justify-center sm:justify-start gap-2 text-orange-100 font-bold mb-1 opacity-80">
+                                        <PiggyBank className="w-5 h-5 shrink-0" />
                                         <span>Profit Coins Available</span>
                                     </div>
-                                    <div className="text-6xl font-black text-white tracking-tight drop-shadow-md">
+                                    <div className="text-4xl sm:text-6xl font-black text-white tracking-tight drop-shadow-md break-words">
                                         {balances.coins.toLocaleString()}
                                     </div>
-                                    <div className="text-orange-100 font-bold mt-2 flex items-center gap-2 bg-white/20 px-3 py-1 rounded-full w-fit backdrop-blur-sm">
-                                        <Coins className="w-4 h-4" /> Profit Coins
+                                    <div className="text-orange-100 font-bold mt-2 flex items-center gap-2 bg-white/20 px-3 py-1 rounded-full w-fit mx-auto sm:mx-0 backdrop-blur-sm">
+                                        <Coins className="w-4 h-4 shrink-0" /> Profit Coins
                                     </div>
                                 </div>
 
                                 <motion.div
                                     animate={{ rotate: [0, 10, -10, 0] }}
                                     transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                                    className="w-32 h-32 bg-white/10 rounded-full flex items-center justify-center border-4 border-white/20 shadow-inner backdrop-blur-sm"
+                                    className="w-24 h-24 sm:w-32 sm:h-32 shrink-0 bg-white/10 rounded-full flex items-center justify-center border-4 border-white/20 shadow-inner backdrop-blur-sm"
                                 >
-                                    <span className="text-7xl">🪙</span>
+                                    <span className="text-5xl sm:text-7xl">🪙</span>
                                 </motion.div>
                             </div>
                         </motion.div>
@@ -324,29 +324,29 @@ export const FinancePage = () => {
                                     className="overflow-hidden"
                                 >
                                     <div className="rounded-3xl p-1 shadow-lg shadow-emerald-500/10" style={{ background: 'rgba(15, 15, 30, 0.5)', backdropFilter: 'blur(30px)', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
-                                        <div className="rounded-[20px] p-6 relative overflow-hidden group" style={{ background: 'linear-gradient(to right, rgba(6, 78, 59, 0.3), rgba(22, 78, 99, 0.3))' }}>
+                                        <div className="rounded-[20px] p-4 sm:p-6 relative overflow-hidden group" style={{ background: 'linear-gradient(to right, rgba(6, 78, 59, 0.3), rgba(22, 78, 99, 0.3))' }}>
                                             <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                                            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
-                                                <div className="flex items-center gap-4">
-                                                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-lg shadow-emerald-500/30">
+                                            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-4 sm:gap-6">
+                                                <div className="flex items-center gap-4 min-w-0 w-full md:w-auto">
+                                                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-lg shadow-emerald-500/30 shrink-0">
                                                         <Lock className="w-7 h-7 text-white" />
                                                     </div>
-                                                    <div>
-                                                        <h3 className="text-xl font-bold text-white">Unlock Your Profits!</h3>
-                                                        <p className="text-white/40">Convert your shop profit coins into AI tokens.</p>
+                                                    <div className="min-w-0">
+                                                        <h3 className="text-lg sm:text-xl font-bold text-white">Unlock Your Profits!</h3>
+                                                        <p className="text-sm sm:text-base text-white/40">Convert your shop profit coins into AI tokens.</p>
                                                     </div>
                                                 </div>
 
-                                                <div className="flex items-center gap-4 p-2 rounded-2xl" style={{ background: 'rgba(0, 0, 0, 0.25)', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
-                                                    <div className="text-right px-2">
+                                                <div className="flex items-center gap-3 sm:gap-4 p-2 rounded-2xl w-full md:w-auto" style={{ background: 'rgba(0, 0, 0, 0.25)', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
+                                                    <div className="text-left md:text-right px-2 min-w-0 flex-1 md:flex-none">
                                                         <div className="text-xs text-white/40 uppercase font-bold">Available</div>
-                                                        <div className="text-emerald-400 font-bold text-lg">{availableProfit.toFixed(0)} Profit Coins</div>
+                                                        <div className="text-emerald-400 font-bold text-base sm:text-lg truncate">{availableProfit.toFixed(0)} Profit Coins</div>
                                                     </div>
-                                                    <ArrowRight className="text-white/30" />
+                                                    <ArrowRight className="text-white/30 shrink-0" />
                                                     <button
                                                         onClick={() => setShowConversionModal(true)}
-                                                        className="bg-emerald-500 hover:bg-emerald-400 text-white px-6 py-3 rounded-xl font-bold shadow-lg shadow-emerald-500/20 transition-all transform hover:scale-105 active:scale-95 flex items-center gap-2"
+                                                        className="bg-emerald-500 hover:bg-emerald-400 text-white px-5 sm:px-6 py-3 rounded-xl font-bold shadow-lg shadow-emerald-500/20 transition-all transform hover:scale-105 active:scale-95 flex items-center gap-2 shrink-0"
                                                     >
                                                         Details <ArrowRight className="w-4 h-4" />
                                                     </button>
@@ -589,18 +589,18 @@ export const FinancePage = () => {
                                                 </div>
                                             ) : (
                                                 transactions.slice(0, 20).map((tx) => (
-                                                    <div key={tx.id} className="p-3 rounded-xl flex items-center justify-between hover:brightness-125 transition-colors" style={{ background: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
-                                                        <div className="flex items-center gap-3">
-                                                            <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg ${tx.type === 'income' ? 'bg-green-500/10' : 'bg-red-500/10'
+                                                    <div key={tx.id} className="p-3 rounded-xl flex items-center justify-between gap-2 hover:brightness-125 transition-colors" style={{ background: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
+                                                        <div className="flex items-center gap-3 min-w-0 flex-1">
+                                                            <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg shrink-0 ${tx.type === 'income' ? 'bg-green-500/10' : 'bg-red-500/10'
                                                                 }`}>
                                                                 {getCategoryEmoji(tx.category)}
                                                             </div>
-                                                            <div>
-                                                                <div className="text-white font-bold text-sm">{CATEGORY_LABELS[tx.category] || tx.category}</div>
-                                                                <div className="text-xs text-white/30 truncate max-w-[120px]">{tx.description}</div>
+                                                            <div className="min-w-0">
+                                                                <div className="text-white font-bold text-sm truncate">{CATEGORY_LABELS[tx.category] || tx.category}</div>
+                                                                <div className="text-xs text-white/30 truncate">{tx.description}</div>
                                                             </div>
                                                         </div>
-                                                        <div className={`font-bold text-sm flex items-center gap-1 ${tx.type === 'income' ? 'text-green-400' : 'text-red-400'
+                                                        <div className={`font-bold text-sm flex items-center gap-1 shrink-0 ${tx.type === 'income' ? 'text-green-400' : 'text-red-400'
                                                             }`}>
                                                             {tx.type === 'income' ? '+' : '-'}{tx.amount}
                                                             <Coins className="w-3 h-3 text-yellow-500" />

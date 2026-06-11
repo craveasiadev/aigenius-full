@@ -60,13 +60,16 @@ export const TopNav = ({
         WebkitBackdropFilter: 'blur(40px) saturate(180%)',
         borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
         boxShadow: '0 4px 24px rgba(0, 0, 0, 0.15)',
+        paddingTop: 'env(safe-area-inset-top)',
+        paddingLeft: 'env(safe-area-inset-left)',
+        paddingRight: 'env(safe-area-inset-right)',
       }}
     >
       <div className="w-full px-4 md:px-8">
-        <div className="flex items-center justify-between h-16 md:h-20">
-          <div className="flex items-center gap-4 md:gap-8">
+        <div className="flex items-center justify-between gap-2 h-16 md:h-20">
+          <div className="flex items-center gap-4 md:gap-8 min-w-0">
             <motion.div
-              className="flex items-center gap-3 cursor-pointer"
+              className="flex items-center gap-3 cursor-pointer min-w-0"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -75,18 +78,18 @@ export const TopNav = ({
                 alt="AI Genius"
                 className="h-10 md:h-12 w-auto"
               />
-              <div className="hidden sm:block">
-                <h1 className="text-base md:text-lg font-bold text-white/90">
+              <div className="hidden sm:block min-w-0">
+                <h1 className="text-base md:text-lg font-bold text-white/90 truncate">
                   {title}
                 </h1>
-                <p className="text-xs text-white/40">
+                <p className="text-xs text-white/40 truncate">
                   {subtitle}
                 </p>
               </div>
             </motion.div>
           </div>
 
-          <div className="flex items-center gap-2 md:gap-3">
+          <div className="flex items-center gap-2 md:gap-3 shrink-0">
 
             {currentUser && showTokenCounter && <AITokenCounter />}
 

@@ -396,24 +396,24 @@ function TitleSelectScreen({ session, onSelectTitle }: { session: StorySession; 
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6">
+    <div className="min-h-screen flex items-center justify-center p-4 sm:p-6 pb-24 sm:pb-28" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 96px)' }}>
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         className="max-w-3xl w-full"
       >
-        <div className="text-center mb-12">
+        <div className="text-center mb-8 sm:mb-12">
           <motion.div
             animate={{ rotate: [0, 10, -10, 0] }}
             transition={{ duration: 2, repeat: Infinity }}
-            className="text-6xl mb-4"
+            className="text-5xl sm:text-6xl mb-4"
           >
             ✨
           </motion.div>
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
             Choose Your Story Title
           </h1>
-          <p className="text-xl" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>
+          <p className="text-lg sm:text-xl" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>
             Pick the title that excites you most, {session.genius_name}!
           </p>
         </div>
@@ -431,19 +431,20 @@ function TitleSelectScreen({ session, onSelectTitle }: { session: StorySession; 
                 setSelectedIndex(index);
                 setTimeout(() => onSelectTitle(title), 300);
               }}
-              className="w-full p-6 rounded-2xl text-left transition-all"
+              className="w-full p-4 sm:p-6 rounded-2xl text-left transition-all"
               style={selectedIndex === index
                 ? { background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(99, 102, 241, 0.6))', border: '2px solid rgba(139, 92, 246, 0.8)', boxShadow: '0 0 20px rgba(139, 92, 246, 0.3)' }
                 : { background: 'rgba(15, 15, 30, 0.5)', backdropFilter: 'blur(30px)', WebkitBackdropFilter: 'blur(30px)', border: '2px solid rgba(255, 255, 255, 0.06)' }
               }
             >
-              <div className="flex items-center justify-between">
-                <span className="text-xl font-bold text-white">{title}</span>
+              <div className="flex items-center justify-between gap-3">
+                <span className="text-lg sm:text-xl font-bold text-white min-w-0 flex-1">{title}</span>
                 {selectedIndex === index && (
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1, rotate: 360 }}
                     transition={{ type: 'spring' }}
+                    className="shrink-0"
                   >
                     <Sparkles className="w-6 h-6 text-white" />
                   </motion.div>
@@ -464,15 +465,15 @@ function CoverCreateScreen({ session, coverImageUrl, onUpload, onStartStory }: {
   onStartStory: () => void;
 }) {
   return (
-    <div className="min-h-screen flex items-center justify-center p-6">
+    <div className="min-h-screen flex items-center justify-center p-4 sm:p-6 pb-24 sm:pb-28" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 96px)' }}>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="max-w-2xl w-full"
       >
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-white mb-4">Create Your Cover</h1>
-          <p className="text-xl mb-2" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>{session.selected_title}</p>
+        <div className="text-center mb-8 sm:mb-12">
+          <h1 className="text-2xl sm:text-4xl font-bold text-white mb-4">Create Your Cover</h1>
+          <p className="text-lg sm:text-xl mb-2 break-words" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>{session.selected_title}</p>
           <p style={{ color: 'rgba(255, 255, 255, 0.3)' }}>
             Take a photo of yourself looking like a brave {session.chapter_theme} hero!
           </p>
@@ -573,7 +574,7 @@ function PageFlowScreen({
   const canContinue = pageStep === 'intro' || (pageStep === 'activity' && (page.page_type === 'quiz' ? quizAnswer !== undefined : !page.activity_requires_photo || (pagePhoto && generatedImages[pageIndex])));
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6">
+    <div className="min-h-screen flex items-center justify-center p-4 sm:p-6 pb-24 sm:pb-28" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 96px)' }}>
       <motion.div
         key={`${pageIndex}-${pageStep}`}
         initial={{ opacity: 0, x: 20 }}
@@ -581,10 +582,10 @@ function PageFlowScreen({
         exit={{ opacity: 0, x: -20 }}
         className="max-w-3xl w-full"
       >
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-3">
-            <span className="font-bold text-lg" style={{ color: 'rgba(139, 92, 246, 0.8)' }}>Page {pageIndex + 1} of 10</span>
-            <span className="text-sm font-medium" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>{session.selected_title}</span>
+        <div className="mb-6 sm:mb-8">
+          <div className="flex items-center justify-between gap-3 mb-3">
+            <span className="font-bold text-base sm:text-lg shrink-0" style={{ color: 'rgba(139, 92, 246, 0.8)' }}>Page {pageIndex + 1} of 10</span>
+            <span className="text-sm font-medium truncate min-w-0" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>{session.selected_title}</span>
           </div>
           <div className="w-full rounded-full h-3 shadow-inner" style={{ background: 'rgba(255, 255, 255, 0.06)' }}>
             <motion.div
@@ -654,11 +655,11 @@ function IntroStep({ text, onNext }: { text: string; onNext: () => void }) {
     <motion.div
       initial={{ scale: 0.9 }}
       animate={{ scale: 1 }}
-      className="rounded-3xl p-8 shadow-2xl"
+      className="rounded-3xl p-5 sm:p-8 shadow-2xl"
       style={{ background: 'rgba(15, 15, 30, 0.5)', backdropFilter: 'blur(30px)', WebkitBackdropFilter: 'blur(30px)', border: '1px solid rgba(255, 255, 255, 0.06)' }}
     >
       <BookOpen className="w-12 h-12 mb-6" style={{ color: 'rgba(139, 92, 246, 0.8)' }} />
-      <p className="text-2xl text-white leading-relaxed mb-8">{text}</p>
+      <p className="text-lg sm:text-2xl text-white leading-relaxed mb-8">{text}</p>
       <motion.button
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
@@ -708,15 +709,15 @@ function ActivityStep({
     <motion.div
       initial={{ scale: 0.9 }}
       animate={{ scale: 1 }}
-      className="rounded-3xl p-8 shadow-2xl"
+      className="rounded-3xl p-5 sm:p-8 shadow-2xl"
       style={{ background: 'rgba(15, 15, 30, 0.5)', backdropFilter: 'blur(30px)', WebkitBackdropFilter: 'blur(30px)', border: '1px solid rgba(255, 255, 255, 0.06)' }}
     >
       <div className="flex items-center gap-3 mb-6">
-        <Camera className="w-8 h-8" style={{ color: 'rgba(139, 92, 246, 0.8)' }} />
-        <h3 className="text-2xl font-bold text-white">Your Mission</h3>
+        <Camera className="w-8 h-8 shrink-0" style={{ color: 'rgba(139, 92, 246, 0.8)' }} />
+        <h3 className="text-xl sm:text-2xl font-bold text-white min-w-0">Your Mission</h3>
       </div>
 
-      <p className="text-xl mb-6" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>{prompt}</p>
+      <p className="text-base sm:text-xl mb-6" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>{prompt}</p>
 
       {requiresPhoto && (
         <div className="mb-6">
@@ -796,14 +797,14 @@ function ActivityStep({
         </div>
       )}
 
-      <div className="flex gap-4 mt-6">
+      <div className="flex gap-2 sm:gap-4 mt-6">
         {pageIndex > 0 && (
           <motion.button
             whileHover={!isGenerating ? { scale: 1.05 } : {}}
             whileTap={!isGenerating ? { scale: 0.95 } : {}}
             onClick={onPrev}
             disabled={isGenerating}
-            className="flex-1 px-6 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2"
+            className="flex-1 px-4 sm:px-6 py-4 rounded-xl font-bold text-base sm:text-lg flex items-center justify-center gap-2"
             style={isGenerating
               ? { background: 'rgba(255, 255, 255, 0.04)', color: 'rgba(255, 255, 255, 0.2)', cursor: 'not-allowed' }
               : { background: 'rgba(255, 255, 255, 0.06)', color: 'white', border: '1px solid rgba(255, 255, 255, 0.08)' }
@@ -819,7 +820,7 @@ function ActivityStep({
           whileTap={canContinue ? { scale: 0.95 } : {}}
           onClick={onNext}
           disabled={!canContinue}
-          className={`${pageIndex > 0 ? 'flex-1' : 'w-full'} px-6 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2`}
+          className={`${pageIndex > 0 ? 'flex-1' : 'w-full'} px-4 sm:px-6 py-4 rounded-xl font-bold text-base sm:text-lg flex items-center justify-center gap-2`}
           style={canContinue
             ? { background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(236, 72, 153, 0.6))', color: 'white', boxShadow: '0 0 20px rgba(139, 92, 246, 0.3)' }
             : { background: 'rgba(255, 255, 255, 0.04)', color: 'rgba(255, 255, 255, 0.25)', cursor: 'not-allowed' }
@@ -861,10 +862,10 @@ function QuizStep({ question, options, selectedIndex, pageIndex, onSelect, onNex
     <motion.div
       initial={{ scale: 0.9 }}
       animate={{ scale: 1 }}
-      className="rounded-3xl p-8 shadow-2xl"
+      className="rounded-3xl p-5 sm:p-8 shadow-2xl"
       style={{ background: 'rgba(15, 15, 30, 0.5)', backdropFilter: 'blur(30px)', WebkitBackdropFilter: 'blur(30px)', border: '1px solid rgba(255, 255, 255, 0.06)' }}
     >
-      <h3 className="text-2xl font-bold text-white mb-6">{question}</h3>
+      <h3 className="text-xl sm:text-2xl font-bold text-white mb-6">{question}</h3>
 
       <div className="space-y-3 mb-6">
         {options.map((option, index) => (
@@ -884,13 +885,13 @@ function QuizStep({ question, options, selectedIndex, pageIndex, onSelect, onNex
         ))}
       </div>
 
-      <div className="flex gap-4">
+      <div className="flex gap-2 sm:gap-4">
         {pageIndex > 0 && (
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={onPrev}
-            className="flex-1 px-6 py-4 text-white rounded-xl font-bold text-lg flex items-center justify-center gap-2"
+            className="flex-1 px-4 sm:px-6 py-4 text-white rounded-xl font-bold text-base sm:text-lg flex items-center justify-center gap-2"
             style={{ background: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.08)' }}
           >
             <ChevronLeft className="w-5 h-5" />
@@ -903,7 +904,7 @@ function QuizStep({ question, options, selectedIndex, pageIndex, onSelect, onNex
           whileTap={canContinue ? { scale: 0.95 } : {}}
           onClick={onNext}
           disabled={!canContinue}
-          className={`${pageIndex > 0 ? 'flex-1' : 'w-full'} px-6 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2`}
+          className={`${pageIndex > 0 ? 'flex-1' : 'w-full'} px-4 sm:px-6 py-4 rounded-xl font-bold text-base sm:text-lg flex items-center justify-center gap-2`}
           style={canContinue
             ? { background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(99, 102, 241, 0.6))', color: 'white', boxShadow: '0 0 20px rgba(139, 92, 246, 0.3)' }
             : { background: 'rgba(255, 255, 255, 0.04)', color: 'rgba(255, 255, 255, 0.25)', cursor: 'not-allowed' }
@@ -942,11 +943,11 @@ function ResultStep({
     <motion.div
       initial={{ scale: 0.9 }}
       animate={{ scale: 1 }}
-      className="rounded-3xl p-8 shadow-2xl"
+      className="rounded-3xl p-5 sm:p-8 shadow-2xl"
       style={{ background: 'rgba(15, 15, 30, 0.5)', backdropFilter: 'blur(30px)', WebkitBackdropFilter: 'blur(30px)', border: '1px solid rgba(255, 255, 255, 0.06)' }}
     >
       <Sparkles className="w-12 h-12 text-yellow-400 mb-6" />
-      <p className="text-2xl text-white leading-relaxed mb-6">{text}</p>
+      <p className="text-lg sm:text-2xl text-white leading-relaxed mb-6">{text}</p>
 
       {imageToDisplay && (
         <motion.div
@@ -981,13 +982,13 @@ function ResultStep({
         </motion.div>
       )}
 
-      <div className="flex gap-4">
+      <div className="flex gap-2 sm:gap-4">
         {pageIndex > 0 && (
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={onPrev}
-            className="flex-1 px-6 py-4 text-white rounded-xl font-bold text-lg flex items-center justify-center gap-2"
+            className="flex-1 px-4 sm:px-6 py-4 text-white rounded-xl font-bold text-base sm:text-lg flex items-center justify-center gap-2"
             style={{ background: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.08)' }}
           >
             <ChevronLeft className="w-5 h-5" />
@@ -1000,7 +1001,7 @@ function ResultStep({
           whileTap={isPageCompleted ? { scale: 0.95 } : {}}
           onClick={isPageCompleted ? onNext : undefined}
           disabled={!isPageCompleted}
-          className={`${pageIndex > 0 ? 'flex-1' : 'w-full'} px-6 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2`}
+          className={`${pageIndex > 0 ? 'flex-1' : 'w-full'} px-4 sm:px-6 py-4 rounded-xl font-bold text-base sm:text-lg flex items-center justify-center gap-2`}
           style={isPageCompleted
             ? isLastPage
               ? { background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.6), rgba(5, 150, 105, 0.6))', color: 'white', boxShadow: '0 0 20px rgba(16, 185, 129, 0.3)' }
@@ -1031,32 +1032,32 @@ function BackcoverScreen({ session, onViewStorybook }: {
   onViewStorybook: () => void;
 }) {
   return (
-    <div className="min-h-screen flex items-center justify-center p-6">
+    <div className="min-h-screen flex items-center justify-center p-4 sm:p-6 pb-24 sm:pb-28" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 96px)' }}>
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         className="max-w-3xl w-full"
       >
-        <div className="text-center mb-12">
+        <div className="text-center mb-8 sm:mb-12">
           <motion.div
             animate={{ rotate: [0, 360] }}
             transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-            className="text-6xl mb-4 mx-auto w-fit"
+            className="text-5xl sm:text-6xl mb-4 mx-auto w-fit"
           >
             🎉
           </motion.div>
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
             Adventure Complete!
           </h1>
         </div>
 
-        <div className="rounded-3xl p-8 mb-8" style={{ background: 'rgba(15, 15, 30, 0.5)', backdropFilter: 'blur(30px)', WebkitBackdropFilter: 'blur(30px)', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
-          <h2 className="text-2xl font-bold mb-4" style={{ color: 'rgba(139, 92, 246, 0.8)' }}>About This Story</h2>
-          <p className="text-lg leading-relaxed mb-8" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
+        <div className="rounded-3xl p-5 sm:p-8 mb-8" style={{ background: 'rgba(15, 15, 30, 0.5)', backdropFilter: 'blur(30px)', WebkitBackdropFilter: 'blur(30px)', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
+          <h2 className="text-xl sm:text-2xl font-bold mb-4" style={{ color: 'rgba(139, 92, 246, 0.8)' }}>About This Story</h2>
+          <p className="text-base sm:text-lg leading-relaxed mb-8" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
             {session.backcover_summary}
           </p>
 
-          <h2 className="text-2xl font-bold mb-4" style={{ color: 'rgba(168, 85, 247, 0.8)' }}>About the Author</h2>
+          <h2 className="text-xl sm:text-2xl font-bold mb-4" style={{ color: 'rgba(168, 85, 247, 0.8)' }}>About the Author</h2>
           <p className="text-lg leading-relaxed mb-2" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
             {session.backcover_author_text}
           </p>

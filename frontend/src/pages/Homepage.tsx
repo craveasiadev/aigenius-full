@@ -56,8 +56,8 @@ export const Homepage = () => {
         </div>
       </header>
 
-      <main className="relative z-10 max-w-7xl mx-auto px-8 py-16">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+      <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 py-10 sm:py-16 pb-24 sm:pb-28" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 96px)' }}>
+        <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -73,7 +73,7 @@ export const Homepage = () => {
               <span className="font-semibold text-sm" style={{ color: 'rgba(139, 92, 246, 0.9)' }}>Welcome to the Future</span>
             </motion.div>
 
-            <h2 className="text-6xl md:text-7xl font-bold mb-6 leading-tight text-white">
+            <h2 className="text-4xl sm:text-6xl md:text-7xl font-bold mb-6 leading-tight text-white break-words">
               Create Your
               <br />
               <span className="bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent">
@@ -81,12 +81,12 @@ export const Homepage = () => {
               </span>
             </h2>
 
-            <p className="text-xl mb-8 leading-relaxed max-w-xl" style={{ color: 'rgba(255, 255, 255, 0.6)', lineHeight: '1.6' }}>
+            <p className="text-base sm:text-xl mb-8 leading-relaxed max-w-xl" style={{ color: 'rgba(255, 255, 255, 0.6)', lineHeight: '1.6' }}>
               Empower your child to build real businesses with AI. Learn entrepreneurship, innovation,
               and leadership through hands-on experiences that prepare them for tomorrow's opportunities.
             </p>
 
-            <div className="flex gap-4 mb-12">
+            <div className="flex flex-wrap gap-4 mb-12">
               <PrimaryButton onClick={() => navigate('/auth/login')}>
                 <div className="flex items-center gap-2 justify-center">
                   <span>Login as Student Demo</span>
@@ -95,9 +95,9 @@ export const Homepage = () => {
               </PrimaryButton>
             </div>
 
-            <div className="flex items-center gap-8">
+            <div className="flex flex-wrap items-center gap-6 sm:gap-8">
               <div>
-                <p className="text-3xl font-bold text-white">
+                <p className="text-2xl sm:text-3xl font-bold text-white">
                   1000+
                 </p>
                 <p className="text-sm" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
@@ -105,7 +105,7 @@ export const Homepage = () => {
                 </p>
               </div>
               <div>
-                <p className="text-3xl font-bold text-white">
+                <p className="text-2xl sm:text-3xl font-bold text-white">
                   50+
                 </p>
                 <p className="text-sm" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
@@ -113,7 +113,7 @@ export const Homepage = () => {
                 </p>
               </div>
               <div>
-                <p className="text-3xl font-bold text-white">
+                <p className="text-2xl sm:text-3xl font-bold text-white">
                   100%
                 </p>
                 <p className="text-sm" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
@@ -129,7 +129,7 @@ export const Homepage = () => {
             transition={{ delay: 0.4 }}
             className="relative"
           >
-            <div className="rounded-[3rem] p-8 shadow-2xl" style={{ background: 'rgba(15, 15, 30, 0.5)', backdropFilter: 'blur(30px)', WebkitBackdropFilter: 'blur(30px)', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
+            <div className="rounded-3xl sm:rounded-[3rem] p-5 sm:p-8 shadow-2xl" style={{ background: 'rgba(15, 15, 30, 0.5)', backdropFilter: 'blur(30px)', WebkitBackdropFilter: 'blur(30px)', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
               <div className="grid grid-cols-1 gap-4">
                 {features.map((feature, index) => {
                   const Icon = feature.icon;
@@ -171,7 +171,7 @@ export const Homepage = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1 }}
-          className="text-center mt-24 text-sm"
+          className="text-center mt-16 sm:mt-24 text-sm"
           style={{ color: 'rgba(255, 255, 255, 0.4)' }}
         >
           Demo Mode — data is simulated for preview purposes

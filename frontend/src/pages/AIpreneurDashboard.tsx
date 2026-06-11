@@ -1547,7 +1547,7 @@ export const AIpreneurDashboard = () => {
             )}
             {pendingWorkshopShop && (
               <div
-                className="fixed z-[55] left-1/2 -translate-x-1/2 px-4 py-2 rounded-full bg-slate-900/90 text-white text-xs font-semibold border border-white/15 backdrop-blur"
+                className="fixed z-[55] left-1/2 -translate-x-1/2 w-[calc(100vw-1.5rem)] max-w-sm text-center px-4 py-2 rounded-full bg-slate-900/90 text-white text-xs font-semibold border border-white/15 backdrop-blur"
                 style={{ top: 'max(env(safe-area-inset-top), 70px)' }}
               >
                 That workshop's business module is on the way!

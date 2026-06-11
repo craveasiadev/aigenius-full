@@ -85,7 +85,7 @@ export const ArtventureHub = () => {
   const availableChapters = allChapters.slice(0, 6);
 
   return (
-    <div className="min-h-screen pb-24 relative overflow-hidden" style={{ background: '#0a0a1a' }}>
+    <div className="min-h-screen pb-24 sm:pb-28 relative overflow-x-hidden" style={{ background: '#0a0a1a' }}>
       {/* Gradient orbs */}
       <div className="fixed top-[-20%] left-[-10%] w-[500px] h-[500px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%)', filter: 'blur(60px)' }} />
       <div className="fixed bottom-[-20%] right-[-10%] w-[500px] h-[500px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, transparent 70%)', filter: 'blur(60px)' }} />
@@ -93,22 +93,22 @@ export const ArtventureHub = () => {
 
       <TopNav userName={currentUser.name} />
 
-      <div className="max-w-[1400px] mx-auto p-6 pt-20 md:pt-24 space-y-8 relative z-10">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-4 sm:py-6 pt-20 md:pt-24 space-y-6 sm:space-y-8 relative z-10">
         {/* Hero Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="relative overflow-hidden rounded-3xl p-8 md:p-12"
+          className="relative overflow-hidden rounded-3xl p-6 sm:p-8 md:p-12"
           style={{ background: 'rgba(15, 15, 30, 0.5)', backdropFilter: 'blur(30px)', WebkitBackdropFilter: 'blur(30px)', border: '1px solid rgba(139, 92, 246, 0.15)' }}
         >
           <div className="relative z-10">
             <div className="flex items-center gap-3 mb-4">
-              <BookOpen className="w-12 h-12 text-white" />
-              <h1 className="text-4xl md:text-5xl font-black text-white">
+              <BookOpen className="w-9 h-9 sm:w-12 sm:h-12 text-white flex-shrink-0" />
+              <h1 className="text-2xl sm:text-4xl md:text-5xl font-black text-white min-w-0">
                 Artventure Hub
               </h1>
             </div>
-            <p className="text-xl mb-6 max-w-2xl" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
+            <p className="text-base sm:text-xl mb-6 max-w-2xl" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
               Unleash your creativity through interactive storytelling and art. Create beautiful storybooks and bring your imagination to life!
             </p>
 
@@ -117,7 +117,7 @@ export const ArtventureHub = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => navigate('/s/create')}
-                className="px-8 py-4 rounded-xl font-bold text-lg shadow-lg inline-flex items-center gap-2 text-white"
+                className="w-full sm:w-auto justify-center px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg shadow-lg inline-flex items-center gap-2 text-white"
                 style={{ background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(99, 102, 241, 0.6))', boxShadow: '0 0 20px rgba(139, 92, 246, 0.3)' }}
               >
                 <Plus className="w-6 h-6" />
@@ -132,7 +132,7 @@ export const ArtventureHub = () => {
                     const story = inProgressStories[0];
                     navigate(`/s/storybook/${story.chapter_code}?session_id=${story.session_id}`);
                   }}
-                  className="px-8 py-4 rounded-xl font-bold text-lg inline-flex items-center gap-2 text-white"
+                  className="w-full sm:w-auto justify-center px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg inline-flex items-center gap-2 text-white"
                   style={{ background: 'rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.1)' }}
                 >
                   <Zap className="w-6 h-6" />
@@ -214,12 +214,12 @@ export const ArtventureHub = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
           >
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-                <Clock className="w-7 h-7" style={{ color: 'rgba(139, 92, 246, 0.8)' }} />
-                Continue Your Stories
+            <div className="flex items-center justify-between gap-2 mb-4">
+              <h2 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2 min-w-0">
+                <Clock className="w-6 h-6 sm:w-7 sm:h-7 flex-shrink-0" style={{ color: 'rgba(139, 92, 246, 0.8)' }} />
+                <span className="truncate">Continue Your Stories</span>
               </h2>
-              <span className="font-semibold" style={{ color: 'rgba(139, 92, 246, 0.8)' }}>{inProgressStories.length} in progress</span>
+              <span className="font-semibold whitespace-nowrap flex-shrink-0 text-sm sm:text-base" style={{ color: 'rgba(139, 92, 246, 0.8)' }}>{inProgressStories.length} in progress</span>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {inProgressStories.map((story, idx) => (
@@ -238,7 +238,7 @@ export const ArtventureHub = () => {
                     </div>
                     <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" style={{ color: 'rgba(139, 92, 246, 0.8)' }} />
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-2 transition-colors" style={{}}>
+                  <h3 className="text-lg sm:text-xl font-bold text-white mb-2 transition-colors line-clamp-2 break-words" style={{}}>
                     {story.selected_title || story.chapter_title || 'Untitled Story'}
                   </h3>
                   <p className="text-sm mb-4 line-clamp-2" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>
@@ -261,12 +261,12 @@ export const ArtventureHub = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
           >
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-                <CheckCircle className="w-7 h-7" style={{ color: 'rgba(16, 185, 129, 0.8)' }} />
-                Completed Storybooks
+            <div className="flex items-center justify-between gap-2 mb-4">
+              <h2 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2 min-w-0">
+                <CheckCircle className="w-6 h-6 sm:w-7 sm:h-7 flex-shrink-0" style={{ color: 'rgba(16, 185, 129, 0.8)' }} />
+                <span className="truncate">Completed Storybooks</span>
               </h2>
-              <span className="font-semibold" style={{ color: 'rgba(16, 185, 129, 0.8)' }}>{completedStoriesData.length} completed</span>
+              <span className="font-semibold whitespace-nowrap flex-shrink-0 text-sm sm:text-base" style={{ color: 'rgba(16, 185, 129, 0.8)' }}>{completedStoriesData.length} completed</span>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {completedStoriesData.map((story, idx) => (
@@ -287,7 +287,7 @@ export const ArtventureHub = () => {
                       <BookOpen className="w-8 h-8 text-white" />
                     </div>
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-2 transition-colors">
+                  <h3 className="text-lg sm:text-xl font-bold text-white mb-2 transition-colors line-clamp-2 break-words pr-8">
                     {story.title || 'Completed Story'}
                   </h3>
                   <p className="text-sm mb-4 line-clamp-2" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>
@@ -309,10 +309,10 @@ export const ArtventureHub = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
         >
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-              <Palette className="w-7 h-7" style={{ color: 'rgba(139, 92, 246, 0.8)' }} />
-              Available Story Themes
+          <div className="flex items-center justify-between gap-2 mb-4">
+            <h2 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2 min-w-0">
+              <Palette className="w-6 h-6 sm:w-7 sm:h-7 flex-shrink-0" style={{ color: 'rgba(139, 92, 246, 0.8)' }} />
+              <span className="truncate">Available Story Themes</span>
             </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -331,7 +331,7 @@ export const ArtventureHub = () => {
                 >
                   <div className={`absolute inset-0 bg-gradient-to-br ${gradient} rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity`} />
                   <div className="relative rounded-2xl p-6 transition-all" style={{ background: 'rgba(15, 15, 30, 0.5)', backdropFilter: 'blur(30px)', WebkitBackdropFilter: 'blur(30px)', border: '1px solid rgba(139, 92, 246, 0.15)' }}>
-                    <h3 className="text-xl font-bold text-white mb-2 transition-colors">
+                    <h3 className="text-lg sm:text-xl font-bold text-white mb-2 transition-colors line-clamp-2 break-words">
                       {chapter.title}
                     </h3>
                     <p className="text-sm mb-4" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>
@@ -354,21 +354,21 @@ export const ArtventureHub = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.5 }}
-            className="rounded-3xl p-12 text-center"
+            className="rounded-3xl p-6 sm:p-12 text-center"
             style={{ background: 'rgba(15, 15, 30, 0.5)', backdropFilter: 'blur(30px)', WebkitBackdropFilter: 'blur(30px)', border: '1px solid rgba(139, 92, 246, 0.15)' }}
           >
             <div className="w-24 h-24 mx-auto mb-6 rounded-full flex items-center justify-center" style={{ background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.5), rgba(236, 72, 153, 0.5))' }}>
               <Sparkles className="w-12 h-12 text-white" />
             </div>
-            <h2 className="text-3xl font-bold text-white mb-4">Start Your Creative Journey!</h2>
-            <p className="text-lg mb-8 max-w-2xl mx-auto" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
+            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">Start Your Creative Journey!</h2>
+            <p className="text-base sm:text-lg mb-8 max-w-2xl mx-auto" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
               Create your first storybook and unlock the world of creative storytelling. Choose a theme, answer fun questions, and watch your story come to life!
             </p>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate('/s/create')}
-              className="px-8 py-4 rounded-xl font-bold text-white text-lg shadow-lg inline-flex items-center gap-2"
+              className="w-full sm:w-auto justify-center px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-white text-base sm:text-lg shadow-lg inline-flex items-center gap-2"
               style={{ background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(99, 102, 241, 0.6))', boxShadow: '0 0 20px rgba(139, 92, 246, 0.3)' }}
             >
               <Plus className="w-6 h-6" />

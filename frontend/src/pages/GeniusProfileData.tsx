@@ -300,7 +300,7 @@ export const GeniusProfileData = () => {
   }
 
   return (
-    <div className="min-h-screen pb-24" style={{ background: '#0a0a1a' }}>
+    <div className="min-h-screen overflow-x-hidden" style={{ background: '#0a0a1a', paddingBottom: 'calc(env(safe-area-inset-bottom) + 96px)' }}>
       {/* Ambient gradient orbs */}
       <div style={{ position: 'fixed', top: '-20%', left: '-10%', width: '40%', height: '40%', borderRadius: '50%', background: 'radial-gradient(circle, rgba(139, 92, 246, 0.15), transparent 70%)', pointerEvents: 'none', zIndex: 0 }} />
       <div style={{ position: 'fixed', bottom: '-20%', right: '-10%', width: '50%', height: '50%', borderRadius: '50%', background: 'radial-gradient(circle, rgba(59, 130, 246, 0.1), transparent 70%)', pointerEvents: 'none', zIndex: 0 }} />
@@ -308,24 +308,24 @@ export const GeniusProfileData = () => {
 
       <TopNav userName={currentUser.name} showPersonaButton={false} />
 
-      <div className="max-w-6xl mx-auto p-6 pt-20 md:pt-24" style={{ position: 'relative', zIndex: 1 }}>
-        <div className="flex items-center justify-between mb-6">
+      <div className="max-w-6xl mx-auto px-4 py-6 sm:p-6 pt-20 md:pt-24" style={{ position: 'relative', zIndex: 1 }}>
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-6">
           <button
             onClick={() => navigate('/s/dashboard')}
-            className="px-4 py-2 rounded-lg flex items-center gap-2 text-sm transition-all"
+            className="min-h-[40px] px-4 py-2 rounded-lg flex items-center gap-2 text-sm transition-all"
             style={{ background: 'rgba(255, 255, 255, 0.06)', border: '1px solid rgba(255, 255, 255, 0.08)', color: 'rgba(255, 255, 255, 0.5)' }}
           >
-            <ArrowLeft className="w-4 h-4" />
+            <ArrowLeft className="w-4 h-4 shrink-0" />
             Back to Dashboard
           </button>
 
           <button
             onClick={handleSync}
             disabled={syncing}
-            className="px-4 py-2 rounded-lg flex items-center gap-2 text-sm text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            className="min-h-[40px] px-4 py-2 rounded-lg flex items-center gap-2 text-sm text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             style={{ background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(99, 102, 241, 0.6))', boxShadow: '0 0 20px rgba(139, 92, 246, 0.3)' }}
           >
-            <RefreshCw className={`w-4 h-4 ${syncing ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-4 h-4 shrink-0 ${syncing ? 'animate-spin' : ''}`} />
             {syncing ? 'Syncing...' : 'Sync Database'}
           </button>
         </div>
@@ -340,12 +340,12 @@ export const GeniusProfileData = () => {
           <div className="space-y-4">
             {sections.map((section, sectionIndex) => (
               <div key={sectionIndex} className="rounded-2xl p-4" style={{ background: 'rgba(15, 15, 30, 0.5)', backdropFilter: 'blur(30px)', WebkitBackdropFilter: 'blur(30px)', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
-                <h2 className="text-lg font-bold mb-3" style={{ color: 'white' }}>
+                <h2 className="text-lg font-bold mb-3 break-words" style={{ color: 'white' }}>
                   {section.emoji} {section.title}
                 </h2>
 
                 {section.count !== undefined && (
-                  <div className="text-sm font-mono mb-2" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
+                  <div className="text-sm font-mono mb-2 break-words" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
                     total_{section.title.split(' ')[0].toLowerCase()} = {section.count}
                   </div>
                 )}
@@ -353,7 +353,7 @@ export const GeniusProfileData = () => {
                 {section.data && Object.keys(section.data).length > 0 ? (
                   <div className="space-y-1 text-sm font-mono">
                     {Object.entries(section.data).map(([key, value], index) => (
-                      <div key={index} style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
+                      <div key={index} className="break-words" style={{ color: 'rgba(255, 255, 255, 0.5)', overflowWrap: 'anywhere' }}>
                         <span style={{ color: 'rgba(167, 139, 250, 0.8)' }}>{key}</span> = {renderValue(key, value)}
                       </div>
                     ))}

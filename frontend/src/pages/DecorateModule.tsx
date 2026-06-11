@@ -471,7 +471,7 @@ export const DecorateModule = () => {
             <ArrowLeft className="w-5 h-5 text-slate-700 dark:text-slate-200" />
           </button>
 
-          <h1 className="flex items-center gap-2 text-base sm:text-lg font-extrabold text-slate-900 dark:text-white truncate">
+          <h1 className="flex-1 min-w-0 flex items-center gap-2 text-base sm:text-lg font-extrabold text-slate-900 dark:text-white truncate">
             <Palette className="w-5 h-5 text-violet-500 dark:text-violet-300" />
             <span className="truncate">Decorate</span>
           </h1>
@@ -744,14 +744,14 @@ function TabButton({ active, icon, label, onClick }: {
       type="button"
       onClick={onClick}
       className={[
-        'flex-1 inline-flex items-center justify-center gap-1.5 min-h-[40px] rounded-xl text-sm font-bold transition-colors',
+        'flex-1 min-w-0 inline-flex items-center justify-center gap-1 sm:gap-1.5 min-h-[40px] px-1 rounded-xl text-xs sm:text-sm font-bold transition-colors',
         active
           ? 'bg-violet-600 text-white border-b-[3px] border-violet-800'
           : 'bg-transparent text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800',
       ].join(' ')}
     >
-      {icon}
-      {label}
+      <span className="shrink-0">{icon}</span>
+      <span className="truncate">{label}</span>
     </button>
   );
 }

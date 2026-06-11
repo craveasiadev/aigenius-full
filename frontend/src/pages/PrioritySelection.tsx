@@ -145,23 +145,23 @@ export const PrioritySelection = () => {
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-4 md:px-8 py-12" style={{ position: 'relative', zIndex: 1 }}>
+      <main className="max-w-5xl mx-auto px-4 md:px-8 py-6 md:py-12" style={{ position: 'relative', zIndex: 1, paddingBottom: 'calc(env(safe-area-inset-bottom) + 96px)' }}>
         {/* Instructions */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="rounded-2xl p-8 mb-8"
+          className="rounded-2xl p-5 sm:p-8 mb-8"
           style={{ background: 'rgba(15, 15, 30, 0.5)', backdropFilter: 'blur(30px)', WebkitBackdropFilter: 'blur(30px)', border: '1px solid rgba(255, 255, 255, 0.06)' }}
         >
-          <div className="flex items-start gap-4">
+          <div className="flex items-start gap-3 sm:gap-4">
             <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(59, 130, 246, 0.15)', border: '1px solid rgba(59, 130, 246, 0.2)' }}>
               <Info className="w-6 h-6" style={{ color: 'rgba(96, 165, 250, 1)' }} />
             </div>
-            <div className="flex-1">
-              <h2 className="text-2xl font-bold mb-3" style={{ color: 'white' }}>
+            <div className="flex-1 min-w-0">
+              <h2 className="text-xl sm:text-2xl font-bold mb-3 break-words" style={{ color: 'white' }}>
                 Choose 5 Priority Focus Areas for {profile.genius_name}
               </h2>
-              <p className="text-lg mb-4" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
+              <p className="text-base sm:text-lg mb-4" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
                 Based on the AI analysis, we've identified 10 areas for growth. Please select the 5 most important areas you'd like to focus on for {profile.genius_name}'s learning journey.
               </p>
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg" style={{ background: 'rgba(249, 115, 22, 0.1)', border: '1px solid rgba(249, 115, 22, 0.2)' }}>
@@ -196,7 +196,7 @@ export const PrioritySelection = () => {
                 whileTap={{ scale: canSelect || isSelected ? 0.98 : 1 }}
                 onClick={() => (canSelect || isSelected) && togglePriority(area.title)}
                 disabled={!canSelect && !isSelected}
-                className="p-6 rounded-2xl text-left transition-all relative"
+                className="p-5 sm:p-6 rounded-2xl text-left transition-all relative"
                 style={
                   isSelected
                     ? { background: 'linear-gradient(135deg, rgba(249, 115, 22, 0.5), rgba(236, 72, 153, 0.5))', border: '1px solid rgba(249, 115, 22, 0.4)', boxShadow: '0 0 30px rgba(249, 115, 22, 0.2)' }
@@ -226,7 +226,7 @@ export const PrioritySelection = () => {
                   {index + 1}
                 </div>
 
-                <h3 className="text-xl font-bold mb-3 pr-12" style={{ color: 'white' }}>
+                <h3 className="text-lg sm:text-xl font-bold mb-3 pr-12 break-words" style={{ color: 'white' }}>
                   {area.title}
                 </h3>
 
@@ -250,7 +250,7 @@ export const PrioritySelection = () => {
             whileTap={{ scale: canSubmit ? 0.95 : 1 }}
             onClick={handleSubmit}
             disabled={!canSubmit || submitting}
-            className="px-8 py-4 rounded-xl font-bold text-white inline-flex items-center gap-3"
+            className="w-full sm:w-auto px-8 py-4 rounded-xl font-bold text-white inline-flex items-center justify-center gap-3"
             style={
               canSubmit && !submitting
                 ? { background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.6), rgba(16, 185, 129, 0.6))', boxShadow: '0 0 20px rgba(34, 197, 94, 0.3)', cursor: 'pointer' }

@@ -116,20 +116,20 @@ export const ExploreShopsPage = () => {
           <button
             type="button"
             onClick={() => smartBack()}
-            className={`${GLASS} ${GLASS_HOVER} w-10 h-10 rounded-xl flex items-center justify-center`}
+            className={`${GLASS} ${GLASS_HOVER} shrink-0 w-10 h-10 rounded-xl flex items-center justify-center`}
             aria-label="Back"
           >
             <ArrowLeft className="w-5 h-5 text-slate-700 dark:text-slate-200" />
           </button>
-          <h1 className="flex items-center gap-2 text-lg font-extrabold text-slate-900 dark:text-white">
-            <Store className="w-5 h-5 text-violet-500 dark:text-violet-300" />
-            Explore Shops
+          <h1 className="flex items-center gap-2 min-w-0 text-base sm:text-lg font-extrabold text-slate-900 dark:text-white">
+            <Store className="w-5 h-5 shrink-0 text-violet-500 dark:text-violet-300" />
+            <span className="truncate">Explore Shops</span>
           </h1>
           <button
             type="button"
             onClick={toggleTheme}
             aria-label="Toggle theme"
-            className={`${GLASS} ${GLASS_HOVER} w-10 h-10 rounded-xl flex items-center justify-center`}
+            className={`${GLASS} ${GLASS_HOVER} shrink-0 w-10 h-10 rounded-xl flex items-center justify-center`}
           >
             {dark ? <Sun className="w-5 h-5 text-amber-300" /> : <Moon className="w-5 h-5 text-slate-700" />}
           </button>

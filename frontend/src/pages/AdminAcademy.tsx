@@ -65,17 +65,17 @@ function Modal({ open, title, onClose, children, size = 'max-w-2xl' }: ModalProp
               border: '1px solid rgba(255, 255, 255, 0.1)',
             }}
           >
-            <div className="flex items-center justify-between p-6" style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
-              <h3 className="text-xl font-bold" style={{ color: 'white' }}>{title}</h3>
+            <div className="flex items-center justify-between gap-3 p-4 sm:p-6" style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
+              <h3 className="text-lg sm:text-xl font-bold min-w-0 truncate" style={{ color: 'white' }}>{title}</h3>
               <button
                 onClick={onClose}
-                className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
+                className="w-10 h-10 shrink-0 rounded-full flex items-center justify-center transition-colors"
                 style={{ background: 'rgba(255, 255, 255, 0.05)', color: 'rgba(255, 255, 255, 0.5)' }}
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
-            <div className="p-6 max-h-[80vh] overflow-y-auto">
+            <div className="p-4 sm:p-6 max-h-[75vh] overflow-y-auto">
               {children}
             </div>
           </motion.div>
@@ -409,16 +409,16 @@ export default function AdminAcademy() {
 
   return (
     <AdminLayout>
-      <div className="space-y-8 font-sans">
+      <div className="space-y-6 sm:space-y-8 font-sans pb-24 sm:pb-28" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 96px)' }}>
 
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-black tracking-tight" style={{ color: 'white' }}>Academy Management</h1>
-            <p className="mt-2" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>Oversee classes, students, and bookings in real-time.</p>
+          <div className="min-w-0">
+            <h1 className="text-2xl sm:text-3xl font-black tracking-tight" style={{ color: 'white' }}>Academy Management</h1>
+            <p className="mt-2 text-sm sm:text-base" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>Oversee classes, students, and bookings in real-time.</p>
           </div>
 
-          <div className="flex flex-wrap gap-2 p-1.5 rounded-2xl" style={{ background: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
+          <div className="flex flex-wrap gap-2 p-1.5 rounded-2xl overflow-x-auto" style={{ background: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
             <TabButton active={activeTab === 'overview'} label="Overview" icon={barchartIcon} onClick={() => setActiveTab('overview')} />
             <TabButton active={activeTab === 'classes'} label="Classes" icon={BookOpen} onClick={() => setActiveTab('classes')} />
             <TabButton active={activeTab === 'bookings'} label="Bookings" icon={Calendar} onClick={() => setActiveTab('bookings')} />
@@ -459,17 +459,17 @@ export default function AdminAcademy() {
                       </div>
                       <div className="space-y-3">
                         {bookings.slice(0, 5).map(booking => (
-                          <div key={booking.id} className="flex items-center justify-between p-3 rounded-xl transition-colors" style={{ background: 'rgba(255, 255, 255, 0.04)' }}>
-                            <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 rounded-full flex items-center justify-center font-bold" style={{ background: 'rgba(59, 130, 246, 0.15)', color: 'rgb(96, 165, 250)' }}>
+                          <div key={booking.id} className="flex items-center justify-between gap-2 p-3 rounded-xl transition-colors" style={{ background: 'rgba(255, 255, 255, 0.04)' }}>
+                            <div className="flex items-center gap-3 min-w-0">
+                              <div className="w-10 h-10 shrink-0 rounded-full flex items-center justify-center font-bold" style={{ background: 'rgba(59, 130, 246, 0.15)', color: 'rgb(96, 165, 250)' }}>
                                 {(booking.customer_name?.[0] || 'S').toUpperCase()}
                               </div>
-                              <div>
-                                <p className="font-bold text-sm" style={{ color: 'white' }}>{booking.customer_name || 'Student'}</p>
-                                <p className="text-xs" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>{booking.slot?.course?.title || 'Class'}</p>
+                              <div className="min-w-0">
+                                <p className="font-bold text-sm truncate" style={{ color: 'white' }}>{booking.customer_name || 'Student'}</p>
+                                <p className="text-xs truncate" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>{booking.slot?.course?.title || 'Class'}</p>
                               </div>
                             </div>
-                            <span className="px-2.5 py-1 rounded-full text-xs font-bold" style={booking.payment_status === 'completed'
+                            <span className="shrink-0 px-2.5 py-1 rounded-full text-xs font-bold" style={booking.payment_status === 'completed'
                               ? { background: 'rgba(34, 197, 94, 0.15)', color: 'rgb(74, 222, 128)' }
                               : { background: 'rgba(234, 179, 8, 0.15)', color: 'rgb(250, 204, 21)' }
                             }>
@@ -489,11 +489,11 @@ export default function AdminAcademy() {
                           .slice(0, 5)
                           .map((student, i) => (
                             <div key={student.id} className="flex items-center gap-4">
-                              <span className="font-black w-4" style={{ color: 'rgba(255, 255, 255, 0.3)' }}>{i + 1}</span>
-                              <div className="flex-1">
-                                <div className="flex justify-between mb-1">
-                                  <span className="font-bold text-sm" style={{ color: 'white' }}>{student.first_name} {student.last_name}</span>
-                                  <span className="text-xs font-bold" style={{ color: 'rgb(245, 158, 11)' }}>{student.rewards?.xp || 0} XP</span>
+                              <span className="font-black w-4 shrink-0" style={{ color: 'rgba(255, 255, 255, 0.3)' }}>{i + 1}</span>
+                              <div className="flex-1 min-w-0">
+                                <div className="flex justify-between gap-2 mb-1">
+                                  <span className="font-bold text-sm truncate min-w-0" style={{ color: 'white' }}>{student.first_name} {student.last_name}</span>
+                                  <span className="text-xs font-bold shrink-0" style={{ color: 'rgb(245, 158, 11)' }}>{student.rewards?.xp || 0} XP</span>
                                 </div>
                                 <div className="h-1.5 w-full rounded-full overflow-hidden" style={{ background: 'rgba(255, 255, 255, 0.06)' }}>
                                   <div className="h-full rounded-full" style={{ width: `${Math.min(100, (student.rewards?.xp || 0) / 100)}%`, background: 'linear-gradient(90deg, rgb(251, 191, 36), rgb(249, 115, 22))' }} />
@@ -530,7 +530,7 @@ export default function AdminAcademy() {
                         </div>
 
                         <div className="p-6">
-                          <h3 className="text-xl font-black mb-1 transition-colors" style={{ color: 'white' }}>{cls.title}</h3>
+                          <h3 className="text-lg sm:text-xl font-black mb-1 pr-20 line-clamp-2 transition-colors" style={{ color: 'white' }}>{cls.title}</h3>
                           <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest mb-4" style={{ color: 'rgba(255, 255, 255, 0.3)' }}>
                             <span style={{ color: 'rgb(139, 92, 246)' }}>{cls.category}</span>
                             <span>&#8226;</span>
@@ -563,12 +563,12 @@ export default function AdminAcademy() {
                             <div className="mt-4 pt-4 space-y-2" style={{ borderTop: '1px solid rgba(255, 255, 255, 0.06)' }}>
                               <p className="text-xs font-bold uppercase" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>Upcoming Slots</p>
                               {cls.slots.map(slot => (
-                                <div key={slot.id} className="flex items-center justify-between p-2 rounded-lg text-xs" style={{ background: 'rgba(255, 255, 255, 0.04)' }}>
-                                  <div>
-                                    <div className="font-bold" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>{new Date(slot.start_time).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}</div>
+                                <div key={slot.id} className="flex items-center justify-between gap-2 p-2 rounded-lg text-xs" style={{ background: 'rgba(255, 255, 255, 0.04)' }}>
+                                  <div className="min-w-0">
+                                    <div className="font-bold truncate" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>{new Date(slot.start_time).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}</div>
                                     <div style={{ color: 'rgba(255, 255, 255, 0.3)' }}>{slot.booked_count}/{slot.capacity} booked</div>
                                   </div>
-                                  <div className="flex gap-1">
+                                  <div className="flex gap-1 shrink-0">
                                     <button onClick={() => handleEditSlot(slot.id, slot)} className="p-1 rounded">
                                       <PencilLine className="w-3 h-3" style={{ color: 'rgb(96, 165, 250)' }} />
                                     </button>
@@ -602,8 +602,8 @@ export default function AdminAcademy() {
                       </div>
                     </div>
 
-                    <div className="flex gap-3">
-                      <div className="relative flex-1">
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <div className="relative flex-1 min-w-0">
                         <QrCode className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: 'rgba(255, 255, 255, 0.4)' }} />
                         <input
                           value={checkInInput}
@@ -617,7 +617,7 @@ export default function AdminAcademy() {
                       <button
                         onClick={handleLookup}
                         disabled={checkInLoading || !checkInInput.trim()}
-                        className="px-6 py-3.5 rounded-xl font-bold text-sm flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors whitespace-nowrap text-white"
+                        className="w-full sm:w-auto px-6 py-3.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors whitespace-nowrap text-white"
                         style={{ background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(99, 102, 241, 0.6))', boxShadow: '0 0 20px rgba(139, 92, 246, 0.3)' }}
                       >
                         {checkInLoading ? (
@@ -639,11 +639,11 @@ export default function AdminAcademy() {
                           className="mt-4 p-4 rounded-xl"
                           style={{ background: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(255, 255, 255, 0.08)' }}
                         >
-                          <div className="flex items-start justify-between mb-3">
-                            <code className="text-xs font-mono font-bold px-2.5 py-1 rounded" style={{ color: 'rgb(167, 139, 250)', background: 'rgba(139, 92, 246, 0.1)' }}>
+                          <div className="flex items-start justify-between gap-2 mb-3">
+                            <code className="text-xs font-mono font-bold px-2.5 py-1 rounded break-all min-w-0" style={{ color: 'rgb(167, 139, 250)', background: 'rgba(139, 92, 246, 0.1)' }}>
                               {foundBooking.order_id}
                             </code>
-                            <button onClick={() => { setFoundBooking(null); setCheckInResult(null); }} style={{ color: 'rgba(255, 255, 255, 0.4)' }}>
+                            <button onClick={() => { setFoundBooking(null); setCheckInResult(null); }} className="shrink-0" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>
                               <X className="w-4 h-4" />
                             </button>
                           </div>
@@ -727,12 +727,12 @@ export default function AdminAcademy() {
                           ) : (
                             <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: 'rgb(248, 113, 113)' }} />
                           )}
-                          <div className="flex-1">
-                            <div className="font-bold text-sm" style={{ color: checkInResult.success ? 'rgb(74, 222, 128)' : 'rgb(248, 113, 113)' }}>
+                          <div className="flex-1 min-w-0">
+                            <div className="font-bold text-sm break-words" style={{ color: checkInResult.success ? 'rgb(74, 222, 128)' : 'rgb(248, 113, 113)' }}>
                               {checkInResult.message}
                             </div>
                             {checkInResult.booking && (
-                              <div className="text-xs mt-1 space-y-0.5" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
+                              <div className="text-xs mt-1 space-y-0.5 break-words" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
                                 <div>Student: {checkInResult.booking.customer_name}</div>
                                 <div>Class: {checkInResult.booking.slot?.course?.title || 'N/A'}</div>
                                 <div>Order: {checkInResult.booking.order_id}</div>
@@ -741,6 +741,7 @@ export default function AdminAcademy() {
                           </div>
                           <button
                             onClick={() => setCheckInResult(null)}
+                            className="shrink-0"
                             style={{ color: 'rgba(255, 255, 255, 0.4)' }}
                           >
                             <X className="w-4 h-4" />
@@ -986,7 +987,7 @@ export default function AdminAcademy() {
       {/* Create Class */}
       <Modal open={showCreateClass} title="Create New Class" onClose={() => setShowCreateClass(false)}>
         <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1">
               <label className="text-xs font-bold uppercase" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>Title</label>
               <input
@@ -1079,7 +1080,7 @@ export default function AdminAcademy() {
       <Modal open={!!editingClassId} title="Edit Class Details" onClose={() => setEditingClassId(null)}>
         {editingClassId && classEdits[editingClassId] && (
           <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1">
                 <label className="text-xs font-bold uppercase" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>Title</label>
                 <input
@@ -1156,7 +1157,7 @@ export default function AdminAcademy() {
       <Modal open={!!creatingSlotClassId} title={`Add Slot: ${activeClassForSlot?.title || ''}`} onClose={() => setCreatingSlotClassId(null)}>
         {creatingSlotClassId && slotDrafts[creatingSlotClassId] && (
           <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1">
                 <label className="text-xs font-bold uppercase" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>Start Time</label>
                 <input
@@ -1218,7 +1219,7 @@ export default function AdminAcademy() {
       <Modal open={!!editingSlotId} title="Edit Slot" onClose={() => setEditingSlotId(null)}>
         {editingSlotId && slotEdits[editingSlotId] && (
           <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1">
                 <label className="text-xs font-bold uppercase" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>Start Time</label>
                 <input

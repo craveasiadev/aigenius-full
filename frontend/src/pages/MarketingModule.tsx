@@ -839,7 +839,7 @@ export const MarketingModule = () => {
                 {/* ADS PANEL */}
                 {activePanel === 'ads' && (
                   <div className="space-y-8">
-                    <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
                       {AD_SPACES.map((ad) => (
                         <div key={ad.id} className="relative group">
                           <button
@@ -869,13 +869,13 @@ export const MarketingModule = () => {
                       ))}
                     </div>
 
-                    <div className="rounded-[2.5rem] p-8" style={{ background: 'rgba(0, 0, 0, 0.2)', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
-                      <div className="flex flex-col items-center justify-center rounded-3xl p-8 hover:bg-white/5 transition-all text-center group cursor-pointer relative" style={{ border: '4px dashed rgba(255, 255, 255, 0.06)' }}>
+                    <div className="rounded-[2.5rem] p-4 sm:p-8" style={{ background: 'rgba(0, 0, 0, 0.2)', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
+                      <div className="flex flex-col items-center justify-center rounded-3xl p-6 sm:p-8 hover:bg-white/5 transition-all text-center group cursor-pointer relative" style={{ border: '4px dashed rgba(255, 255, 255, 0.06)' }}>
                         <label className="absolute inset-0 cursor-pointer">
                           <input type="file" accept="image/*" className="hidden" onChange={handleAdUpload} />
                         </label>
                         {adUpload ? (
-                          <img src={adUpload} alt="Preview" className="h-64 rounded-2xl object-cover shadow-2xl" />
+                          <img src={adUpload} alt="Preview" className="h-64 max-w-full rounded-2xl object-cover shadow-2xl" />
                         ) : (
                           <>
                             <div className="w-20 h-20 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform" style={{ background: 'rgba(249, 115, 22, 0.15)' }}>
@@ -1057,7 +1057,7 @@ export const MarketingModule = () => {
                   <div className="space-y-8">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       {/* Coach Card */}
-                      <div className="rounded-[2.5rem] p-8 relative overflow-hidden" style={{ background: 'rgba(6, 182, 212, 0.08)', border: '2px solid rgba(6, 182, 212, 0.15)' }}>
+                      <div className="rounded-[2.5rem] p-5 sm:p-8 relative overflow-hidden" style={{ background: 'rgba(6, 182, 212, 0.08)', border: '2px solid rgba(6, 182, 212, 0.15)' }}>
                         <Bot className="absolute -bottom-8 -right-8 w-48 h-48 text-cyan-400/20 rotate-12" />
                         <div className="relative z-10">
                           <div className="flex items-center gap-4 mb-6">
@@ -1091,7 +1091,7 @@ export const MarketingModule = () => {
                       </div>
 
                       {/* Generator Controls */}
-                      <div className="rounded-[2.5rem] p-8" style={{ background: 'rgba(15, 15, 30, 0.5)', backdropFilter: 'blur(30px)', WebkitBackdropFilter: 'blur(30px)', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
+                      <div className="rounded-[2.5rem] p-5 sm:p-8" style={{ background: 'rgba(15, 15, 30, 0.5)', backdropFilter: 'blur(30px)', WebkitBackdropFilter: 'blur(30px)', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
                         <div className="mb-6">
                           <label className="text-xs font-black uppercase tracking-widest pl-2 mb-2 block" style={{ color: 'rgba(255,255,255,0.3)' }}>Video Topic</label>
                           <input
@@ -1292,7 +1292,7 @@ export const MarketingModule = () => {
 
                     {/* Workshop Promo */}
                     <div className="relative rounded-[3rem] overflow-hidden shadow-2xl" style={{ background: 'linear-gradient(135deg, rgba(79, 70, 229, 0.8), rgba(139, 92, 246, 0.8))' }}>
-                      <div className="relative z-10 p-10 flex flex-col md:flex-row items-center justify-between gap-8">
+                      <div className="relative z-10 p-6 sm:p-10 flex flex-col md:flex-row items-center justify-between gap-8">
                         <div className="text-center md:text-left">
                           <span className="inline-block px-4 py-1 rounded-full text-xs font-black text-white uppercase tracking-widest mb-3" style={{ background: 'rgba(255, 255, 255, 0.15)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.2)' }}>Live Event</span>
                           <h3 className="text-3xl md:text-5xl font-black text-white mb-2 leading-tight">Content Creator <br /><span className="text-yellow-300">Workshop</span></h3>
@@ -1796,7 +1796,7 @@ export const MarketingModule = () => {
                                 <img src={resolveInfluencerAvatarUrl(influencerRoster.find(i => i.name === camp.influencer_name)?.avatar)} className="w-full h-full object-cover" />
                               </div>
                               <div className="flex-1 min-w-0">
-                                <p className="text-white font-bold">{camp.influencer_name}</p>
+                                <p className="text-white font-bold truncate">{camp.influencer_name}</p>
                                 <p className="text-xs" style={{ color: 'rgba(255,255,255,0.3)' }}>Reaching {camp.reach} people</p>
                                 {camp.ended_at && (
                                   <p className="text-cyan-400 text-xs font-bold mt-1">{getTimeRemaining(camp.ended_at)}</p>
@@ -1828,7 +1828,7 @@ export const MarketingModule = () => {
                                 <img src={resolveInfluencerAvatarUrl(influencerRoster.find(i => i.name === camp.influencer_name)?.avatar)} className="w-full h-full object-cover grayscale" />
                               </div>
                               <div className="flex-1 min-w-0">
-                                <p className="font-bold text-sm" style={{ color: 'rgba(255,255,255,0.4)' }}>{camp.influencer_name}</p>
+                                <p className="font-bold text-sm truncate" style={{ color: 'rgba(255,255,255,0.4)' }}>{camp.influencer_name}</p>
                                 <p className="text-xs" style={{ color: 'rgba(255,255,255,0.2)' }}>{camp.status === 'cancelled' ? 'Dismissed' : 'Expired'}</p>
                               </div>
                             </div>

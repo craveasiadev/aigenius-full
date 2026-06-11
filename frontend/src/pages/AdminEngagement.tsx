@@ -149,18 +149,18 @@ export default function AdminEngagement() {
 
   return (
     <AdminLayout>
-      <div className="p-8 space-y-6">
+      <div className="p-4 sm:p-8 space-y-6 pb-24 sm:pb-28">
         <div>
-          <h1 className="text-3xl font-bold mb-2" style={{ color: 'white' }}>Engagement System</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold mb-2" style={{ color: 'white' }}>Engagement System</h1>
           <p style={{ color: 'rgba(255, 255, 255, 0.5)' }}>Manage events, challenges, life situations, and system settings</p>
         </div>
 
-        <div className="flex gap-2 overflow-x-auto pb-2">
+        <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0">
           {(['Events', 'Challenges', 'Life Events', 'Seasonal Content', 'System Config'] as EngagementTab[]).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className="px-6 py-3 rounded-lg font-medium whitespace-nowrap transition-all"
+              className="px-4 sm:px-6 py-3 rounded-lg font-medium whitespace-nowrap transition-all"
               style={activeTab === tab
                 ? { background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(99, 102, 241, 0.6))', color: 'white', boxShadow: '0 0 20px rgba(139, 92, 246, 0.3)' }
                 : { background: 'rgba(15, 15, 30, 0.5)', color: 'rgba(255, 255, 255, 0.5)', border: '1px solid rgba(255, 255, 255, 0.06)' }
@@ -256,9 +256,9 @@ function EventsManagement({ events, onToggleActive, onDelete, onEdit }: any) {
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold" style={{ color: 'white' }}>Events ({events.length})</h2>
-        <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-white font-medium transition-shadow" style={{ background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(99, 102, 241, 0.6))', boxShadow: '0 0 20px rgba(139, 92, 246, 0.3)' }}>
+      <div className="flex flex-wrap justify-between items-center gap-3">
+        <h2 className="text-xl sm:text-2xl font-bold" style={{ color: 'white' }}>Events ({events.length})</h2>
+        <button className="flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-white font-medium transition-shadow w-full sm:w-auto" style={{ background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(99, 102, 241, 0.6))', boxShadow: '0 0 20px rgba(139, 92, 246, 0.3)' }}>
           <Plus className="w-5 h-5" />
           Create Event
         </button>
@@ -272,7 +272,7 @@ function EventsManagement({ events, onToggleActive, onDelete, onEdit }: any) {
               key={event.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="rounded-xl p-6"
+              className="rounded-xl p-4 sm:p-6"
               style={{
                 background: 'rgba(15, 15, 30, 0.5)',
                 backdropFilter: 'blur(30px)',
@@ -280,10 +280,10 @@ function EventsManagement({ events, onToggleActive, onDelete, onEdit }: any) {
                 border: '1px solid rgba(255, 255, 255, 0.06)',
               }}
             >
-              <div className="flex justify-between items-start mb-4">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <h3 className="text-xl font-bold" style={{ color: 'white' }}>{event.event_name}</h3>
+              <div className="flex flex-col sm:flex-row justify-between items-start gap-3 mb-4">
+                <div className="flex-1 min-w-0 w-full">
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2">
+                    <h3 className="text-lg sm:text-xl font-bold min-w-0 break-words" style={{ color: 'white' }}>{event.event_name}</h3>
                     <span className="px-3 py-1 rounded-full text-xs font-medium" style={{ background: typeColor.bg, color: typeColor.color }}>
                       {event.event_type}
                     </span>
@@ -309,7 +309,7 @@ function EventsManagement({ events, onToggleActive, onDelete, onEdit }: any) {
                     </div>
                   </div>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2 shrink-0 self-end sm:self-start">
                   <button
                     onClick={() => onToggleActive(event.id, event.is_active)}
                     className="p-2 rounded-lg transition-colors"
@@ -367,9 +367,9 @@ function ChallengesManagement({ challenges, onToggleActive, onDelete, onEdit }: 
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold" style={{ color: 'white' }}>Challenges ({challenges.length})</h2>
-        <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-white font-medium transition-shadow" style={{ background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(99, 102, 241, 0.6))', boxShadow: '0 0 20px rgba(139, 92, 246, 0.3)' }}>
+      <div className="flex flex-wrap justify-between items-center gap-3">
+        <h2 className="text-xl sm:text-2xl font-bold" style={{ color: 'white' }}>Challenges ({challenges.length})</h2>
+        <button className="flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-white font-medium transition-shadow w-full sm:w-auto" style={{ background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(99, 102, 241, 0.6))', boxShadow: '0 0 20px rgba(139, 92, 246, 0.3)' }}>
           <Plus className="w-5 h-5" />
           Create Challenge
         </button>
@@ -383,7 +383,7 @@ function ChallengesManagement({ challenges, onToggleActive, onDelete, onEdit }: 
               key={challenge.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="rounded-xl p-6"
+              className="rounded-xl p-4 sm:p-6"
               style={{
                 background: 'rgba(15, 15, 30, 0.5)',
                 backdropFilter: 'blur(30px)',
@@ -391,10 +391,10 @@ function ChallengesManagement({ challenges, onToggleActive, onDelete, onEdit }: 
                 border: '1px solid rgba(255, 255, 255, 0.06)',
               }}
             >
-              <div className="flex justify-between items-start">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <h3 className="text-xl font-bold" style={{ color: 'white' }}>{challenge.challenge_name}</h3>
+              <div className="flex flex-col sm:flex-row justify-between items-start gap-3">
+                <div className="flex-1 min-w-0 w-full">
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2">
+                    <h3 className="text-lg sm:text-xl font-bold min-w-0 break-words" style={{ color: 'white' }}>{challenge.challenge_name}</h3>
                     <span className="px-3 py-1 rounded-full text-xs font-medium" style={{ background: typeColor.bg, color: typeColor.color }}>
                       {challenge.challenge_type}
                     </span>
@@ -412,7 +412,7 @@ function ChallengesManagement({ challenges, onToggleActive, onDelete, onEdit }: 
                     </div>
                   </div>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2 shrink-0 self-end sm:self-start">
                   <button
                     onClick={() => onToggleActive(challenge.id, challenge.is_active)}
                     className="p-2 rounded-lg transition-colors"
@@ -461,9 +461,9 @@ function LifeEventsManagement({ lifeEvents, onToggleActive, onDelete, onEdit }: 
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold" style={{ color: 'white' }}>Life Events ({lifeEvents.length})</h2>
-        <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-white font-medium transition-shadow" style={{ background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(99, 102, 241, 0.6))', boxShadow: '0 0 20px rgba(139, 92, 246, 0.3)' }}>
+      <div className="flex flex-wrap justify-between items-center gap-3">
+        <h2 className="text-xl sm:text-2xl font-bold" style={{ color: 'white' }}>Life Events ({lifeEvents.length})</h2>
+        <button className="flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-white font-medium transition-shadow w-full sm:w-auto" style={{ background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(99, 102, 241, 0.6))', boxShadow: '0 0 20px rgba(139, 92, 246, 0.3)' }}>
           <Plus className="w-5 h-5" />
           Create Life Event
         </button>
@@ -477,7 +477,7 @@ function LifeEventsManagement({ lifeEvents, onToggleActive, onDelete, onEdit }: 
               key={event.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="rounded-xl p-6"
+              className="rounded-xl p-4 sm:p-6"
               style={{
                 background: 'rgba(15, 15, 30, 0.5)',
                 backdropFilter: 'blur(30px)',
@@ -485,10 +485,10 @@ function LifeEventsManagement({ lifeEvents, onToggleActive, onDelete, onEdit }: 
                 border: '1px solid rgba(255, 255, 255, 0.06)',
               }}
             >
-              <div className="flex justify-between items-start">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <h3 className="text-xl font-bold" style={{ color: 'white' }}>{event.event_name}</h3>
+              <div className="flex flex-col sm:flex-row justify-between items-start gap-3">
+                <div className="flex-1 min-w-0 w-full">
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2">
+                    <h3 className="text-lg sm:text-xl font-bold min-w-0 break-words" style={{ color: 'white' }}>{event.event_name}</h3>
                     <span className="px-3 py-1 rounded-full text-xs font-medium" style={{ background: catColor.bg, color: catColor.color }}>
                       {event.event_category}
                     </span>
@@ -500,7 +500,7 @@ function LifeEventsManagement({ lifeEvents, onToggleActive, onDelete, onEdit }: 
                     </div>
                   </div>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2 shrink-0 self-end sm:self-start">
                   <button
                     onClick={() => onToggleActive(event.id, event.is_active)}
                     className="p-2 rounded-lg transition-colors"
@@ -537,7 +537,7 @@ function LifeEventsManagement({ lifeEvents, onToggleActive, onDelete, onEdit }: 
 
 function SeasonalContentManagement() {
   return (
-    <div className="rounded-xl p-8 text-center" style={{
+    <div className="rounded-xl p-6 sm:p-8 text-center" style={{
       background: 'rgba(15, 15, 30, 0.5)',
       backdropFilter: 'blur(30px)',
       WebkitBackdropFilter: 'blur(30px)',
@@ -588,14 +588,14 @@ function SystemConfigManagement({ configs, onUpdate }: any) {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold" style={{ color: 'white' }}>System Configuration</h2>
+      <h2 className="text-xl sm:text-2xl font-bold" style={{ color: 'white' }}>System Configuration</h2>
 
       {Object.entries(groupedConfigs).map(([category, configsList]: [string, any]) => (
         <motion.div
           key={category}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="rounded-xl p-6"
+          className="rounded-xl p-4 sm:p-6"
           style={{
             background: 'rgba(15, 15, 30, 0.5)',
             backdropFilter: 'blur(30px)',
@@ -610,19 +610,19 @@ function SystemConfigManagement({ configs, onUpdate }: any) {
 
           <div className="space-y-3">
             {configsList.map((config: SystemConfig) => (
-              <div key={config.id} className="flex items-center justify-between p-4 rounded-lg" style={{ background: 'rgba(255, 255, 255, 0.04)' }}>
-                <div className="flex-1">
-                  <div className="font-medium" style={{ color: 'white' }}>{config.config_key.replace(/_/g, ' ')}</div>
-                  <div className="text-sm" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>{config.description}</div>
+              <div key={config.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-lg" style={{ background: 'rgba(255, 255, 255, 0.04)' }}>
+                <div className="flex-1 min-w-0">
+                  <div className="font-medium break-words" style={{ color: 'white' }}>{config.config_key.replace(/_/g, ' ')}</div>
+                  <div className="text-sm break-words" style={{ color: 'rgba(255, 255, 255, 0.4)' }}>{config.description}</div>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 w-full sm:w-auto">
                   {editingConfig === config.config_key ? (
                     <>
                       <input
                         type="text"
                         value={editValue}
                         onChange={(e) => setEditValue(e.target.value)}
-                        className="px-3 py-2 rounded-lg text-sm"
+                        className="px-3 py-2 rounded-lg text-sm flex-1 sm:flex-none min-w-0"
                         style={{ background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.08)', color: 'white' }}
                       />
                       <button
@@ -642,7 +642,7 @@ function SystemConfigManagement({ configs, onUpdate }: any) {
                     </>
                   ) : (
                     <>
-                      <span className="px-3 py-1 rounded-lg text-sm" style={{ background: 'rgba(255, 255, 255, 0.05)', color: 'rgba(255, 255, 255, 0.6)' }}>
+                      <span className="px-3 py-1 rounded-lg text-sm flex-1 sm:flex-none min-w-0 truncate" style={{ background: 'rgba(255, 255, 255, 0.05)', color: 'rgba(255, 255, 255, 0.6)' }}>
                         {typeof config.config_value === 'object'
                           ? JSON.stringify(config.config_value)
                           : String(config.config_value)}

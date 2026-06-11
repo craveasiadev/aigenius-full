@@ -500,7 +500,7 @@ export const CreateProductModule = () => {
             >
               <motion.div
                 layoutId={viewingProduct.id}
-                className={`${GLASS} w-full max-w-lg rounded-3xl overflow-hidden`}
+                className={`${GLASS} w-full max-w-lg rounded-3xl overflow-hidden max-h-[90vh] overflow-y-auto`}
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="relative aspect-square bg-slate-100 dark:bg-slate-800">
@@ -521,7 +521,7 @@ export const CreateProductModule = () => {
                   </button>
                 </div>
                 <div className="p-5">
-                  <h2 className="text-xl font-extrabold text-slate-900 dark:text-white">{viewingProduct.product_name}</h2>
+                  <h2 className="text-xl font-extrabold text-slate-900 dark:text-white break-words">{viewingProduct.product_name}</h2>
                   <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-3 mb-4">{viewingProduct.description}</p>
                   <div className="grid grid-cols-2 gap-3 mb-4">
                     <KVCard label="Price" value={`RM ${viewingProduct.price}`} tone="violet" />
@@ -625,7 +625,7 @@ export const CreateProductModule = () => {
               />
 
               <div className="text-center max-w-2xl mx-auto mt-6 mb-6">
-                <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-2">
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mb-2">
                   What’s your big idea?
                 </h1>
                 <p className="text-slate-600 dark:text-slate-300">
@@ -832,7 +832,7 @@ export const CreateProductModule = () => {
               <span className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-violet-600 border-b-[5px] border-violet-800 mb-5">
                 <Loader2 className="w-10 h-10 text-white animate-spin" />
               </span>
-              <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white mb-2">
+              <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white mb-2">
                 Fabricating your {selectedStrategy?.label.toLowerCase()} product…
               </h2>
               <p className="text-sm text-slate-600 dark:text-slate-300 max-w-md mx-auto mb-6">
@@ -907,7 +907,7 @@ export const CreateProductModule = () => {
                 {/* Details + launch */}
                 <div className="space-y-4">
                   <div>
-                    <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white">{productName}</h2>
+                    <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white break-words">{productName}</h2>
                     <span className="inline-flex items-center gap-1.5 mt-2 px-2.5 py-1 rounded-full text-xs font-extrabold text-white bg-violet-600 border-b-[2px] border-violet-800">
                       {selectedStrategy?.label} strategy
                     </span>
@@ -919,10 +919,10 @@ export const CreateProductModule = () => {
                   {/* Charity card */}
                   <div className={`${GLASS} rounded-2xl p-4`}>
                     <div className="flex items-center gap-3 mb-2">
-                      <span className="w-10 h-10 rounded-xl bg-rose-500 border-b-[3px] border-rose-700 flex items-center justify-center">
+                      <span className="w-10 h-10 rounded-xl bg-rose-500 border-b-[3px] border-rose-700 flex items-center justify-center shrink-0">
                         <Heart className="w-5 h-5 text-white" />
                       </span>
-                      <div className="flex-1">
+                      <div className="flex-1 min-w-0">
                         <p className="font-bold text-slate-900 dark:text-white">Donate to a cause</p>
                         <p className="text-xs text-slate-500 dark:text-slate-400">
                           A small % of every sale goes to charity.
@@ -1093,13 +1093,13 @@ function Toast({ message }: { message: string | null }) {
           initial={{ opacity: 0, y: 24, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 24, scale: 0.95 }}
-          className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[9999]"
+          className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[9999] w-[calc(100%-2rem)] max-w-md"
         >
-          <div className={`${GLASS} rounded-2xl px-4 py-3 flex items-center gap-3 max-w-md`}>
-            <span className="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-violet-600 border-b-[3px] border-violet-800">
+          <div className={`${GLASS} rounded-2xl px-4 py-3 flex items-center gap-3 w-full`}>
+            <span className="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-violet-600 border-b-[3px] border-violet-800 shrink-0">
               <Sparkles className="w-4 h-4 text-white" />
             </span>
-            <p className="font-bold text-sm text-slate-900 dark:text-white">{message}</p>
+            <p className="font-bold text-sm text-slate-900 dark:text-white min-w-0">{message}</p>
           </div>
         </motion.div>
       )}

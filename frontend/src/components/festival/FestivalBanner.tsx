@@ -37,20 +37,22 @@ export function FestivalBanner() {
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: -16, opacity: 0 }}
         transition={{ type: 'spring', stiffness: 280, damping: 22 }}
-        className="fixed z-30 pointer-events-auto select-none"
+        className="fixed z-30 pointer-events-auto select-none max-w-[calc(100vw-1rem)] px-2"
         style={{
-          top:  'calc(env(safe-area-inset-top) + 8px)',
+          // Sits BELOW the game HUD pill (top-centre) so the two never
+          // stack on top of each other on phones.
+          top:  'calc(env(safe-area-inset-top) + 58px)',
           left: '50%',
           transform: 'translateX(-50%)',
         }}
       >
         <div
-          className={`${COZY_GLOW} inline-flex items-center gap-2 rounded-full pl-3 pr-1.5 py-1 border-2 border-white/60 dark:border-white/15`}
+          className={`${COZY_GLOW} inline-flex max-w-full items-center gap-2 rounded-full pl-3 pr-1.5 py-1 border-2 border-white/60 dark:border-white/15`}
           // Inline accent so each festival actually feels different at a glance.
           style={{ backgroundColor: festival.accentHex + 'CC' }}
         >
-          <span className="text-lg leading-none">{festival.emoji}</span>
-          <span className="text-[11px] sm:text-xs font-extrabold text-white drop-shadow-sm max-w-[60vw] truncate">
+          <span className="text-lg leading-none shrink-0">{festival.emoji}</span>
+          <span className="text-[11px] sm:text-xs font-extrabold text-white drop-shadow-sm min-w-0 truncate">
             {festival.banner}
           </span>
           <button

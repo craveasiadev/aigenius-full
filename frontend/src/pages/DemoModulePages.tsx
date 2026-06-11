@@ -63,7 +63,10 @@ function DemoModuleShell({
 }: DemoModuleShellProps) {
   return (
     <div className="min-h-screen bg-slate-950 text-white">
-      <header className="sticky top-0 z-30 bg-slate-950/85 backdrop-blur border-b border-white/5">
+      <header
+        className="sticky top-0 z-30 bg-slate-950/85 backdrop-blur border-b border-white/5"
+        style={{ paddingTop: 'env(safe-area-inset-top)' }}
+      >
         <div className="max-w-3xl mx-auto px-4 py-3 flex items-center gap-3">
           <Link
             to="/demo"
@@ -86,7 +89,10 @@ function DemoModuleShell({
         </div>
       </header>
 
-      <main className="max-w-3xl mx-auto px-4 py-5 space-y-5 pb-24">
+      <main
+        className="max-w-3xl mx-auto px-4 py-5 space-y-5 pb-24 sm:pb-28"
+        style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 96px)' }}
+      >
         {children}
 
         <div className="pt-2">
@@ -1042,7 +1048,7 @@ export function DemoInnovationPage() {
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ type: 'spring', stiffness: 320, damping: 26 }}
-            className="w-full max-w-md rounded-3xl bg-slate-900 border border-violet-500/40 p-6 shadow-2xl"
+            className="w-full max-w-md max-h-[90vh] overflow-y-auto rounded-3xl bg-slate-900 border border-violet-500/40 p-5 sm:p-6 shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             <p className="text-[10px] uppercase tracking-widest font-extrabold text-violet-300 mb-1">
@@ -1269,7 +1275,7 @@ export function DemoCSRPage() {
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ type: 'spring', stiffness: 320, damping: 26 }}
-            className="w-full max-w-md rounded-3xl bg-slate-900 border border-rose-500/40 p-6 shadow-2xl"
+            className="w-full max-w-md max-h-[90vh] overflow-y-auto rounded-3xl bg-slate-900 border border-rose-500/40 p-5 sm:p-6 shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             <p className="text-[10px] uppercase tracking-widest font-extrabold text-rose-300 mb-1">
@@ -1449,7 +1455,7 @@ export function DemoFinancePage() {
             Profit coins
           </p>
         </div>
-        <p className="text-5xl font-black tabular-nums">{state.balance.toLocaleString()}</p>
+        <p className="text-4xl sm:text-5xl font-black tabular-nums truncate">{state.balance.toLocaleString()}</p>
         <p className="text-xs text-white/85 mt-1">
           Banked from {state.todaySales} sale{state.todaySales === 1 ? '' : 's'} today
         </p>
@@ -1579,7 +1585,7 @@ export function DemoFinancePage() {
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ type: 'spring', stiffness: 320, damping: 26 }}
-            className="w-full max-w-md rounded-3xl bg-slate-900 border border-cyan-500/40 p-6 shadow-2xl"
+            className="w-full max-w-md max-h-[90vh] overflow-y-auto rounded-3xl bg-slate-900 border border-cyan-500/40 p-5 sm:p-6 shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             <p className="text-[10px] uppercase tracking-widest font-extrabold text-cyan-300 mb-1">

@@ -90,7 +90,10 @@ function LegalLayout({ title, subtitle, icon, children }: LegalLayoutProps) {
         <span className="w-[68px]" aria-hidden />
       </header>
 
-      <main className="relative z-10 px-4 sm:px-6 pb-20">
+      <main
+        className="relative z-10 px-4 sm:px-6 pb-24 sm:pb-28"
+        style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 96px)' }}
+      >
         <div className="max-w-3xl mx-auto">
           {/* Hero */}
           <motion.div
@@ -197,6 +200,8 @@ function LegalLayout({ title, subtitle, icon, children }: LegalLayoutProps) {
           color: rgb(124 58 237);
           font-weight: 600;
           text-decoration: underline;
+          overflow-wrap: anywhere;
+          word-break: break-word;
         }
         .dark .prose-legal a { color: rgb(167 139 250); }
         .prose-legal strong { color: rgb(15 23 42); font-weight: 700; }
@@ -888,9 +893,9 @@ export function SupportPage() {
                   aria-expanded={open}
                   className="w-full flex items-center justify-between gap-3 px-4 sm:px-5 py-3 sm:py-4 text-left hover:bg-slate-50 dark:hover:bg-white/5 transition-colors touch-manipulation"
                 >
-                  <span className="inline-flex items-start gap-2 font-bold text-slate-900 dark:text-white text-sm sm:text-base">
+                  <span className="flex-1 min-w-0 inline-flex items-start gap-2 font-bold text-slate-900 dark:text-white text-sm sm:text-base">
                     <HelpCircle className="w-4 h-4 text-violet-500 dark:text-violet-300 mt-0.5 shrink-0" />
-                    {f.q}
+                    <span className="min-w-0 break-words">{f.q}</span>
                   </span>
                   <ChevronDown
                     className={`w-4 h-4 text-slate-500 dark:text-slate-300 transition-transform shrink-0 ${

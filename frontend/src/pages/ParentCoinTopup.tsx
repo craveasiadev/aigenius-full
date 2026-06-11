@@ -176,7 +176,7 @@ export const ParentCoinTopup = () => {
   }
 
   return (
-    <div className="min-h-screen pb-8" style={{ background: '#0a0a1a' }}>
+    <div className="min-h-screen pb-24 sm:pb-28" style={{ background: '#0a0a1a' }}>
       {/* Ambient gradient orbs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 0 }}>
         <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] rounded-full opacity-30" style={{ background: 'radial-gradient(circle, rgba(139, 92, 246, 0.3), transparent 70%)', filter: 'blur(80px)' }} />
@@ -223,8 +223,8 @@ export const ParentCoinTopup = () => {
                 </div>
               )}
             </div>
-            <div>
-              <h2 className="text-xl font-bold" style={{ color: '#fff' }}>
+            <div className="flex-1 min-w-0">
+              <h2 className="text-lg sm:text-xl font-bold truncate" style={{ color: '#fff' }}>
                 Top Up for {childProfile?.genius_name || 'Kid'}
               </h2>
               <p className="text-sm" style={{ color: 'rgba(255,255,255,0.5)' }}>Add AI tokens to their account</p>
@@ -297,7 +297,7 @@ export const ParentCoinTopup = () => {
                   />
                 </div>
 
-                <h4 className="font-bold text-sm mb-1" style={{ color: '#fff' }}>{pkg.name}</h4>
+                <h4 className="font-bold text-sm mb-1 truncate" style={{ color: '#fff' }}>{pkg.name}</h4>
                 <div className="flex items-baseline gap-1 mb-2">
                   <span className="text-lg font-bold" style={{ color: '#fff' }}>{pkg.amount.toLocaleString()}</span>
                   <span className="text-sm">🪙</span>
@@ -368,7 +368,7 @@ export const ParentCoinTopup = () => {
                   <span className="text-5xl block mb-3">
                     {selectedPackage.bestValue ? '👑' : selectedPackage.popular ? '⭐' : '🎁'}
                   </span>
-                  <h3 className="text-xl font-bold mb-1" style={{ color: '#fff' }}>{selectedPackage.name}</h3>
+                  <h3 className="text-xl font-bold mb-1 px-8 truncate" style={{ color: '#fff' }}>{selectedPackage.name}</h3>
                   <p className="text-sm" style={{ color: 'rgba(255,255,255,0.5)' }}>
                     for {childProfile?.genius_name || 'your kid'}
                   </p>
@@ -416,8 +416,8 @@ export const ParentCoinTopup = () => {
                             border: selectedPaymentMethod === method.id ? '1px solid rgba(245, 158, 11, 0.3)' : '1px solid rgba(255,255,255,0.08)',
                           }}
                         >
-                          <span className="text-2xl">{method.icon}</span>
-                          <span className="font-medium text-sm flex-1" style={{ color: '#fff' }}>{method.name}</span>
+                          <span className="text-2xl flex-shrink-0">{method.icon}</span>
+                          <span className="font-medium text-sm flex-1 min-w-0 truncate" style={{ color: '#fff' }}>{method.name}</span>
                           {selectedPaymentMethod === method.id && (
                             <div className="w-5 h-5 bg-amber-500 rounded-full flex items-center justify-center">
                               <Check className="w-3 h-3 text-white" />
@@ -438,18 +438,18 @@ export const ParentCoinTopup = () => {
                     >
                       {selectedPaymentMethod ? (
                         <>
-                          <span className="text-2xl">
+                          <span className="text-2xl flex-shrink-0">
                             {PAYMENT_METHODS.find(m => m.id === selectedPaymentMethod)?.icon}
                           </span>
-                          <span className="font-medium text-sm flex-1" style={{ color: '#fff' }}>
+                          <span className="font-medium text-sm flex-1 min-w-0 truncate" style={{ color: '#fff' }}>
                             {PAYMENT_METHODS.find(m => m.id === selectedPaymentMethod)?.name}
                           </span>
-                          <span className="text-xs" style={{ color: 'rgba(255,255,255,0.5)' }}>Change</span>
+                          <span className="text-xs flex-shrink-0" style={{ color: 'rgba(255,255,255,0.5)' }}>Change</span>
                         </>
                       ) : (
                         <>
-                          <span className="text-2xl">💳</span>
-                          <span className="text-sm flex-1" style={{ color: 'rgba(255,255,255,0.5)' }}>Choose payment method</span>
+                          <span className="text-2xl flex-shrink-0">💳</span>
+                          <span className="text-sm flex-1 min-w-0 truncate" style={{ color: 'rgba(255,255,255,0.5)' }}>Choose payment method</span>
                           <ChevronRight className="w-4 h-4" style={{ color: 'rgba(255,255,255,0.3)' }} />
                         </>
                       )}

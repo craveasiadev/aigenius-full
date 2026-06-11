@@ -470,11 +470,11 @@ export function Landing() {
         style={{ paddingTop: 'env(safe-area-inset-top)' }}
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2 touch-manipulation" aria-label="AIpreneur home">
-            <div className="w-9 h-9 rounded-xl bg-violet-600 border-b-[3px] border-violet-800 flex items-center justify-center">
+          <Link to="/" className="flex items-center gap-2 min-w-0 touch-manipulation" aria-label="AIpreneur home">
+            <div className="w-9 h-9 shrink-0 rounded-xl bg-violet-600 border-b-[3px] border-violet-800 flex items-center justify-center">
               <Sparkles className="w-5 h-5 text-white" />
             </div>
-            <span className="font-bold text-base sm:text-lg tracking-tight text-slate-900 dark:text-white">AIpreneur</span>
+            <span className="font-bold text-base sm:text-lg tracking-tight text-slate-900 dark:text-white truncate">AIpreneur</span>
           </Link>
 
           {/* Desktop nav */}
@@ -491,7 +491,7 @@ export function Landing() {
           </nav>
 
           {/* CTA cluster */}
-          <div className="flex items-center gap-1.5 sm:gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
             {/* Fullscreen toggle — uses the standard Fullscreen API
                 so it works in browsers; on iOS Safari < 16.4 it falls
                 back to the webkit-prefixed methods; on iOS where the
@@ -581,7 +581,7 @@ export function Landing() {
               animate={{ y: 0 }}
               exit={{ y: '-100%' }}
               transition={{ type: 'spring', damping: 22, stiffness: 240 }}
-              className={`${GLASS} rounded-b-3xl border-t-0`}
+              className={`${GLASS} rounded-b-3xl border-t-0 max-h-[90vh] overflow-y-auto`}
               style={{ paddingTop: 'max(env(safe-area-inset-top), 12px)' }}
               onClick={(e) => e.stopPropagation()}
             >
