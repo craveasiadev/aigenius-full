@@ -62,6 +62,8 @@ import { DockTile } from './DockTile';
 
 type CustomerState = 'entering' | 'waiting' | 'ordering' | 'served' | 'angry' | 'leaving';
 
+type TutorialStep = 'welcome' | 'guide' | 'done';
+
 /** Variant catalogue — 8 customer archetypes with different stats so
  *  the queue feels varied. Picked at spawn time. */
 type CustomerVariantId =
@@ -567,6 +569,37 @@ export function ShopMiniGame({
   const [achievementToast, setAchievementToast] = useState<AchievementDef | null>(null);
   /** Banner: 'complete' | 'failed' | null. Pauses spawning when set. */
   const [waveBanner, setWaveBanner] = useState<'complete' | 'failed' | null>(null);
+  /** True once the player has pressed "Open Your Shop" for the first time this session. */
+  const [shopOpen, setShopOpen] = useState(false);
+  /** Countdown seconds remaining in the planning phase (15 → 0). */
+  const [planCountdown, setPlanCountdown] = useState<number>(15);
+  const planTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // ─── Tutorial / onboarding ─────────────────────────────────────
+  const [tutorialStep, setTutorialStep] = useState<TutorialStep>(() => {
+    try {
+      const saved = localStorage.getItem(`shop_tutorial_${shopId}`) as TutorialStep | null;
+      if (saved) return saved;
+      // Existing players who pre-date the tutorial skip it automatically.
+      const gameRaw = localStorage.getItem(`shop_game_state_${shopId}`);
+      if (gameRaw) {
+        const game = JSON.parse(gameRaw) as Partial<GameState>;
+        if ((game.servedToday ?? 0) > 0 || (game.wave ?? 1) > 1) return 'done';
+      }
+      return 'welcome';
+    } catch { return 'welcome'; }
+  });
+  useEffect(() => {
+    try { localStorage.setItem(`shop_tutorial_${shopId}`, tutorialStep); } catch {}
+  }, [shopId, tutorialStep]);
+  // Auto-open missions panel when the guide step starts.
+  useEffect(() => {
+    if (tutorialStep === 'guide') setMissionsOpen(true);
+  }, [tutorialStep]);
+  // Tutorial completes once the player opens the shop for the first time.
+  useEffect(() => {
+    if (tutorialStep === 'guide' && shopOpen) setTutorialStep('done');
+  }, [tutorialStep, shopOpen]);
 
   // ─── Coin balance HUD ──────────────────────────────────────────
   // `displayCoins` is what the HUD chip shows. It's seeded from the
@@ -793,14 +826,21 @@ export function ShopMiniGame({
   //   • the player completed the wave target (banner dismissed but
   //     not advanced — they're "on a break")
   //   • the player hit too many angries and dismissed the fail banner
+  // Shop is ready to run only when the student has at least one product
+  // AND at least one staff member. Without these, customers have nothing
+  // to order and no one to serve them — block spawning entirely.
+  const setupRequired = !progress.hasProduct || !progress.hasStaff;
+
   //     (waiting on a Retry).
   const spawningPausedRef = useRef(false);
   useEffect(() => {
     spawningPausedRef.current =
+      setupRequired ||
+      !shopOpen ||
       waveBanner !== null ||
       state.waveServed >= cfg.target ||
       state.waveAngry >= cfg.angryToFail;
-  }, [waveBanner, state.waveServed, state.waveAngry, cfg.target, cfg.angryToFail]);
+  }, [setupRequired, shopOpen, waveBanner, state.waveServed, state.waveAngry, cfg.target, cfg.angryToFail]);
 
   useEffect(() => {
     let canceled = false;
@@ -899,8 +939,36 @@ export function ShopMiniGame({
   const dismissWaveBanner = useCallback(() => {
     // Just close — don't change wave counters. The "Resume" button on
     // the HUD lets the player restart spawning when they're ready.
+    if (planTimerRef.current) clearInterval(planTimerRef.current);
     setWaveBanner(null);
   }, []);
+
+  // Start a 15-second planning countdown whenever the wave-complete banner appears.
+  // When it reaches 0 the wave auto-starts so the player is nudged to act.
+  const startNextWaveRef = useRef(startNextWave);
+  useEffect(() => { startNextWaveRef.current = startNextWave; }, [startNextWave]);
+
+  useEffect(() => {
+    if (waveBanner !== 'complete') {
+      if (planTimerRef.current) clearInterval(planTimerRef.current);
+      return;
+    }
+    setPlanCountdown(15);
+    if (planTimerRef.current) clearInterval(planTimerRef.current);
+    planTimerRef.current = setInterval(() => {
+      setPlanCountdown((prev) => {
+        if (prev <= 1) {
+          if (planTimerRef.current) clearInterval(planTimerRef.current);
+          startNextWaveRef.current();
+          return 15;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => {
+      if (planTimerRef.current) clearInterval(planTimerRef.current);
+    };
+  }, [waveBanner]);
 
   // Track wave completion / failure via state transitions in a single
   // effect that only fires when the counters move. Guard with a ref so
@@ -1383,6 +1451,47 @@ export function ShopMiniGame({
                 <X className="w-3.5 h-3.5" />
               </button>
             </div>
+
+            {/* Tutorial progress banner — only during guide step */}
+            {tutorialStep === 'guide' && (
+              <div className={`mb-3 rounded-xl border px-3 py-2.5 ${
+                !progress.hasProduct
+                  ? 'bg-amber-500/10 border-amber-400/30'
+                  : 'bg-violet-500/15 border-violet-400/30'
+              }`}>
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className={`text-[10px] font-bold uppercase tracking-wider ${!progress.hasProduct ? 'text-amber-300' : 'text-violet-300'}`}>
+                    🎓 Tutorial
+                  </span>
+                  <span className="text-[10px] text-white/50">
+                    {[progress.hasProduct, progress.hasStaff].filter(Boolean).length}/2 ready
+                  </span>
+                </div>
+                <div className="h-1.5 rounded-full bg-white/10 overflow-hidden mb-1.5">
+                  <div
+                    className={`h-full rounded-full transition-all duration-500 ${
+                      !progress.hasProduct
+                        ? 'bg-gradient-to-r from-amber-400 to-orange-400'
+                        : 'bg-gradient-to-r from-violet-400 to-fuchsia-400'
+                    }`}
+                    style={{ width: `${([progress.hasProduct, progress.hasStaff].filter(Boolean).length / 2) * 100}%` }}
+                  />
+                </div>
+                <p className="text-[11px] text-white/70 leading-snug font-medium">
+                  {!progress.hasProduct
+                    ? '🪙 Complete quests below to earn AI tokens first — you\'ll need them to generate your product image'
+                    : !progress.hasStaff
+                    ? '👇 Great, you have a product! Now complete "Hire your first helper"'
+                    : '✅ All done! Close this and open your shop 🚪'}
+                </p>
+                {!progress.hasProduct && (
+                  <p className="text-[10px] text-amber-300/80 mt-1 leading-snug">
+                    Tip: tap "Claim your reward" 🎁 for free starter tokens
+                  </p>
+                )}
+              </div>
+            )}
+
             <div className="space-y-2 max-h-[60vh] overflow-y-auto">
               {MISSIONS.map((m) => {
                 const done = m.done(progress);
@@ -1603,6 +1712,394 @@ export function ShopMiniGame({
         </div>
       </div>
 
+      {/* ── Tutorial welcome overlay ───────────────────────────────
+            First-ever visit: introduce the quest-based tutorial before
+            any other overlay so the player knows what to do.          */}
+      <AnimatePresence>
+        {tutorialStep === 'welcome' && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 flex items-center justify-center pointer-events-auto px-4"
+            style={{ zIndex: 60 }}
+          >
+            <div className="absolute inset-0 bg-slate-900/85 backdrop-blur-md" />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.85, y: 30 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ type: 'spring', damping: 20, stiffness: 280 }}
+              className="relative w-full max-w-sm"
+            >
+              <div className="rounded-3xl bg-white/97 dark:bg-slate-900/97 backdrop-blur-2xl border border-slate-200 dark:border-white/10 shadow-2xl overflow-hidden">
+
+                {/* Header */}
+                <div className="bg-gradient-to-r from-violet-600 via-indigo-600 to-blue-600 px-5 py-5 text-center">
+                  <motion.div
+                    animate={{ rotate: [-8, 8, -8, 8, 0], scale: [1, 1.1, 1] }}
+                    transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+                    className="text-5xl mb-2"
+                  >
+                    🎓
+                  </motion.div>
+                  <h2 className="text-xl font-extrabold text-white leading-tight">Welcome to Your Shop!</h2>
+                  <p className="text-xs text-white/75 mt-1 leading-snug">
+                    Complete 3 missions to open your doors for the first time
+                  </p>
+                </div>
+
+                <div className="px-5 py-4">
+                  {/* 4-step checklist — quests/tokens first */}
+                  <div className="flex flex-col gap-2 mb-4">
+                    {[
+                      {
+                        step: 1,
+                        emoji: '🎯',
+                        title: 'Do Quests — Earn Tokens',
+                        desc: 'Complete missions to earn AI tokens (needed to generate product images)',
+                        done: false,
+                        highlight: true,
+                      },
+                      {
+                        step: 2,
+                        emoji: '📦',
+                        title: 'Add a Product',
+                        desc: 'Use your tokens to create a product with an AI-generated image',
+                        done: progress.hasProduct,
+                        highlight: false,
+                      },
+                      {
+                        step: 3,
+                        emoji: '👥',
+                        title: 'Hire Staff',
+                        desc: 'Get someone to serve the queue faster',
+                        done: progress.hasStaff,
+                        highlight: false,
+                      },
+                      {
+                        step: 4,
+                        emoji: '🚪',
+                        title: 'Open Your Shop',
+                        desc: 'Let the customers in!',
+                        done: false,
+                        highlight: false,
+                      },
+                    ].map(item => (
+                      <div
+                        key={item.step}
+                        className={`flex items-center gap-3 rounded-2xl border px-3 py-2.5 ${
+                          item.done
+                            ? 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-200 dark:border-emerald-500/25'
+                            : item.highlight
+                            ? 'bg-amber-50 dark:bg-amber-500/10 border-amber-300 dark:border-amber-500/40'
+                            : 'bg-slate-50 dark:bg-slate-800/60 border-slate-200 dark:border-white/10'
+                        }`}
+                      >
+                        <div className={`w-8 h-8 rounded-xl flex items-center justify-center text-lg shrink-0 ${
+                          item.done ? 'bg-emerald-100 dark:bg-emerald-500/20'
+                          : item.highlight ? 'bg-amber-100 dark:bg-amber-500/20'
+                          : 'bg-white dark:bg-slate-700 border border-slate-200 dark:border-white/10'
+                        }`}>
+                          {item.done ? '✅' : item.emoji}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className={`text-sm font-bold ${item.done ? 'text-emerald-700 dark:text-emerald-300' : item.highlight ? 'text-amber-700 dark:text-amber-300' : 'text-slate-900 dark:text-white'}`}>
+                            {item.title}
+                          </div>
+                          <div className="text-[11px] text-slate-400 leading-snug">{item.desc}</div>
+                        </div>
+                        <div className={`shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-black ${
+                          item.done ? 'bg-emerald-500 text-white' : item.highlight ? 'bg-amber-400 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-500'
+                        }`}>
+                          {item.done ? '✓' : item.step}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <p className="text-[11px] text-slate-400 text-center mb-3 leading-snug">
+                    Your <span className="font-bold text-violet-500">Quests</span> panel (top of screen) will guide you through each step
+                  </p>
+
+                  {/* CTAs */}
+                  <button
+                    type="button"
+                    onClick={() => setTutorialStep('guide')}
+                    className={`${BTN_3D_PRIMARY} w-full px-4 py-3 text-sm mb-2`}
+                  >
+                    🚀 Start Tutorial
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setTutorialStep('done')}
+                    className="w-full text-center text-xs text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors py-1"
+                  >
+                    Skip tutorial — I know what I'm doing
+                  </button>
+                </div>
+
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── Tutorial floating guide hint ────────────────────────────
+            During the guide step, when the missions panel is closed,
+            a bouncing pill nudges the player to open it.             */}
+      {tutorialStep === 'guide' && !missionsOpen && (
+        <div
+          className="absolute left-1/2 -translate-x-1/2 pointer-events-auto"
+          style={{ bottom: 'calc(env(safe-area-inset-bottom) + 200px)' }}
+        >
+          <motion.button
+            animate={{ y: [0, -5, 0] }}
+            transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
+            onClick={() => (!progress.hasProduct || !progress.hasStaff) ? setMissionsOpen(true) : undefined}
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl border-b-[3px] text-white font-bold text-sm shadow-xl ${
+              !progress.hasProduct
+                ? 'bg-amber-500 border-amber-700 shadow-amber-900/40'
+                : !progress.hasStaff
+                ? 'bg-violet-600 border-violet-800 shadow-violet-900/40'
+                : 'bg-emerald-600 border-emerald-800 shadow-emerald-900/40'
+            }`}
+          >
+            <Sparkles className="w-4 h-4" />
+            {!progress.hasProduct
+              ? '🪙 Tap QUESTS — earn tokens, then create a product'
+              : !progress.hasStaff
+              ? '👆 Tap QUESTS — now hire your first helper'
+              : '🚪 Ready! Open your shop below'}
+          </motion.button>
+        </div>
+      )}
+
+      {/* ── Open Your Shop overlay ─────────────────────────────────
+            Shown before Wave 1 starts so the player chooses WHEN to
+            open their doors instead of customers auto-spawning.      */}
+      <AnimatePresence>
+        {!setupRequired && !shopOpen && !waveBanner && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-50 flex items-center justify-center pointer-events-auto px-4"
+          >
+            <div className="absolute inset-0 bg-slate-900/75 backdrop-blur-sm" />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.85, y: 30 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ type: 'spring', damping: 20, stiffness: 280 }}
+              className="relative w-full max-w-sm"
+            >
+              <div className="rounded-3xl bg-white/97 dark:bg-slate-900/97 backdrop-blur-2xl border border-slate-200 dark:border-white/10 shadow-2xl shadow-slate-900/40 overflow-hidden">
+
+                {/* Header banner */}
+                <div className="bg-gradient-to-r from-amber-500 to-orange-500 px-5 py-5 text-center">
+                  <motion.div
+                    animate={{ rotate: [-4, 4, -4, 4, 0] }}
+                    transition={{ duration: 1.8, repeat: Infinity, repeatDelay: 2 }}
+                    className="text-5xl mb-2"
+                  >
+                    🏪
+                  </motion.div>
+                  <h2 className="text-xl font-extrabold text-white leading-tight">
+                    Ready to Open?
+                  </h2>
+                  <p className="text-xs text-white/80 mt-1">
+                    Customers are waiting outside — press the button when you're ready!
+                  </p>
+                </div>
+
+                <div className="px-5 py-4">
+                  {/* Wave 1 preview */}
+                  <div className="flex gap-3 mb-4">
+                    {[
+                      { emoji: '🌊', label: 'Wave', value: '1' },
+                      { emoji: '👥', label: 'Customers', value: `${cfg.target}` },
+                      { emoji: '⏱', label: 'Patience', value: cfg.patience > 18000 ? 'High' : cfg.patience > 12000 ? 'Normal' : 'Low' },
+                    ].map(stat => (
+                      <div key={stat.label} className="flex-1 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-white/10 p-2 text-center">
+                        <div className="text-xl">{stat.emoji}</div>
+                        <div className="text-xs font-black text-slate-900 dark:text-white mt-0.5">{stat.value}</div>
+                        <div className="text-[9px] text-slate-400 uppercase tracking-wider">{stat.label}</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Ready checklist */}
+                  <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">
+                    Your shop is ready
+                  </div>
+                  <div className="flex flex-col gap-1.5 mb-4">
+                    {[
+                      { emoji: '📦', label: 'Products', done: progress.hasProduct },
+                      { emoji: '👥', label: 'Staff',    done: progress.hasStaff },
+                      { emoji: '📣', label: 'Marketing', done: progress.hasMarketing },
+                      { emoji: '🎨', label: 'Decor',    done: progress.hasDecor },
+                    ].map(item => (
+                      <div key={item.label} className="flex items-center gap-2">
+                        <span className="text-sm">{item.done ? '✅' : '⬜'}</span>
+                        <span className={`text-xs font-semibold ${item.done ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400'}`}>
+                          {item.label}
+                        </span>
+                        {item.done && (
+                          <span className="text-[9px] font-bold text-emerald-500 uppercase tracking-wide">Ready</span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* CTA */}
+                  <button
+                    type="button"
+                    onClick={() => setShopOpen(true)}
+                    className={`${BTN_3D_PRIMARY} w-full px-4 py-3 text-base`}
+                  >
+                    🚪 Open Your Shop — Wave 1
+                  </button>
+                </div>
+
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── Setup Required overlay ───────────────────────────────
+            Shown whenever the shop is missing the two mandatory
+            requirements (at least 1 product + 1 staff). Blocks
+            spawning at the ref level too so no customers leak through
+            even while the overlay is animating in/out.           */}
+      <AnimatePresence>
+        {setupRequired && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-50 flex items-center justify-center pointer-events-auto px-4"
+          >
+            <div className="absolute inset-0 bg-slate-900/75 backdrop-blur-sm" />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.85, y: 30 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ type: 'spring', damping: 20, stiffness: 280 }}
+              className="relative w-full max-w-sm"
+            >
+              <div className="rounded-3xl bg-white/97 dark:bg-slate-900/97 backdrop-blur-2xl border border-slate-200 dark:border-white/10 shadow-2xl shadow-slate-900/40 overflow-hidden">
+
+                {/* Header banner */}
+                <div className="bg-gradient-to-r from-violet-600 to-indigo-600 px-5 py-4 text-center">
+                  <div className="text-3xl mb-1">🏪</div>
+                  <h2 className="text-lg font-extrabold text-white leading-tight">
+                    Set Up Your Shop First
+                  </h2>
+                  <p className="text-xs text-white/70 mt-0.5">
+                    Customers can't be served until your shop is ready
+                  </p>
+                </div>
+
+                <div className="px-5 py-4">
+                  {/* Required items */}
+                  <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">
+                    Required before opening
+                  </div>
+                  <div className="flex flex-col gap-2 mb-4">
+                    {[
+                      {
+                        emoji: '📦',
+                        title: 'Add a Product',
+                        desc: 'Customers need something to buy — create at least one product',
+                        done: progress.hasProduct,
+                        route: 'product',
+                        cta: 'Add Product →',
+                      },
+                      {
+                        emoji: '👥',
+                        title: 'Hire Staff',
+                        desc: 'Someone needs to serve the customers — hire at least one person',
+                        done: progress.hasStaff,
+                        route: 'operation',
+                        cta: 'Hire Staff →',
+                      },
+                    ].map(item => (
+                      <div
+                        key={item.route}
+                        className={`flex items-center gap-3 rounded-2xl border px-3 py-3 ${
+                          item.done
+                            ? 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-200 dark:border-emerald-500/25'
+                            : 'bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-500/30'
+                        }`}
+                      >
+                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl shrink-0 ${
+                          item.done ? 'bg-emerald-100 dark:bg-emerald-500/20' : 'bg-white dark:bg-slate-700 border border-amber-200 dark:border-amber-500/30'
+                        }`}>
+                          {item.done ? '✅' : item.emoji}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className={`text-sm font-bold ${item.done ? 'text-emerald-700 dark:text-emerald-300' : 'text-slate-900 dark:text-white'}`}>
+                            {item.title}
+                          </div>
+                          <div className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">
+                            {item.desc}
+                          </div>
+                        </div>
+                        {item.done ? (
+                          <span className="shrink-0 text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-500/20 px-2 py-1 rounded-lg">
+                            ✓ Done
+                          </span>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => { if (onNavigate) onNavigate(item.route); }}
+                            className="shrink-0 rounded-xl px-3 py-1.5 text-xs font-bold bg-violet-600 border-b-[3px] border-violet-800 text-white hover:bg-violet-500 active:translate-y-[2px] active:border-b-[1px] transition-all"
+                          >
+                            {item.cta}
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Optional boosters */}
+                  <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">
+                    Optional — but makes you stronger
+                  </div>
+                  <div className="flex gap-2 flex-wrap">
+                    {[
+                      { emoji: '📣', label: 'Marketing', done: progress.hasMarketing, route: 'marketing' },
+                      { emoji: '⚡', label: 'Upgrades',  done: progress.hasInnovation, route: 'innovation' },
+                      { emoji: '🎨', label: 'Decorate',  done: progress.hasDecor,     route: 'decorate' },
+                    ].map(opt => (
+                      <button
+                        key={opt.route}
+                        type="button"
+                        onClick={() => { if (onNavigate) onNavigate(opt.route); }}
+                        className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold border transition-all active:scale-95 ${
+                          opt.done
+                            ? 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-200 dark:border-emerald-500/25 text-emerald-700 dark:text-emerald-300'
+                            : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:border-violet-300 dark:hover:border-violet-500/50'
+                        }`}
+                      >
+                        <span>{opt.emoji}</span>
+                        <span>{opt.done ? '✓ ' : ''}{opt.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* ── Wave popup — proper game notification ─────────────────
             Full-screen scrim + backdrop blur so the popup sits on top
             of a dimmed scene. The card itself is a frosted glass
@@ -1635,113 +2132,258 @@ export function ShopMiniGame({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.85, y: 20 }}
               transition={{ type: 'spring', damping: 18, stiffness: 260, mass: 0.8 }}
-              className="relative w-full max-w-sm"
+              className={`relative w-full ${waveBanner === 'complete' ? 'max-w-lg' : 'max-w-sm'}`}
             >
-              {/* Card — frosted glass, neutral border. The big circular
-                  emoji crest sits half-outside the top edge so the
-                  popup reads as "something arrived". */}
-              <div className="relative rounded-3xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl border border-slate-200 dark:border-white/10 shadow-2xl shadow-slate-900/40 pt-14 pb-6 px-6 text-center">
-                {/* Emoji crest — pinned half-outside the top edge. The
-                    coloured ring matches the popup state (rose = fail,
-                    emerald = complete). A second outer halo gives it
-                    the "this is a moment" feel. */}
-                <motion.div
-                  initial={{ scale: 0, rotate: -180 }}
-                  animate={{ scale: 1, rotate: 0 }}
-                  transition={{
-                    type: 'spring',
-                    damping: 12,
-                    stiffness: 200,
-                    delay: 0.1,
-                  }}
-                  className="absolute -top-10 left-1/2 -translate-x-1/2"
-                >
-                  <div
-                    className={`relative w-20 h-20 rounded-full flex items-center justify-center text-4xl shadow-xl border-4 border-white dark:border-slate-900 ${
-                      waveBanner === 'complete'
-                        ? 'bg-emerald-500'
-                        : 'bg-rose-500'
-                    }`}
+              {waveBanner === 'complete' ? (
+                /* ── PLANNING PHASE card ─────────────────────────── */
+                (() => {
+                  const nextCfg   = waveConfig(state.wave + 1);
+                  const countdownPct = (planCountdown / 15) * 100;
+
+                  const patienceLabel =
+                    nextCfg.patience > 18000 ? 'Patient' :
+                    nextCfg.patience > 12000 ? 'Normal'  : 'Rushed';
+
+                  // Prep action cards — what the student can do before opening doors
+                  type PrepCard = {
+                    emoji: string;
+                    title: string;
+                    benefit: string;
+                    done: boolean;
+                    route: string;
+                    actionLabel: string;
+                  };
+                  const prepCards: PrepCard[] = [
+                    {
+                      emoji: '📦',
+                      title: 'Add Products',
+                      benefit: 'Customers ask for your products by name — more choices = more sales',
+                      done: progress.hasProduct,
+                      route: 'product',
+                      actionLabel: 'Add Product →',
+                    },
+                    {
+                      emoji: '👥',
+                      title: 'Hire Staff',
+                      benefit: 'Staff serve customers 2× faster so fewer leave angry',
+                      done: progress.hasStaff,
+                      route: 'operation',
+                      actionLabel: 'Hire Staff →',
+                    },
+                    {
+                      emoji: '📣',
+                      title: 'Run Marketing',
+                      benefit: 'Active campaigns attract bigger crowds each wave',
+                      done: progress.hasMarketing,
+                      route: 'marketing',
+                      actionLabel: 'Launch Campaign →',
+                    },
+                    {
+                      emoji: '⚡',
+                      title: 'Upgrade Shop',
+                      benefit: 'Innovations unlock speed boosts & special abilities',
+                      done: progress.hasInnovation,
+                      route: 'innovation',
+                      actionLabel: 'See Upgrades →',
+                    },
+                    {
+                      emoji: '🎨',
+                      title: 'Decorate',
+                      benefit: 'A beautiful shop raises customer mood & your rating',
+                      done: progress.hasDecor,
+                      route: 'decorate',
+                      actionLabel: 'Decorate Shop →',
+                    },
+                  ];
+                  const readyCount = prepCards.filter(c => c.done).length;
+
+                  const goTo = (route: string) => {
+                    if (!onNavigate) return;
+                    if (planTimerRef.current) clearInterval(planTimerRef.current);
+                    dismissWaveBanner();
+                    onNavigate(route);
+                  };
+
+                  return (
+                    <div className="relative w-full max-w-lg rounded-3xl bg-white/97 dark:bg-slate-900/97 backdrop-blur-2xl border border-slate-200 dark:border-white/10 shadow-2xl shadow-slate-900/40 overflow-hidden">
+
+                      {/* Countdown bar */}
+                      <div className="h-1.5 bg-slate-100 dark:bg-slate-800">
+                        <motion.div
+                          className="h-full bg-gradient-to-r from-violet-500 to-indigo-500"
+                          style={{ width: `${countdownPct}%` }}
+                          transition={{ duration: 0.9, ease: 'linear' }}
+                        />
+                      </div>
+
+                      {/* Scrollable body — fits on small phones without cutting off */}
+                      <div className="px-4 pt-4 pb-5 overflow-y-auto" style={{ maxHeight: '82vh' }}>
+
+                        {/* ── Header ── */}
+                        <div className="flex items-start justify-between gap-3 mb-4">
+                          <div>
+                            <div className="text-[10px] font-bold uppercase tracking-widest text-violet-600 dark:text-violet-400 mb-0.5">
+                              Wave {state.wave} Complete!
+                            </div>
+                            <h2 className="text-xl font-extrabold text-slate-900 dark:text-white leading-tight">
+                              Prep before Wave {state.wave + 1}
+                            </h2>
+                            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                              {nextCfg.target} customers · {patienceLabel} patience · {readyCount}/5 ready
+                            </p>
+                          </div>
+                          <div className="flex flex-col items-center shrink-0">
+                            <div
+                              className="w-11 h-11 rounded-full flex items-center justify-center font-black text-base border-[3px] border-violet-400 dark:border-violet-500"
+                              style={{ color: planCountdown <= 5 ? '#ef4444' : '#7c3aed' }}
+                            >
+                              {planCountdown}
+                            </div>
+                            <span className="text-[9px] text-slate-400 mt-0.5 leading-none">auto-start</span>
+                          </div>
+                        </div>
+
+                        {/* ── Prep action cards ── */}
+                        <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">
+                          What you can do now
+                        </div>
+                        <div className="grid grid-cols-1 gap-2 mb-4">
+                          {prepCards.map(card => (
+                            <div
+                              key={card.route}
+                              className={`flex items-center gap-3 rounded-2xl border px-3 py-2.5 transition-all ${
+                                card.done
+                                  ? 'bg-emerald-50/60 dark:bg-emerald-500/8 border-emerald-100 dark:border-emerald-500/15 opacity-70'
+                                  : 'bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-white/8'
+                              }`}
+                            >
+                              {/* Icon */}
+                              <div
+                                className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl shrink-0 ${
+                                  card.done
+                                    ? 'bg-emerald-100 dark:bg-emerald-500/20'
+                                    : 'bg-white dark:bg-slate-700 border border-slate-200 dark:border-white/10'
+                                }`}
+                              >
+                                {card.done ? '✅' : card.emoji}
+                              </div>
+
+                              {/* Text */}
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-1.5">
+                                  <span className={`text-sm font-bold ${card.done ? 'text-emerald-700 dark:text-emerald-300' : 'text-slate-900 dark:text-white'}`}>
+                                    {card.title}
+                                  </span>
+                                  {card.done && (
+                                    <span className="text-[9px] font-bold uppercase tracking-wide text-emerald-600 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-500/20 px-1.5 py-0.5 rounded-full">
+                                      Ready
+                                    </span>
+                                  )}
+                                </div>
+                                <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug mt-0.5 line-clamp-2">
+                                  {card.benefit}
+                                </p>
+                              </div>
+
+                              {/* Action button — only shown for incomplete items */}
+                              {card.done ? (
+                                <span className="shrink-0 text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-500/20 px-2 py-1 rounded-lg">
+                                  ✓ Done
+                                </span>
+                              ) : (
+                                <button
+                                  type="button"
+                                  onClick={() => goTo(card.route)}
+                                  className="shrink-0 rounded-xl px-3 py-1.5 text-xs font-bold bg-violet-600 border-b-[3px] border-violet-800 text-white hover:bg-violet-500 active:translate-y-[2px] active:border-b-[1px] transition-all"
+                                >
+                                  {card.actionLabel}
+                                </button>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* ── Wave intel (compact) ── */}
+                        <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">
+                          Incoming wave intel
+                        </div>
+                        <div className="flex gap-2 mb-4 flex-wrap">
+                          {[
+                            CUSTOMER_VARIANTS.find(v => v.id === 'vip')!,
+                            CUSTOMER_VARIANTS.find(v => v.id === 'bigspender')!,
+                            CUSTOMER_VARIANTS.find(v => v.id === 'impatient')!,
+                            CUSTOMER_VARIANTS.find(v => v.id === 'curious')!,
+                          ].map(v => (
+                            <div
+                              key={v.id}
+                              className="flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 text-xs font-semibold border"
+                              style={{ borderColor: v.ringHex + '55', background: v.ringHex + '18', color: v.ringHex }}
+                            >
+                              <span>{v.avatar}</span>
+                              <span>{v.label}</span>
+                              <span className="opacity-60 text-[10px]">
+                                {v.rewardMul >= 2 ? '💰' : v.patienceMul <= 0.7 ? '⚠️' : '✓'}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* ── CTAs ── */}
+                        <div className="flex gap-2">
+                          <button
+                            type="button"
+                            onClick={() => { if (planTimerRef.current) clearInterval(planTimerRef.current); startNextWave(); }}
+                            className={`${BTN_3D_PRIMARY} flex-1 px-4 py-2.5 text-sm`}
+                          >
+                            🚪 Open Doors — Wave {state.wave + 1}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={dismissWaveBanner}
+                            className={`${BTN_3D_SECONDARY} px-3 py-2.5 text-sm`}
+                            title="Take a break"
+                          >
+                            ☕
+                          </button>
+                        </div>
+
+                      </div>
+                    </div>
+                  );
+                })()
+              ) : (
+                /* ── WAVE FAILED card ───────────────────────────── */
+                <div className="relative rounded-3xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl border border-slate-200 dark:border-white/10 shadow-2xl shadow-slate-900/40 pt-14 pb-6 px-6 text-center">
+                  <motion.div
+                    initial={{ scale: 0, rotate: -180 }}
+                    animate={{ scale: 1, rotate: 0 }}
+                    transition={{ type: 'spring', damping: 12, stiffness: 200, delay: 0.1 }}
+                    className="absolute -top-10 left-1/2 -translate-x-1/2"
                   >
-                    <span aria-hidden>
-                      {waveBanner === 'complete' ? '🎉' : '😅'}
-                    </span>
-                    {/* Ambient pulse halo so the crest feels alive. */}
-                    <span
-                      className={`absolute inset-0 rounded-full animate-ping opacity-40 ${
-                        waveBanner === 'complete'
-                          ? 'bg-emerald-400'
-                          : 'bg-rose-400'
-                      }`}
-                    />
+                    <div className="relative w-20 h-20 rounded-full flex items-center justify-center text-4xl shadow-xl border-4 border-white dark:border-slate-900 bg-rose-500">
+                      <span aria-hidden>😅</span>
+                      <span className="absolute inset-0 rounded-full animate-ping opacity-40 bg-rose-400" />
+                    </div>
+                  </motion.div>
+                  <div className="inline-block text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-rose-100 dark:bg-rose-500/20 text-rose-700 dark:text-rose-300">
+                    Wave Failed
                   </div>
-                </motion.div>
-
-                {/* State tag — small uppercase pill above the title. */}
-                <div
-                  className={`inline-block text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full ${
-                    waveBanner === 'complete'
-                      ? 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300'
-                      : 'bg-rose-100 dark:bg-rose-500/20 text-rose-700 dark:text-rose-300'
-                  }`}
-                >
-                  {waveBanner === 'complete' ? 'Wave Complete' : 'Wave Failed'}
+                  <h2 className="mt-2 text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+                    Too many sad customers
+                  </h2>
+                  <p className="mt-2 text-sm text-slate-600 dark:text-slate-300 leading-snug">
+                    Reset this wave or take a break — your XP and level are safe.
+                  </p>
+                  <div className="mt-5 flex flex-col sm:flex-row gap-2 sm:gap-3">
+                    <button type="button" onClick={retryWave} className={`${BTN_3D_PRIMARY} flex-1 px-4 py-2.5 text-sm`}>
+                      🔁 Try Again
+                    </button>
+                    <button type="button" onClick={dismissWaveBanner} className={`${BTN_3D_SECONDARY} flex-1 px-4 py-2.5 text-sm`}>
+                      ⏸ Stop for Now
+                    </button>
+                  </div>
                 </div>
-
-                {/* Title */}
-                <h2 className="mt-2 text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-                  {waveBanner === 'complete'
-                    ? `Wave ${state.wave} Cleared!`
-                    : 'Too many sad customers'}
-                </h2>
-
-                {/* Body copy */}
-                <p className="mt-2 text-sm text-slate-600 dark:text-slate-300 leading-snug">
-                  {waveBanner === 'complete'
-                    ? `Next wave will have ${waveConfig(state.wave + 1).target} customers and less patience.`
-                    : 'Reset this wave or take a break — your XP and level are safe.'}
-                </p>
-
-                {/* CTAs — system 3D buttons so they match the rest of
-                    AIgenius. Stacked on tight screens, row otherwise. */}
-                <div className="mt-5 flex flex-col sm:flex-row gap-2 sm:gap-3">
-                  {waveBanner === 'complete' ? (
-                    <>
-                      <button
-                        type="button"
-                        onClick={startNextWave}
-                        className={`${BTN_3D_PRIMARY} flex-1 px-4 py-2.5 text-sm`}
-                      >
-                        ▶ Start Wave {state.wave + 1}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={dismissWaveBanner}
-                        className={`${BTN_3D_SECONDARY} flex-1 px-4 py-2.5 text-sm`}
-                      >
-                        ☕ Take a Break
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <button
-                        type="button"
-                        onClick={retryWave}
-                        className={`${BTN_3D_PRIMARY} flex-1 px-4 py-2.5 text-sm`}
-                      >
-                        🔁 Try Again
-                      </button>
-                      <button
-                        type="button"
-                        onClick={dismissWaveBanner}
-                        className={`${BTN_3D_SECONDARY} flex-1 px-4 py-2.5 text-sm`}
-                      >
-                        ⏸ Stop for Now
-                      </button>
-                    </>
-                  )}
-                </div>
-              </div>
+              )}
             </motion.div>
           </motion.div>
         )}

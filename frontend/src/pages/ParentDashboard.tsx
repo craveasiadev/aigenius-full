@@ -123,7 +123,7 @@ export const ParentDashboard = () => {
 
   if (loading) {
     return (
-      <div className={`${PAGE} flex items-center justify-center`}>
+      <div className={`${PAGE} flex items-center justify-center`} style={{ backgroundColor: '#0a0a1a', color: 'white' }}>
         <StarfieldBackground />
         <DottedBackground />
         {/* Background gradient orbs */}
@@ -175,7 +175,7 @@ export const ParentDashboard = () => {
   }
 
   return (
-    <div className={PAGE}>
+    <div className={PAGE} style={{ backgroundColor: '#0a0a1a', color: 'white' }}>
       <StarfieldBackground />
       <DottedBackground />
       {/* Fixed background gradient orbs */}
@@ -222,7 +222,12 @@ export const ParentDashboard = () => {
         }}
       />
 
-      <TopNav userName={currentUser?.name || 'Parent'} />
+      <TopNav
+        userName={currentUser?.name || 'Parent'}
+        title="AI Genius"
+        subtitle="Parent Hub"
+        showTokenCounter={false}
+      />
 
       <main className="page-container pt-24 md:pt-28 px-4 sm:px-6 md:px-8" style={{ position: 'relative', zIndex: 1 }}>
         <div className="max-w-7xl mx-auto">
@@ -251,7 +256,7 @@ export const ParentDashboard = () => {
               </h1>
               <p
                 className="text-sm sm:text-base md:text-lg font-medium max-w-2xl"
-                style={{ color: 'rgba(255, 255, 255, 0.4)' }}
+                style={{ color: 'rgba(255, 255, 255, 0.65)' }}
               >
                 Manage your children's learning journey, track progress, and unlock their potential with{' '}
                 <span

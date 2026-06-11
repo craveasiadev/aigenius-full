@@ -1703,7 +1703,7 @@ export const AIpreneurDashboard = () => {
             // that by setting `from` to the dashboard URL with `?enter=shop`,
             // which the dashboard reads on mount to auto-enter the interior.
             onShopNavigate={(route) => navigate(`/s/aipreneur/${route}`, {
-              state: { from: '/s/aipreneur?enter=shop', enterInterior: true },
+              state: { from: '/s/aipreneur?enter=shop', enterInterior: true, moduleCompleted: true },
             })}
             // Themed product pool for the in-shop mini-game. Falls back to
             // the default mixed pool when the student hasn't chosen a type.
@@ -1738,6 +1738,15 @@ export const AIpreneurDashboard = () => {
               totalSales: business?.total_sales ?? 0,
             }}
             onQuestClick={(route) => navigate(`/s/aipreneur/${route}`, withFrom(location))}
+            autoOpen={
+              !dataLoading && (
+                products.length < 1 ||
+                staff.length < 1 ||
+                (rewards?.ai_tokens ?? 0) < 10 ||
+                !(business?.shop_launched) ||
+                (business?.total_sales ?? 0) < 5
+              )
+            }
           />}
           </>
         ) : (

@@ -10,9 +10,18 @@ import { clearAllTokens } from '../lib/api';
 interface TopNavProps {
   userName?: string;
   showPersonaButton?: boolean;
+  title?: string;
+  subtitle?: string;
+  showTokenCounter?: boolean;
 }
 
-export const TopNav = ({ userName, showPersonaButton = false }: TopNavProps) => {
+export const TopNav = ({
+  userName,
+  showPersonaButton = false,
+  title = 'AI Genius AIpreneur',
+  subtitle = 'Your Learning Journey',
+  showTokenCounter = true,
+}: TopNavProps) => {
   const navigate = useNavigate();
   const { logout, currentUser } = useAuth();
   const { logout: geniusLogout, isAuthenticated: isGeniusAuthenticated, geniusProfile } = useGeniusAuth();
@@ -62,16 +71,16 @@ export const TopNav = ({ userName, showPersonaButton = false }: TopNavProps) => 
               whileTap={{ scale: 0.95 }}
             >
               <img
-                src="/aigenius-finallogo-aug2025.svg"
+                src="/logo.svg"
                 alt="AI Genius"
                 className="h-10 md:h-12 w-auto"
               />
               <div className="hidden sm:block">
                 <h1 className="text-base md:text-lg font-bold text-white/90">
-                  AI Genius AIpreneur
+                  {title}
                 </h1>
                 <p className="text-xs text-white/40">
-                  Your Learning Journey
+                  {subtitle}
                 </p>
               </div>
             </motion.div>
@@ -79,7 +88,7 @@ export const TopNav = ({ userName, showPersonaButton = false }: TopNavProps) => 
 
           <div className="flex items-center gap-2 md:gap-3">
 
-            {currentUser && <AITokenCounter />}
+            {currentUser && showTokenCounter && <AITokenCounter />}
 
             <motion.div
               className="hidden md:flex items-center gap-3 cursor-pointer px-3 py-1.5 rounded-xl transition-colors"
