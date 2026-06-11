@@ -1,6 +1,6 @@
 /**
- * Learning Hub — the always-visible entry point to the 5 business-
- * learning modules (Product / Marketing / Staff / Innovations / Finance).
+ * Learning Hub — the always-visible entry point to the 6 business-
+ * learning modules (Product / Marketing / Staff / Innovations / Finance / CSR).
  *
  *   Trigger button: a chunky pill-shaped FAB anchored to the BOTTOM-RIGHT
  *                   of the screen, above the WorldDock. Warm amber
@@ -31,7 +31,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   GraduationCap, X, KeyRound,
-  Package, Megaphone, Users, Lightbulb, Wallet,
+  Package, Megaphone, Users, Lightbulb, Wallet, HeartHandshake,
   type LucideIcon,
 } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
@@ -94,6 +94,8 @@ const MODULES: ModuleTile[] = [
     emoji: '🤖', blurb: 'Invent tech that supercharges sales',  glow: 'rgba(168,85,247,0.55)' },
   { id: 'finance',     label: 'Finance',     icon: Wallet,    route: 'finance',    tone: 'from-amber-400 to-orange-500 border-orange-700',
     emoji: '🪙', blurb: 'Count coins, grow your vault',         glow: 'rgba(245,158,11,0.55)' },
+  { id: 'csr',         label: 'CSR',         icon: HeartHandshake, route: 'csr',   tone: 'from-teal-400 to-cyan-500 border-cyan-700',
+    emoji: '🌱', blurb: 'Give back + grow your community',      glow: 'rgba(20,184,166,0.55)' },
 ];
 
 interface LearningHubProps {
@@ -273,7 +275,7 @@ export function LearningHub({ onNavigate }: LearningHubProps) {
             Learning Portal
           </span>
           <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-white/55">
-            Five worlds, five superpowers
+            Six worlds, six superpowers
           </span>
         </div>
         <button
@@ -285,12 +287,10 @@ export function LearningHub({ onNavigate }: LearningHubProps) {
           <X className="w-4 h-4" />
         </button>
       </div>
-      {/* Portal grid — 2 columns on mobile (fits 4 portals + the wide
-          finance one spanning both), gives way more visual weight than
-          the old 3-col icon grid. */}
+      {/* Portal grid — 2 columns; the 6 modules fill three even rows. */}
       <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
         {MODULES.map((m, i) => (
-          <div key={m.id} className={i === 4 ? 'col-span-2' : ''}>
+          <div key={m.id}>
             <Portal m={m} delay={i * 0.05} />
           </div>
         ))}
