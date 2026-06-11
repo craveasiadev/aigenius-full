@@ -439,6 +439,25 @@ export interface ShopDef {
    *  the building, the selection ring is gold instead of yellow, and the
    *  action menu has only one option (Enter). */
   isPlayer?: boolean;
+
+  // ── Multi-user "worlds" overlay ─────────────────────────────────
+  // When the live world feed populates a surrounding cell with another
+  // player's shop, these fields carry that user's data. Tapping such a
+  // building opens a read-only preview card (not the Enter/Move menu).
+  /** True when this cell is showing another player's real shop. */
+  isOtherUser?: boolean;
+  /** The owning student's id (player or other user). */
+  worldUserId?: string;
+  /** Owner display name shown on the preview card. */
+  ownerName?: string;
+  /** Public shop slug → the preview card's "Visit Shop" link (`/shop/:slug`). */
+  slug?: string;
+  /** Popularity level shown on the preview card. */
+  level?: number;
+  /** Store rating (0-5) shown on the preview card. */
+  rating?: number;
+  /** Resolved shop image URL for the preview card. */
+  shopImage?: string | null;
 }
 
 /**

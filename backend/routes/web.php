@@ -418,6 +418,12 @@ Route::prefix('aipreneur')->middleware('auth.genius')->group(function () {
     // Leaderboard
     Route::get('/leaderboard', [AIpreneurController::class, 'getLeaderboard']);
 
+    // Multi-user shop worlds (explore other players' shops, 8 per world).
+    // `/worlds/count` is declared before `/worlds/{worldNumber}` and the
+    // param is digits-only so the literal "count" path never matches it.
+    Route::get('/worlds/count', [AIpreneurController::class, 'getWorldCount']);
+    Route::get('/worlds/{worldNumber}', [AIpreneurController::class, 'getWorld'])->whereNumber('worldNumber');
+
     // Rewards
     Route::get('/rewards', [AIpreneurController::class, 'getRewards']);
     Route::post('/rewards/daily', [AIpreneurController::class, 'claimDailyReward']);

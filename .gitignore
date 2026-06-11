@@ -36,3 +36,7 @@ qbot.ppk
 .vscode
 .DS_Store
 Thumbs.db
+
+# Local-only docker overrides (never deploy to production)
+docker-compose.override.yml
+docker/web-local/

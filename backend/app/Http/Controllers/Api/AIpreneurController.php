@@ -4909,6 +4909,174 @@ class AIpreneurController extends Controller
         ]);
     }
 
+    // =============================================
+    // MULTI-USER SHOP WORLDS
+    // =============================================
+
+    /** Home world (World 1): the player sits in the centre, so it holds the
+     *  player + 8 other shops in the surrounding cells. */
+    private const WORLD_HOME_OTHERS = 8;
+
+    /** Every world after the home one is entirely other players — all 9
+     *  cells (including the centre) are filled by other shops. */
+    private const WORLD_FULL = 9;
+
+    /** Surrounding-cell positions for the home world (centre 5 is the
+     *  player and is never in here). */
+    private const WORLD_POSITIONS_HOME = [1, 2, 3, 4, 6, 7, 8, 9];
+
+    /** Fill order for non-home worlds. Centre (5) is filled FIRST so a
+     *  partially-filled final world still puts a real user in the middle —
+     *  the player's own shop only ever appears in the home world. */
+    private const WORLD_POSITIONS_FULL = [5, 1, 2, 3, 4, 6, 7, 8, 9];
+
+    /**
+     * Base query for "other players' shops" that can populate a world.
+     * Only launched shops with a public slug are eligible, and the current
+     * student is excluded. Ordered deterministically (created_at, then id)
+     * so world N always returns the same slice — this is what makes the
+     * left/right world arrows stable and repeatable.
+     */
+    private function worldShopsQuery(string $excludeStudentId)
+    {
+        return AIpreneurBusiness::query()
+            ->where('shop_launched', true)
+            ->whereNotNull('shop_url_slug')
+            ->where('student_id', '!=', $excludeStudentId)
+            ->with('student:id,genius_name,aipreneur_shop_name,passion_category')
+            ->orderBy('created_at')
+            ->orderBy('id');
+    }
+
+    /** Map a raw popularity_level (decimal) onto the integer "Lv N" the
+     *  HUD shows. Mirrors the frontend's `Math.max(1, popularity_level)`. */
+    private function popularityToLevel($popularity): int
+    {
+        if (!is_numeric($popularity)) {
+            return 1;
+        }
+
+        return max(1, (int) round((float) $popularity));
+    }
+
+    /** Shape one AIpreneurBusiness (+ its student) into a world building. */
+    private function presentWorldBuilding(int $position, AIpreneurBusiness $business, GeniusProfile $profile, bool $isYourShop): array
+    {
+        return [
+            'position'        => $position,
+            'userId'          => $profile->id,
+            'shopName'        => $profile->aipreneur_shop_name ?: 'My Shop',
+            'ownerName'       => trim((string) ($profile->genius_name ?? '')),
+            'image'           => $business->shop_image_url ?? null,
+            'slug'            => $business->shop_url_slug ?? null,
+            'passionCategory' => $profile->passion_category ?? null,
+            'level'           => $this->popularityToLevel($business->popularity_level ?? null),
+            'rating'          => (float) ($business->store_rating ?? 0),
+            'isYourShop'      => $isYourShop,
+        ];
+    }
+
+    /**
+     * Total number of worlds for a given count of other shops. The home
+     * world holds 8 others (player is centred); every world after holds 9.
+     */
+    private function totalWorldsFor(int $totalOthers): int
+    {
+        if ($totalOthers <= self::WORLD_HOME_OTHERS) {
+            return 1;
+        }
+
+        return 1 + (int) ceil(($totalOthers - self::WORLD_HOME_OTHERS) / self::WORLD_FULL);
+    }
+
+    /**
+     * GET /aipreneur/worlds/count
+     * Total number of worlds the current student can page through. World 1
+     * is the player's home (their shop centred + 8 others); subsequent
+     * worlds are 9 other players each.
+     */
+    public function getWorldCount(Request $request): JsonResponse
+    {
+        $profile = $request->genius_profile;
+        $total = $this->worldShopsQuery($profile->id)->count();
+
+        return response()->json([
+            'success' => true,
+            'totalWorlds' => $this->totalWorldsFor($total),
+            'totalShops' => $total,
+        ]);
+    }
+
+    /**
+     * GET /aipreneur/worlds/{worldNumber}
+     *   • World 1 (home): the player's shop at the centre (position 5) plus
+     *     up to 8 other players' shops (positions 1-4, 6-9).
+     *   • World 2+: nine other players fill every cell INCLUDING the centre
+     *     — the player's own shop never appears outside the home world.
+     * `worldNumber` is clamped into [1, totalWorlds].
+     */
+    public function getWorld(Request $request, int $worldNumber): JsonResponse
+    {
+        $profile = $request->genius_profile;
+
+        $others = $this->worldShopsQuery($profile->id)->get();
+        $total = $others->count();
+        $totalWorlds = $this->totalWorldsFor($total);
+
+        // Clamp the requested world into range so a stale/out-of-bounds
+        // request never 404s — it just lands on the nearest valid world.
+        $world = max(1, min((int) $worldNumber, $totalWorlds));
+
+        $buildings = [];
+
+        if ($world === 1) {
+            // Home world — centre (position 5) is the logged-in player.
+            $myBusiness = $profile->business;
+            $buildings[] = [
+                'position'        => 5,
+                'userId'          => $profile->id,
+                'shopName'        => $profile->aipreneur_shop_name ?: 'My Shop',
+                'ownerName'       => trim((string) ($profile->genius_name ?? '')),
+                'image'           => $myBusiness?->shop_image_url,
+                'slug'            => $myBusiness?->shop_url_slug,
+                'passionCategory' => $profile->passion_category ?? null,
+                'level'           => $this->popularityToLevel($myBusiness?->popularity_level),
+                'rating'          => (float) ($myBusiness?->store_rating ?? 0),
+                'isYourShop'      => true,
+            ];
+
+            // Surrounding (positions 1-4, 6-9) — other players' shops.
+            $slice = $others->slice(0, self::WORLD_HOME_OTHERS)->values();
+            foreach ($slice as $i => $business) {
+                $buildings[] = $this->presentWorldBuilding(
+                    self::WORLD_POSITIONS_HOME[$i],
+                    $business,
+                    $business->student,
+                    false,
+                );
+            }
+        } else {
+            // Non-home world — all 9 cells are other players (centre first).
+            $offset = self::WORLD_HOME_OTHERS + ($world - 2) * self::WORLD_FULL;
+            $slice = $others->slice($offset, self::WORLD_FULL)->values();
+            foreach ($slice as $i => $business) {
+                $buildings[] = $this->presentWorldBuilding(
+                    self::WORLD_POSITIONS_FULL[$i],
+                    $business,
+                    $business->student,
+                    false,
+                );
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'currentWorld' => $world,
+            'totalWorlds' => $totalWorlds,
+            'buildings' => $buildings,
+        ]);
+    }
+
     /**
      * Like a public shop.
      * This endpoint is publicly accessible without authentication.

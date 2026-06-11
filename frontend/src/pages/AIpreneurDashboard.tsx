@@ -1708,6 +1708,9 @@ export const AIpreneurDashboard = () => {
             // Themed product pool for the in-shop mini-game. Falls back to
             // the default mixed pool when the student hasn't chosen a type.
             shopCategory={geniusProfile?.passion_category ?? null}
+            // Populate the 8 surrounding buildings with real users' shops
+            // and enable left/right world navigation (live route only).
+            worldsEnabled
           />
           {/* Gamified HUD overlay — quest log, mascot guide, shop vitals,
               quest-complete reward toasts. Sits on top of the iso scene

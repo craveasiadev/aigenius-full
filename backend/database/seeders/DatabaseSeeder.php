@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             ProductSeeder::class,
             AIpreneurAcademySeeder::class,
             AIpreneurKidsDemoSeeder::class,
+            WorldShopsSeeder::class,
             SuperAdminTestSeeder::class,
         ]);
     }

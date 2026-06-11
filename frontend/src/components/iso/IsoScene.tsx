@@ -2,7 +2,7 @@ import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'rea
 import * as THREE from 'three';
 import { Canvas, useThree } from '@react-three/fiber';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, X, Loader2, Store, Compass, Gift, Menu } from 'lucide-react';
+import { Check, X, Loader2, Store, Compass, Gift, Menu, ChevronLeft, ChevronRight } from 'lucide-react';
 import { IsoCity } from './IsoCity';
 import { IsoShop } from './IsoShop';
 import { IsoShopInterior } from './IsoShopInterior';
@@ -15,6 +15,9 @@ import { GrassDetail } from './GrassDetail';
 import { GrassGround } from './GrassGround';
 import { CityProps } from './CityProps';
 import { PlayerShopBubble } from './PlayerShopBubble';
+import { WorldShopPreview } from './WorldShopPreview';
+import { fetchWorld, type WorldBuilding } from '../../services/worldsApi';
+import { getShopImageUrl } from '../../lib/api';
 import {
   SHOPS,
   NPC_PATHS,
@@ -265,6 +268,160 @@ interface IsoSceneProps {
    *  clearly a supermarket, so the right pool applies even before the
    *  backend field catches up. */
   shopCategory?: string | null;
+  /** Enables the multi-user world system: the 8 surrounding buildings are
+   *  populated from real users via the worlds API, and left/right arrows
+   *  page between worlds. Off by default (the /demo route keeps the static
+   *  placeholder city). */
+  worldsEnabled?: boolean;
+}
+
+/** Resolve once — small promise sleep used to pace the world transition. */
+const wait = (ms: number) => new Promise<void>((res) => window.setTimeout(res, ms));
+
+/** Cloud puffs for the world-transition overlay. Each drifts horizontally
+ *  across the screen (alternating directions) to sell the "clouds rolling
+ *  in" effect while the next world loads. Sizes are in px. */
+const WORLD_CLOUDS = [
+  { top: '8%',  size: 460, from: -260, to: 1280, dur: 9,  delay: 0,   opacity: 0.22 },
+  { top: '30%', size: 560, from: 1280, to: -360, dur: 12, delay: 1.1, opacity: 0.16 },
+  { top: '52%', size: 400, from: -320, to: 1200, dur: 8,  delay: 0.4, opacity: 0.24 },
+  { top: '70%', size: 600, from: 1200, to: -420, dur: 13, delay: 2.0, opacity: 0.14 },
+  { top: '86%', size: 440, from: -280, to: 1240, dur: 10, delay: 0.8, opacity: 0.2  },
+];
+
+/**
+ * Overlay live world data onto the static SHOPS template. The 3×3 grid
+ * position maps directly to the SHOPS array index (position = index + 1,
+ * with index 4 / position 5 being the centre player shop), so each cell
+ * keeps its hand-tuned geometry (cell, door, building model) while its
+ * identity (name, owner, image) comes from the backend.
+ *
+ * Cells with no live shop (a partially-filled final world) keep their
+ * static placeholder so the city never reads as broken.
+ */
+
+/** Shop-height Kenney commercial models. Restricted to the 9 variants the
+ *  city was designed around — these are short enough that the floating name
+ *  label (fixed at y≈3.6 in IsoShop) always clears the roof. The taller
+ *  office/tower variants (e, j, l, m, n) are excluded because their roofs
+ *  rise above the label and hide the name. 9 variants = exactly enough to
+ *  give every building in a world a distinct model. */
+const BUILDING_VARIANTS: ShopDef['buildingId'][] = [
+  'a', 'b', 'c', 'd', 'f', 'g', 'h', 'i', 'k',
+];
+
+/** Wall / roof / sign colour triples used to repaint world buildings. 14
+ *  entries so a world's ≤9 buildings each get a distinct palette. */
+const BUILDING_COLORS: Array<{ wall: string; roof: string; sign: string }> = [
+  { wall: '#fde68a', roof: '#f59e0b', sign: '#92400e' },
+  { wall: '#bbf7d0', roof: '#16a34a', sign: '#14532d' },
+  { wall: '#fecdd3', roof: '#e11d48', sign: '#9f1239' },
+  { wall: '#bae6fd', roof: '#0284c7', sign: '#075985' },
+  { wall: '#ddd6fe', roof: '#7c3aed', sign: '#5b21b6' },
+  { wall: '#fed7aa', roof: '#ea580c', sign: '#9a3412' },
+  { wall: '#c7d2fe', roof: '#6366f1', sign: '#3730a3' },
+  { wall: '#fbcfe8', roof: '#db2777', sign: '#9d174d' },
+  { wall: '#a7f3d0', roof: '#059669', sign: '#065f46' },
+  { wall: '#fef08a', roof: '#eab308', sign: '#854d0e' },
+  { wall: '#99f6e4', roof: '#0d9488', sign: '#115e59' },
+  { wall: '#e9d5ff', roof: '#9333ea', sign: '#6b21a8' },
+  { wall: '#fda4af', roof: '#f43f5e', sign: '#881337' },
+  { wall: '#bfdbfe', roof: '#2563eb', sign: '#1e3a8a' },
+];
+
+/**
+ * Deterministic, distinct-per-world building style. `world` shifts the start
+ * index so each world looks different; the step is coprime to the pool size
+ * so the `k`-th building in a world gets a unique model + colour (no repeats
+ * within a world, ≤9 buildings ≤ 14 variants). Stable: same world+slot →
+ * same look every visit.
+ */
+function worldBuildingStyle(world: number, k: number) {
+  const v = BUILDING_VARIANTS.length; // 9
+  const c = BUILDING_COLORS.length; // 14
+  // Steps are coprime to the pool sizes (2↔9, 3↔14) so the k-th building in
+  // a world always gets a DISTINCT model + colour (no repeats within a world);
+  // the per-world offset rotates the assignment so each world looks different.
+  const buildingId = BUILDING_VARIANTS[((world * 5) + k * 2) % v];
+  const color = BUILDING_COLORS[((world * 7) + k * 3) % c];
+  return { buildingId, ...color };
+}
+
+function mergeWorldIntoShops(
+  base: ShopDef[],
+  buildings: WorldBuilding[] | null,
+  playerShopName?: string,
+  currentWorld = 1,
+): ShopDef[] {
+  // Assign each non-player building in this world a slot index `k` (ordered
+  // by grid position) so the style helper can hand out distinct models.
+  const otherPositions = (buildings ?? [])
+    .filter((x) => !x.isYourShop)
+    .map((x) => x.position)
+    .sort((a, z) => a - z);
+
+  return base.map((s, idx) => {
+    const position = idx + 1;
+    const b = buildings?.find((x) => x.position === position) ?? null;
+
+    // No live data for this cell — keep the static template untouched. In
+    // the home world that leaves your placeholder shop in the centre before
+    // the feed lands; surrounding cells keep their demo placeholders.
+    if (!b) {
+      return {
+        ...s,
+        name: s.isPlayer && playerShopName ? playerShopName : s.name,
+        isOtherUser: false,
+        worldUserId: undefined,
+        ownerName: undefined,
+        slug: undefined,
+        level: undefined,
+        rating: undefined,
+        shopImage: undefined,
+      };
+    }
+
+    // Your own shop — only ever in the home world's centre. Keep geometry +
+    // the player treatment (gold pill, shop bubble, Enter menu).
+    if (b.isYourShop) {
+      return {
+        ...s,
+        isPlayer: true,
+        name: playerShopName || b.shopName || s.name,
+        isOtherUser: false,
+        worldUserId: b.userId,
+        ownerName: undefined,
+        slug: b.slug ?? undefined,
+        level: undefined,
+        rating: undefined,
+        shopImage: undefined,
+      };
+    }
+
+    // Another player's shop. In non-home worlds this can be the CENTRE cell,
+    // so we explicitly clear isPlayer — the centre building takes on the other
+    // user's identity (name, image, preview card). The building model + colours
+    // are re-rolled per world so each world looks visually distinct and no two
+    // buildings in a world share a model.
+    const k = Math.max(0, otherPositions.indexOf(position));
+    const style = worldBuildingStyle(currentWorld, k);
+    return {
+      ...s,
+      isPlayer: false,
+      name: b.shopName,
+      buildingId: style.buildingId,
+      wallColor: style.wall,
+      roofColor: style.roof,
+      signColor: style.sign,
+      isOtherUser: true,
+      worldUserId: b.userId,
+      ownerName: b.ownerName,
+      slug: b.slug ?? undefined,
+      level: b.level,
+      rating: b.rating,
+      shopImage: getShopImageUrl(b.image),
+    };
+  });
 }
 
 export function IsoScene({
@@ -285,6 +442,7 @@ export function IsoScene({
   onShopNavigate,
   enterPlayerInterior,
   shopCategory,
+  worldsEnabled,
 }: IsoSceneProps) {
   const navigate = useNavigate();
   // Mutable shop positions so "Move" actually relocates a building on the map.
@@ -298,6 +456,84 @@ export function IsoScene({
   const [mode, setMode] = useState<Mode>({ kind: 'city' });
   const [selectedShopId, setSelectedShopId] = useState<string | null>(null);
   const readyFired = useRef(false);
+
+  // ── Multi-user worlds ────────────────────────────────────────────
+  // `worldBuildings` is the live feed overlaid onto the SHOPS template;
+  // null until the first fetch resolves (or when worlds are disabled, in
+  // which case the static placeholder city stays).
+  const [worldBuildings, setWorldBuildings] = useState<WorldBuilding[] | null>(null);
+  const [currentWorld, setCurrentWorld] = useState(1);
+  const [totalWorlds, setTotalWorlds] = useState(1);
+  const [worldTransitioning, setWorldTransitioning] = useState(false);
+  const [pendingWorld, setPendingWorld] = useState(1);
+  const worldLoadedRef = useRef(false);
+
+  // Initial world fetch (world 1) once, when the feature is enabled.
+  useEffect(() => {
+    if (!worldsEnabled || worldLoadedRef.current) return;
+    worldLoadedRef.current = true;
+    let cancelled = false;
+    fetchWorld(1)
+      .then((res) => {
+        if (cancelled || !res?.buildings) return;
+        setWorldBuildings(res.buildings);
+        setCurrentWorld(res.currentWorld);
+        setTotalWorlds(res.totalWorlds);
+      })
+      .catch((err) => {
+        // Keep the static placeholder city on failure, but surface why —
+        // a 404 here means the backend /aipreneur/worlds routes aren't
+        // deployed yet, which is why the Next button stays disabled.
+        console.warn('[worlds] initial fetch failed — world nav stays at 1/1:', err);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [worldsEnabled]);
+
+  // Re-derive the on-map shops whenever the live feed (or the player's own
+  // shop name) changes. Only active when worlds are enabled; the /demo
+  // route leaves `shops` on its static initial value.
+  useEffect(() => {
+    if (!worldsEnabled) return;
+    setShops(mergeWorldIntoShops(SHOPS, worldBuildings, playerShopName, currentWorld));
+  }, [worldsEnabled, worldBuildings, playerShopName, currentWorld]);
+
+  // Page to an adjacent world with the cloud / "Loading World…" transition.
+  const handleWorldChange = useCallback(
+    async (dir: -1 | 1) => {
+      if (worldTransitioning) return;
+      // Wrap around so the arrows are ALWAYS pressable — past the last
+      // world loops back to 1, before the first loops to the last. With a
+      // single world this simply reloads world 1 (still plays the cloud
+      // transition). The backend clamps the number defensively too.
+      let target = currentWorld + dir;
+      if (target > totalWorlds) target = 1;
+      if (target < 1) target = Math.max(1, totalWorlds);
+
+      setPendingWorld(target);
+      setSelectedShopId(null);
+      setWorldTransitioning(true);
+
+      // 1) Let the screen darken / cloud over (overlay fades in ~1.4s).
+      await wait(1500);
+      // 2) Fetch the new world while the screen is covered.
+      try {
+        const res = await fetchWorld(target);
+        if (res?.buildings) {
+          setWorldBuildings(res.buildings);
+          setCurrentWorld(res.currentWorld);
+          setTotalWorlds(res.totalWorlds);
+        }
+      } catch {
+        /* Stay on the current world on failure. */
+      }
+      // 3) Brief hold on the loading text, then fade out to reveal (~1.4s).
+      await wait(700);
+      setWorldTransitioning(false);
+    },
+    [worldTransitioning, currentWorld, totalWorlds],
+  );
 
   // ── HUD stats — real (from props) OR local demo fallback ─────
   // When the parent passes `stats`, we use them directly. Otherwise we
@@ -646,8 +882,10 @@ export function IsoScene({
 
             {ghostShop && <IsoShop shop={ghostShop} moveMode />}
 
-            {/* Action menu — player shop hides "Move", uses gold theme. */}
-            {selectedShop && menuAnchor && mode.kind === 'city' && (
+            {/* Action menu — player shop hides "Move", uses gold theme.
+                Other players' shops (live worlds) skip this and open the
+                read-only preview card overlay instead. */}
+            {selectedShop && menuAnchor && mode.kind === 'city' && !selectedShop.isOtherUser && (
               <ShopActionMenu
                 anchor={menuAnchor}
                 title={selectedShop.name}
@@ -795,6 +1033,119 @@ export function IsoScene({
             <p className="mt-1 text-xs text-white/60">
               {shops.find((s) => mode.kind === 'loading' && s.id === mode.targetShopId)?.name}
             </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── World navigation (left / right arrows + indicator) ───────
+          Only in live-worlds mode while standing in the city. Arrows are
+          edge-centred so they stay clear of the HUD, settings gear, and
+          learning hub. Disabled at the first / last world. */}
+      {worldsEnabled && mode.kind === 'city' && !worldTransitioning && (
+        <>
+          <button
+            type="button"
+            onClick={() => handleWorldChange(-1)}
+            aria-label="Previous world"
+            style={{ touchAction: 'manipulation' }}
+            className="fixed left-3 top-1/2 -translate-y-1/2 z-40 w-12 h-12 rounded-full bg-slate-900/70 backdrop-blur text-white flex items-center justify-center shadow-lg hover:bg-slate-800/80 active:scale-95 transition touch-manipulation"
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </button>
+          <button
+            type="button"
+            onClick={() => handleWorldChange(1)}
+            aria-label="Next world"
+            style={{ touchAction: 'manipulation' }}
+            className="fixed right-3 top-1/2 -translate-y-1/2 z-40 w-12 h-12 rounded-full bg-slate-900/70 backdrop-blur text-white flex items-center justify-center shadow-lg hover:bg-slate-800/80 active:scale-95 transition touch-manipulation"
+          >
+            <ChevronRight className="w-6 h-6" />
+          </button>
+
+          {/* "World X of Y" pill, top-centre below the status HUD. */}
+          <div
+            className="fixed left-1/2 -translate-x-1/2 z-30 px-3.5 py-1.5 rounded-full bg-slate-900/70 backdrop-blur text-white text-xs font-bold shadow-lg flex items-center gap-1.5"
+            style={{ top: 'calc(max(env(safe-area-inset-top), 12px) + 64px)' }}
+          >
+            <span aria-hidden>🌐</span>
+            World {currentWorld} of {totalWorlds}
+          </div>
+        </>
+      )}
+
+      {/* ── Other player's shop — read-only preview card ───────────── */}
+      <AnimatePresence>
+        {mode.kind === 'city' && selectedShop?.isOtherUser && (
+          <WorldShopPreview
+            key={selectedShop.id}
+            shopName={selectedShop.name}
+            ownerName={selectedShop.ownerName}
+            level={selectedShop.level}
+            rating={selectedShop.rating}
+            image={selectedShop.shopImage}
+            slug={selectedShop.slug}
+            onClose={() => setSelectedShopId(null)}
+            onVisit={() => {
+              if (selectedShop.slug) navigate(`/shop/${selectedShop.slug}`);
+            }}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* ── World transition — rolling clouds + "Loading World…" ───── */}
+      <AnimatePresence>
+        {worldTransitioning && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1.4, ease: 'easeInOut' }}
+            className="fixed inset-0 z-[60] flex flex-col items-center justify-center text-white overflow-hidden"
+            style={{
+              background:
+                'linear-gradient(160deg, #1e293b 0%, #0b1120 60%, #020617 100%)',
+              backdropFilter: 'blur(4px)',
+              WebkitBackdropFilter: 'blur(4px)',
+            }}
+          >
+            {/* Drifting cloud puffs — large blurred radial blobs sliding
+                across the screen in alternating directions so the world
+                visibly "clouds over" during the swap. */}
+            {WORLD_CLOUDS.map((c, i) => (
+              <motion.div
+                key={i}
+                className="absolute rounded-full pointer-events-none"
+                style={{
+                  top: c.top,
+                  width: c.size,
+                  height: c.size * 0.55,
+                  opacity: c.opacity,
+                  filter: 'blur(40px)',
+                  background:
+                    'radial-gradient(closest-side, rgba(226,232,240,0.95), rgba(226,232,240,0))',
+                }}
+                initial={{ x: c.from }}
+                animate={{ x: c.to }}
+                transition={{
+                  duration: c.dur,
+                  delay: c.delay,
+                  repeat: Infinity,
+                  repeatType: 'loop',
+                  ease: 'linear',
+                }}
+              />
+            ))}
+
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.4, duration: 0.6 }}
+              className="relative flex flex-col items-center"
+            >
+              <Loader2 className="w-12 h-12 animate-spin text-white/90" />
+              <p className="mt-5 text-lg font-extrabold tracking-wide drop-shadow">🌐 Loading World…</p>
+              <p className="mt-1 text-sm text-white/70 drop-shadow">World {pendingWorld}</p>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
